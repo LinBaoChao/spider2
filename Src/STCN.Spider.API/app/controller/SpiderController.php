@@ -14,7 +14,7 @@ class SpiderController extends BaseController
 {
     /**
      * @OA\Get(path="/spider/getListByPage",
-     *   tags={"采集资源"},
+     *   tags={"资源采集"},
      *   summary="获取采集资源列表",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
      *   @OA\Parameter(name="keyword", in="query", description="关键词", @OA\Schema(type="string")),
@@ -36,7 +36,7 @@ class SpiderController extends BaseController
                 }
             })
                 ->orderRaw('publish_time desc')
-            ->paginate($pageSize, false, ['page' => $page]);
+                ->paginate($pageSize, false, ['page' => $page]);
 
             $r = [
                 'items' => $list->items(),
@@ -56,7 +56,7 @@ class SpiderController extends BaseController
 
     /**
      * @OA\Delete(path="/spider/delete",
-     *   tags={"采集资源"},
+     *   tags={"资源采集"},
      *   summary="删除",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
      *   @OA\Parameter(name="id", in="query", description="id", required=true, @OA\Schema(type="int")),
