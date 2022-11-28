@@ -32,7 +32,7 @@
         />
       </template>
       <template #url="{ text }">
-        <a href="text" target="_blank">{{ text }}</a>
+        <a :href="text" target="_blank">{{ text }}</a>
       </template>
     </BasicTable>
     <!-- <Detail @register="registerDetail" /> -->
