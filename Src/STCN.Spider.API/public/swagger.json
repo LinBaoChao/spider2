@@ -1,0 +1,111 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "微信机器人接口文档",
+        "version": "1.0.1"
+    },
+    "paths": {
+        "/user/gettoken": {
+            "get": {
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "获取Token",
+                "operationId": "2ee8f3bfb9df42db84fdb5bda990f64c",
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "query",
+                        "description": "用户Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "1001"
+                        }
+                    },
+                    {
+                        "name": "pwd",
+                        "in": "query",
+                        "description": "密钥",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "123456"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token"
+                    }
+                }
+            }
+        },
+        "/wechatmsg/getList": {
+            "get": {
+                "tags": [
+                    "微信机器人"
+                ],
+                "summary": "消息列表",
+                "operationId": "362b4dd1519024885d14a92880b84460",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "关键字",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "beginTime",
+                        "in": "query",
+                        "description": "开始时间",
+                        "schema": {
+                            "type": "datetime"
+                        }
+                    },
+                    {
+                        "name": "endTime",
+                        "in": "query",
+                        "description": "结束时间",
+                        "schema": {
+                            "type": "datetime"
+                        }
+                    },
+                    {
+                        "name": "pageIndex",
+                        "in": "query",
+                        "description": "页码",
+                        "schema": {
+                            "type": "int",
+                            "default": "1"
+                        }
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "description": "行数",
+                        "schema": {
+                            "type": "int",
+                            "default": "20"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "WechatMsg对象"
+                    }
+                }
+            }
+        }
+    }
+}

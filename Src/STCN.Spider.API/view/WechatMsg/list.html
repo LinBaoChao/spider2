@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <title>微信消息</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      .table {
+        border-top: #ccc 1px solid;
+        border-left: #ccc 1px solid;
+        -moz-box-shadow: 3px 4px 5px #cacaca;
+        -webkit-box-shadow: 3px 4px 5px #cacaca;
+        -o-box-shadow: 3px 4px 5px #cacaca;
+        -ms-box-shadow: 3px 4px 5px #cacaca;
+        box-shadow: 3px 4px 5px #cacaca;
+      }
+
+      .table tr th {
+        text-align: center;
+        font-weight: normal;
+        font-size: 15px;
+        border-bottom: 1px solid #ccc;
+        background-color: #e5e5e5;
+        background-image: linear-gradient(#fefefe, #e5e5e5);
+        filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#fefefe,endColorStr=#e5e5e5);
+      }
+
+      .table tr th {
+        background: #dedede;
+        border-right: #cccccc 1px solid;
+      }
+
+      .table th {
+        background: #dedede;
+        height: 45px;
+        border-right: #cccccc 1px solid;
+      }
+
+      .table tr td {
+        border-bottom: #cccccc 1px solid;
+        height: 40px;
+        border-right: #cccccc 1px solid;
+        padding: 3px 6px;
+
+        font-weight: normal;
+        font-size: 14px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .table tr:hover td {
+        background: #fefcdc;
+      }
+
+      ul li {
+        display: inline;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>1级来源ID</th>
+            <th>1级来源昵称</th>
+            <th>2级来源ID</th>
+            <th>2级来源昵称</th>
+            <th>当前机器人ID</th>
+            <th>消息内容</th>
+            <th>消息类型</th>
+            <th>事件类型</th>
+            <th>消息时间</th>
+            <th>创建时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          {volist name="list" id="wm" empty="没有符合条件的数据！"}
+          <tr>
+            <td>{$wm.from_wxid}</td>
+            <td>{$wm.from_name}</td>
+            <td>{$wm.final_from_wxid}</td>
+            <td>{$wm.final_from_name}</td>
+            <td>{$wm.robot_wxid}</td>
+            <!-- <td>{:substr(strtoupper($wm.msg),0,20)}</td> -->
+            <td>
+              <a href="info?id={$wm.id}" target="_blank"
+                >{$wm.msg|substr=0,35}...</a
+              >
+            </td>
+            <td>{$wm.msg_type == null ? '' : $wm.msg_type}</td>
+            <td>{$wm.type}</td>
+            <td>{$wm.time}</td>
+            <td>{$wm.create_time}</td>
+          </tr>
+          {/volist}
+        </tbody>
+        <tr>
+          <td colspan="10" style="text-align: center">{$list|raw}</td>
+        </tr>
+      </table>
+      <!-- 分页 -->
+      <div style="text-align: center"></div>
+    </div>
+  </body>
+</html>
