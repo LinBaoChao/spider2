@@ -72,3 +72,5 @@ function check_user($arr, $s)
 
 test();
 echo str_replace("\\", "/", "http://10.254.15.33:9997/storage/upload/user-avatar/2022\1119\476dae523fa1653365\8a5040065a2961.png");
+
+var_dump(phpinfo());

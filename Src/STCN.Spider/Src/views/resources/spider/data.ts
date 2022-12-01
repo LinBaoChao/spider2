@@ -6,7 +6,6 @@ export const columns: BasicColumn[] = [
     title: '来源',
     dataIndex: 'source',
     width: 160,
-    align: 'left',
   },
   {
     title: '标题',

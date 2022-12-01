@@ -26,7 +26,7 @@ return [
         ],
         // 更多的缓存连接
         // 配置Reids
-        /*'redis'    =>    [
+        'redis'    =>    [
             'type'     => 'redis',
             'host'     =>  env('redis.host', '127.0.0.1'),
             'port'     => env('redis.port', 6379),
@@ -37,6 +37,6 @@ return [
             // 缓存前缀
             'prefix'   => env('redis.prefix', ''),
             'timeout'  => env('redis.timeout', 0),
-        ],*/
+        ],
     ],
 ];
