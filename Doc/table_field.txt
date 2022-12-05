@@ -1,0 +1,57 @@
+-- sentiment_library.sentiment_tmp definition
+
+CREATE TABLE sentiment_library.sentiment_tmp
+(
+
+    `id` UInt64,
+
+    `source_title` Nullable(String) DEFAULT NULL COMMENT '标题',
+
+    `source_content` Nullable(String) COMMENT '正文',
+
+    `source_url` Nullable(String) DEFAULT NULL COMMENT '来源链接',
+
+    `source_name` Nullable(String) DEFAULT NULL COMMENT '文章来源名称',
+
+    `pub_source_name` Nullable(String) DEFAULT NULL COMMENT '文章发布源',
+
+    `source_media_name` Nullable(String) DEFAULT NULL COMMENT '来源媒体名称',
+
+    `source_product_name` Nullable(String) DEFAULT NULL COMMENT '来源产品名称',
+
+    `source_platform_name` Nullable(String) DEFAULT NULL COMMENT '来源平台名称',
+
+    `source_channel_name` Nullable(String) DEFAULT NULL COMMENT '来源渠道名称',
+
+    `pub_media_name` Nullable(String) DEFAULT NULL COMMENT '发布源媒体名称',
+
+    `pub_product_name` Nullable(String) DEFAULT NULL COMMENT '发布源产品名称',
+
+    `pub_platform_name` Nullable(String) DEFAULT NULL COMMENT '发布源平台名称',
+
+    `pub_channel_name` Nullable(String) DEFAULT NULL COMMENT '发布源渠道名称',
+
+    `source_author` Nullable(String) DEFAULT NULL COMMENT '文章作者',
+
+    `source_pub_time` Nullable(Int32) DEFAULT NULL COMMENT '原文发布时间',
+
+    `is_ocr` Int8 DEFAULT '0' COMMENT '0 未解析过 1 解析且关联个股 2 解析关联不到个股 3异常',
+
+    `title_hash` Nullable(String) DEFAULT '0' COMMENT '标题hash值',
+
+    `content_hash` Nullable(String) DEFAULT '0' COMMENT '内容hash值',
+
+    `article_check_type` Int8 DEFAULT '0' COMMENT '文章类型：0 默认 1 权威发布（部委类） 2 微信 3 微博 4 重要推送 5 重要快讯  7 合作媒体 10 中标信息 9 公司微信',
+
+    `search_field` Nullable(String) DEFAULT NULL COMMENT 'opensearch搜索字段',
+
+    `has_ocr_article_id` Nullable(Int64) DEFAULT NULL COMMENT '已解析到舆情的表sentiment_spider_article的主键id',
+
+    `c_time` Nullable(Int32) DEFAULT NULL COMMENT '记录创建时间',
+
+    `u_time` Nullable(Int32) DEFAULT NULL COMMENT '记录更新时间'
+)
+ENGINE = ReplacingMergeTree
+PRIMARY KEY id
+ORDER BY id
+SETTINGS index_granularity = 8192;

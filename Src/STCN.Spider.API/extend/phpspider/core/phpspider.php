@@ -91,11 +91,11 @@ class phpspider
     //public static $taskpids = array();
 
     /**
-     * Daemonize.
+     * Daemonize. 守护进程
      *
      * @var bool
      */
-    public static $daemonize = false;
+    public static $daemonize = false; 
 
     /**
      * 当前进程是否终止 
@@ -406,15 +406,15 @@ class phpspider
         log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_DATA.'/phpspider.log';
         log::$log_type = isset($configs['log_type']) ? $configs['log_type'] : false;
 
-        // 彩蛋
-        $included_files = get_included_files();
-        $content = file_get_contents($included_files[0]);
-        if (!preg_match("#/\* Do NOT delete this comment \*/#", $content) || !preg_match("#/\* 不要删除这段注释 \*/#", $content))
-        {
-            $msg = "Unknown error...";
-            log::error($msg);
-            exit;
-        }
+        // 彩蛋 lbc
+        // $included_files = get_included_files();
+        // $content = file_get_contents($included_files[0]);
+        // if (!preg_match("#/\* Do NOT delete this comment \*/#", $content) || !preg_match("#/\* 不要删除这段注释 \*/#", $content))
+        // {
+        //     $msg = "Unknown error...";
+        //     log::error($msg);
+        //     exit;
+        // }
 
         $configs['name']        = isset($configs['name'])        ? $configs['name']        : 'phpspider';
         $configs['proxy']       = isset($configs['proxy'])       ? $configs['proxy']       : false;
@@ -1034,7 +1034,7 @@ class phpspider
         // windows 下没法显示面板, 强制显示日志
         if (util::is_win()) 
         {
-            self::$configs['name'] = iconv('UTF-8', 'GB2312//IGNORE', self::$configs['name']);
+            self::$configs['name'] = self::$configs['name'];// iconv('UTF-8', 'GB2312//IGNORE', self::$configs['name']); // lbc
             log::$log_show         = true;
         }
         // 守护进程下也显示日志
@@ -1060,7 +1060,7 @@ class phpspider
 
             $header .= "\n[ ".self::$configs['name']." Spider ] is started...\n\n";
             $header .= '  * PHPSpider Version: '.self::VERSION."\n";
-            $header .= "  * Documentation: https://doc.phpspider.org\n";
+            //$header .= "  * Documentation: https://doc.phpspider.org\n"; // lbc
             $header .= '  * Task Number: '.self::$tasknum."\n\n";
             $header .= "Input \"php $start_file stop\" to quit. Start success.\n";
             if ( ! util::is_win())
@@ -2056,12 +2056,12 @@ class phpspider
                     }
                     elseif (self::$export_type == 'sql') 
                     {
-                        $sql = db::insert(self::$export_table, $fields, true);
+                        $sql = db::insert(self::$export_table, $fields, true); // lbc todo db
                         util::put_file(self::$export_file, $sql.";\n", FILE_APPEND);
                     }
                     elseif (self::$export_type == 'db') 
                     {
-                        db::insert(self::$export_table, $fields);
+                        db::insert(self::$export_table, $fields); // lbc todo db
                     }
                 }
             }
@@ -2274,8 +2274,8 @@ class phpspider
                     log::error('Export data into SQL files need to Set the file path.');
                     exit;
                 }
-            }
-            elseif (self::$export_type == 'db') 
+            } 
+            elseif (self::$export_type == 'db') // lbc todo db
             {
                 if (!function_exists('mysqli_connect'))
                 {
@@ -2289,7 +2289,7 @@ class phpspider
                     exit;
                 }
 
-                $config = self::$db_config;
+                $config = self::$db_config; // lbc db
                 @mysqli_connect($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
                 if(mysqli_connect_errno())
                 {
@@ -2297,7 +2297,7 @@ class phpspider
                     exit;
                 }
 
-                db::set_connect('default', $config);
+                db::set_connect('default', $config); // lbc todo db
                 db::_init();
 
                 if (!db::table_exists(self::$export_table))
@@ -3060,7 +3060,7 @@ class phpspider
         $result = selector::select($html, $selector);
         if (selector::$error) 
         {
-            log::error("Field(\"{$fieldname}\") ".selector::$error."\n");
+            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // lbc todo trace
         }
         return $result;
     }
@@ -3201,7 +3201,7 @@ class phpspider
         }
         $display_str .= 'task number: '.self::$tasknum."\n";
         $display_str .= 'load average: '.implode(', ', $loadavg)."\n";
-        $display_str .= "document: https://doc.phpspider.org\n";
+        //$display_str .= "document: https://doc.phpspider.org\n";
 
         $display_str .= $this->display_task_ui();
 

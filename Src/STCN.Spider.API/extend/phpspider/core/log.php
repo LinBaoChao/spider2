@@ -92,7 +92,7 @@ class log
         {
             echo $msg;
         }
-        file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX);
+        file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX); // lbc todo add to db and trace
     }
 
     /**

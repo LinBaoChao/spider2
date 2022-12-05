@@ -37,6 +37,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'url',
     key: 'url',
     slots: { customRender: 'url' },
+    align: 'left',
   },
   // {
   //   title: '内容',

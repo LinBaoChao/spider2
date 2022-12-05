@@ -41,7 +41,7 @@ util::path_exists(PATH_DATA."/log");
 util::path_exists(PATH_DATA."/cache");
 util::path_exists(PATH_DATA."/status");
 
-class phpspider
+class phpspider_back
 {
     /**
      * 版本号

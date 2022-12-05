@@ -36,7 +36,7 @@ class SpiderController extends BaseController
                 }
             })
                 ->orderRaw('publish_time desc')
-                ->paginate($pageSize, false, ['page' => $page]);
+                ->paginate(['page' => $page, 'pageSize' => $pageSize], false,);
 
             $r = [
                 'items' => $list->items(),
