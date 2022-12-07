@@ -151,8 +151,12 @@ class DeptController extends BaseController
 
                 array_push($this->ids, $m->id);
             }
-
             $retval->result = $data;
+
+            unset($root);
+            unset($depts);
+            unset($data);
+
             return json($retval);
         } catch (\Exception $ex) {
             $retval->code = ResultCode::ERROR;
@@ -189,14 +193,17 @@ class DeptController extends BaseController
                 if ($status !== null) {
                     $query->where('status', $status);
                 }
-            })->paginate($pageSize, false, ['page' => $page]);
+            })->paginate(['page' => $page, 'pageSize' => $pageSize], false);
 
             $r = [
                 'items' => $list->items(),
-                'total' => count($list)
+                'total' => $list->total()
             ];
 
             $retval->result = $r;
+
+            unset($list);
+            unset($r);
 
             return json($retval);
         } catch (\Exception $ex) {

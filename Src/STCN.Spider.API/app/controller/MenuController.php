@@ -139,8 +139,11 @@ class MenuController extends BaseController
                     }
                 }
             }
-
             $retval->result = $data;
+
+            unset($rootMenus);
+            unset($data);
+
             return json($retval);
         } catch (\Exception $ex) {
             $retval->code = ResultCode::ERROR;
@@ -444,8 +447,12 @@ class MenuController extends BaseController
 
                 // array_push($this->gmenuId, $m->id);
             }
-
             $retval->result = $data;
+
+            unset($root);
+            unset($menus);
+            unset($data);
+
             return json($retval);
         } catch (\Exception $ex) {
             $retval->code = ResultCode::ERROR;

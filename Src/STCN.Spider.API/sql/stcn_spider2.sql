@@ -38,7 +38,7 @@ CREATE TABLE `article_spider` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28084 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=59250 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 
@@ -179,7 +179,7 @@ DROP TABLE IF EXISTS `website`;
 CREATE TABLE `website` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `meida_name` varchar(50) DEFAULT NULL COMMENT '媒体名称，如证券时报',
+  `media_name` varchar(50) DEFAULT NULL COMMENT '媒体名称，如证券时报',
   `product_name` varchar(50) DEFAULT NULL COMMENT '媒体下的某产品名称，如e公司',
   `platform` varchar(50) DEFAULT NULL COMMENT '平台，如网站、app、微信、微博',
   `channel` varchar(50) DEFAULT NULL COMMENT '栏目/频道',
@@ -190,12 +190,12 @@ CREATE TABLE `website` (
   `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文逗号分隔。内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
-  `tasknum` int(11) DEFAULT NULL COMMENT '同时工作的爬虫任务数',
-  `multiserver` tinyint(1) DEFAULT NULL COMMENT '多服务器处理',
-  `serverid` int(11) DEFAULT NULL COMMENT '第几台服务器id',
-  `save_running_state` tinyint(1) DEFAULT NULL COMMENT '保存爬虫运行状态',
-  `interval` int(11) DEFAULT NULL COMMENT '单位：秒，爬虫爬取每个网页的时间间隔',
-  `timeout` int(11) DEFAULT NULL COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
+  `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
+  `multiserver` tinyint(1) DEFAULT '0' COMMENT '多服务器处理',
+  `serverid` int(11) DEFAULT '1' COMMENT '第几台服务器id',
+  `save_running_state` tinyint(1) DEFAULT '0' COMMENT '保存爬虫运行状态',
+  `interval` int(11) DEFAULT '1' COMMENT '单位：秒，爬虫爬取每个网页的时间间隔',
+  `timeout` int(11) DEFAULT '5' COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
   `max_try` int(11) DEFAULT '0' COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
   `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
   `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
@@ -214,6 +214,7 @@ DROP TABLE IF EXISTS `website_field`;
 CREATE TABLE `website_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
+  `website_id` int(11) DEFAULT NULL COMMENT '网站id',
   `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
   `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
@@ -221,6 +222,9 @@ CREATE TABLE `website_field` (
   `repeated` tinyint(1) DEFAULT '0' COMMENT '定义该field抽取到的内容是否是有多项, 默认false,赋值为true的话, 无论该field是否真的是有多项, 抽取到的结果都是数组结构，''selector'' => "//*[@id=''zh-single-question-page'']//a[contains(@class,''zm-item-tag'')]",',
   `source_type` varchar(50) DEFAULT 'url_context' COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
   `attached_url` varchar(200) DEFAULT NULL COMMENT '当source_type设置为attached_url时, 定义新请求的url',
+  `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
+  `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符合分割及用什么符号连接内容',
+  `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
   `status` int(11) DEFAULT '1',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,

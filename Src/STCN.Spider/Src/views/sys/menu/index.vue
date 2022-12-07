@@ -34,7 +34,7 @@
   import { defineComponent, nextTick, ref } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getRouteMenuList, getMenuPermission, menuDelete } from '/@/api/menu';
+  import { getMenuPermission, menuDelete } from '/@/api/menu';
 
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
@@ -43,7 +43,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { Authority } from '/@/components/Authority';
+  // import { Authority } from '/@/components/Authority';
 
   export default defineComponent({
     name: 'MenuManagement',

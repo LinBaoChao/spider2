@@ -89,7 +89,7 @@ class RoleController extends BaseController
                 }
             })
                 ->orderRaw('if(isnull(order_no),1,0),order_no')
-                ->paginate($pageSize, false, ['page' => $page]);
+                ->paginate(['page' => $page, 'pageSize' => $pageSize], false);
 
             //$total = $list->total();
 

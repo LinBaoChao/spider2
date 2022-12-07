@@ -19,7 +19,7 @@ use think\facade\Log;
 use utils\Md5Hash;
 
 /**
- * @OA\Info(title="STCN.FRAMEWORK 接口文档", version="1.0.1")
+ * @OA\Info(title="STCN.SPIDER 接口文档", version="1.0.1")
  */
 class UserController extends BaseController
 {
@@ -292,7 +292,7 @@ class UserController extends BaseController
                 ->field('u.*')
                 ->orderRaw('if(isnull(u.order_no),1,0),u.order_no,u.real_name,u.create_time desc')
                 ->distinct()
-                ->paginate($pageSize, false, ['page' => $page]);
+                ->paginate(['page' => $page, 'pageSize' => $pageSize], false);
             //->page($page, $pageSize) 用这个分页 total()会出错
 
             foreach ($user->items() as $m) {

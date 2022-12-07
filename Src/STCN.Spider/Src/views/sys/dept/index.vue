@@ -67,13 +67,13 @@
         showTableSetting: true,
         bordered: true,
         showIndexColumn: false,
-        canResize: false,
+        canResize: true,
         actionColumn: {
           width: 80,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
-          fixed: undefined,
+          //fixed: undefined,
         },
       });
 
