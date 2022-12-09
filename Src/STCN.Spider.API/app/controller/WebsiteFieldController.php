@@ -25,7 +25,7 @@ class WebsiteFieldController extends BaseController
      *   @OA\Response(response="200", description="WebsiteField")
      * )
      */
-    public function getList(int $websiteId, string $keyword = '', int $status)
+    public function getList(int $websiteId, string $keyword  = null, int $status = null)
     {
         $retval = new Result();
         $retval->code = ResultCode::SUCCESS;

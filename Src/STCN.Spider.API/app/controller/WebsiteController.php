@@ -27,7 +27,7 @@ class WebsiteController extends BaseController
      *   @OA\Response(response="200", description="Website")
      * )
      */
-    public function getListByPage(string $keyword = '', int $status, int $page = 1, int $pageSize = 20)
+    public function getListByPage(string $keyword = null, int $status = null, int $page = 1, int $pageSize = 20)
     {
         $retval = new Result();
         $retval->code = ResultCode::SUCCESS;

@@ -87,6 +87,13 @@ export const navItems: NavItem[] = [
     url: '/resources/spider',
     permissionCode: 'Resources.Spider.View',
   },
+  {
+    title: '网站管理',
+    icon: 'vscode-icons:file-type-graphql-config',
+    color: '#bf0c2c',
+    url: '/bllConfig/website',
+    permissionCode: 'BllConfig.Website.View',
+  },
 ];
 
 export const dynamicInfoItems: DynamicInfoItem[] = [
