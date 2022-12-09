@@ -124,7 +124,7 @@ export const searchFormSchema: FormSchema[] = [
     component: 'Select',
     componentProps: {
       options: [
-        { label: '启用', value: 1 },
+        { label: '正常', value: 1 },
         { label: '停用', value: 0 },
         { label: '出错', value: 2 },
       ],
@@ -176,7 +176,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'domains',
     label: '域名',
-    component: 'Input',
+    component: 'InputTextArea',
     required: true,
     helpMessage: [
       '多个用英文逗号分隔',
@@ -186,21 +186,21 @@ export const formSchema: FormSchema[] = [
   {
     field: 'scanUrls',
     label: '入口urls',
-    component: 'Input',
+    component: 'InputTextArea',
     required: true,
     helpMessage: ['多个用英文逗号分隔', '爬虫的入口链接'],
   },
   {
     field: 'listUrls',
     label: '列表urls',
-    component: 'Input',
+    component: 'InputTextArea',
     required: true,
     helpMessage: ['多个用英文逗号分隔', '可带正则规则的列表页url'],
   },
   {
     field: 'contentUrls',
     label: '内容urls',
-    component: 'Input',
+    component: 'InputTextArea',
     required: true,
     helpMessage: ['多个用英文逗号分隔', '可带正则规则的内容页url'],
   },
@@ -302,7 +302,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'clientIp',
     label: '伪IP',
-    component: 'Input',
+    component: 'InputTextArea',
     helpMessage: [
       '多个用英文逗号分隔',
       '爬虫爬取网页所使用的伪IP，用于破解防采集如192.168.0.2,192.168.0.3,...',
@@ -311,7 +311,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'userAgent',
     label: '代理',
-    component: 'Input',
+    component: 'InputTextArea',
     helpMessage: ['随机浏览器类型', '用于破解防采集'],
 
     // AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器

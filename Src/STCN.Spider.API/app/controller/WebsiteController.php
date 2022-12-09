@@ -10,6 +10,7 @@ use think\facade\Db;
 use app\BaseController;
 use app\model\Website;
 use app\model\WebsiteField;
+use app\validate\WebsiteValidate;
 use utils\Result;
 use enum\ResultCode;
 
@@ -36,16 +37,15 @@ class WebsiteController extends BaseController
         try {
             $list = Website::where(function ($query) use ($keyword, $status) {
                 if (!empty($keyword)) {
-                    $query->whereLike('w.media_name|w.product_name|w.platform|w.channel|w.name|w.domains|w.scan_urls|w.list_urls|w.content_urls|', "%{$keyword}%");
+                    $query->whereLike('media_name|product_name|platform|channel|name|domains|scan_urls|list_urls|content_urls', "%{$keyword}%");
                 }
 
-                if (!empty($status)) {
-                    $query->where('w.status', $status);
+                if ($status !== null) {
+                    $query->where('status', $status);
                 }
             })
-                ->alias('w')
-                ->field('w.*')
-                ->orderRaw('w.create_time desc')
+                ->field('*')
+                ->orderRaw('create_time desc')
                 ->paginate(['page' => $page, 'pageSize' => $pageSize], false);
 
 
@@ -114,7 +114,7 @@ class WebsiteController extends BaseController
                 'tasknum' => $params['tasknum'] ?? 1,
                 'multiserver' => $params['multiserver'] ?? 0,
                 'serverid' => $params['serverid'] ?? 1,
-                'save_running_state' => $params['save_running_state'] ?? 0,
+                'save_running_state' => $params['saveRunningState'] ?? 0,
                 'interval' => $params['interval'] ?? 1,
                 'timeout' => $params['timeout'] ?? 5,
                 'max_try' => $params['maxTry'] ?? 0,
@@ -199,7 +199,7 @@ class WebsiteController extends BaseController
                 'tasknum' => $params['tasknum'] ?? 1,
                 'multiserver' => $params['multiserver'] ?? 0,
                 'serverid' => $params['serverid'] ?? 1,
-                'save_running_state' => $params['save_running_state'] ?? 0,
+                'save_running_state' => $params['saveRunningState'] ?? 0,
                 'interval' => $params['interval'] ?? 1,
                 'timeout' => $params['timeout'] ?? 5,
                 'max_try' => $params['maxTry'] ?? 0,

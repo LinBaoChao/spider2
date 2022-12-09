@@ -9,6 +9,7 @@ use think\facade\Db;
 
 use app\BaseController;
 use app\model\WebsiteField;
+use app\validate\WebsiteFieldValidate;
 use utils\Result;
 use enum\ResultCode;
 
@@ -39,7 +40,7 @@ class WebsiteFieldController extends BaseController
                     $query->whereLike('name|selector', "%{$keyword}%");
                 }
 
-                if (!empty($status)) {
+                if ($status !== null) {
                     $query->where('status', $status);
                 }
             })->select();
