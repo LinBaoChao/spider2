@@ -239,7 +239,7 @@ class WebsiteController extends BaseController
         try {
             Db::startTrans();
 
-            WebsiteField::where('parent_id', $id)->delete(); // 删除子
+            WebsiteField::where('website_id', $id)->delete(); // 删除子
             if (!Website::destroy($id)) {
                 $retval->code = ResultCode::FAIL;
                 $retval->message = '删除失败';

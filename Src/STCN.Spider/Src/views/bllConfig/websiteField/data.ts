@@ -2,6 +2,7 @@ import { h, Slots } from 'vue';
 import { Tag } from 'ant-design-vue';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import { left } from 'inquirer/lib/utils/readline';
 
 export const searchSchema: FormSchema[] = [
   {
@@ -27,22 +28,31 @@ export const searchSchema: FormSchema[] = [
 
 export const columns: BasicColumn[] = [
   {
-    title: '名称',
+    title: '状态',
+    dataIndex: 'status',
+    width: 80,
+    customRender: ({ record }) => {
+      const enable = record.status;
+      const color = enable == 1 ? 'green' : 'red';
+      const text = enable == 1 ? '正常' : enable == 0 ? '停用' : '出错';
+      return h(Tag, { color: color }, () => text);
+    },
+  },
+  {
+    title: '字段',
     dataIndex: 'fieldName',
     width: 120,
   },
   {
     title: '抽取规则',
     dataIndex: 'selector',
+    width: 300,
+    align: 'left',
   },
   {
     title: '规则类型',
     dataIndex: 'selectorType',
-    width: 100,
-  },
-  {
-    title: '过滤去除',
-    dataIndex: 'filter',
+    width: 80,
   },
   {
     title: '是否必须',
@@ -50,17 +60,6 @@ export const columns: BasicColumn[] = [
     width: 80,
     customRender: ({ record }) => {
       const enable = record.required;
-      const color = enable == 1 ? 'green' : 'red';
-      const text = enable == 1 ? '是' : '否';
-      return h(Tag, { color: color }, () => text);
-    },
-  },
-  {
-    title: '是否多项',
-    dataIndex: 'repeated',
-    width: 80,
-    customRender: ({ record }) => {
-      const enable = record.repeated;
       const color = enable == 1 ? 'green' : 'red';
       const text = enable == 1 ? '是' : '否';
       return h(Tag, { color: color }, () => text);
@@ -78,6 +77,23 @@ export const columns: BasicColumn[] = [
     },
   },
   {
+    title: '是否多项',
+    dataIndex: 'repeated',
+    width: 80,
+    customRender: ({ record }) => {
+      const enable = record.repeated;
+      const color = enable == 1 ? 'green' : 'red';
+      const text = enable == 1 ? '是' : '否';
+      return h(Tag, { color: color }, () => text);
+    },
+  },
+  {
+    title: '过滤去除',
+    dataIndex: 'filter',
+    //width: 200,
+    align: 'left',
+  },
+  {
     title: '数据源类型',
     dataIndex: 'sourceType',
     width: 100,
@@ -91,17 +107,6 @@ export const columns: BasicColumn[] = [
     dataIndex: 'joinField',
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    width: 80,
-    customRender: ({ record }) => {
-      const enable = record.status;
-      const color = enable == 1 ? 'green' : 'red';
-      const text = enable == 1 ? '正常' : enable == 0 ? '停用' : '出错';
-      return h(Tag, { color: color }, () => text);
-    },
-  },
-  {
     title: '创建时间',
     dataIndex: 'createTime',
     width: 160,
@@ -111,9 +116,9 @@ export const columns: BasicColumn[] = [
 export const formSchema: FormSchema[] = [
   {
     field: 'fieldName',
-    label: '名称',
+    label: '字段',
     component: 'Input',
-    helpMessage: ['不能重复', '如title,source...'],
+    helpMessage: ['不能重复，英文', '与写入数据库表的字段对应，如title,source...'],
     rules: [
       {
         required: true,
@@ -124,7 +129,7 @@ export const formSchema: FormSchema[] = [
   {
     field: 'selector',
     label: '抽取规则',
-    component: 'Input',
+    component: 'InputTextArea',
     helpMessage: ['定义抽取规则', '默认使用xpath,如selector => //*[@id=single-next-link]'],
     rules: [
       {
@@ -142,6 +147,7 @@ export const formSchema: FormSchema[] = [
         { label: 'xpath', value: 'xpath', default: true },
         { label: 'jsonpath', value: 'jsonpath' },
         { label: 'regex', value: 'regex' },
+        { label: 'self', value: 'self' }, // selector的原内容
       ],
     },
     defaultValue: 'xpath',
@@ -164,21 +170,7 @@ export const formSchema: FormSchema[] = [
         { label: '否', value: 0 },
       ],
     },
-    defaultValue: 0,
-    colProps: { span: 12 },
-  },
-  {
-    field: 'repeated',
-    label: '是否多项',
-    component: 'RadioButtonGroup',
-    required: true,
-    componentProps: {
-      options: [
-        { label: '是', value: 1 },
-        { label: '否', value: 0 },
-      ],
-    },
-    defaultValue: 0,
+    defaultValue: 1,
     colProps: { span: 12 },
   },
   {
@@ -196,10 +188,18 @@ export const formSchema: FormSchema[] = [
     colProps: { span: 12 },
   },
   {
-    field: 'filter',
-    label: '过滤移除',
-    component: 'Input',
-    helpMessage: ['可正则表达式'],
+    field: 'repeated',
+    label: '是否多项',
+    component: 'RadioButtonGroup',
+    required: true,
+    componentProps: {
+      options: [
+        { label: '是', value: 1 },
+        { label: '否', value: 0 },
+      ],
+    },
+    defaultValue: 0,
+    colProps: { span: 12 },
   },
   {
     field: 'status',
@@ -213,6 +213,12 @@ export const formSchema: FormSchema[] = [
     },
     defaultValue: 1,
     colProps: { span: 12 },
+  },
+  {
+    field: 'filter',
+    label: '过滤移除',
+    component: 'InputTextArea',
+    helpMessage: ['可正则表达式'],
   },
   {
     field: 'parentId',
@@ -237,7 +243,6 @@ export const formSchema: FormSchema[] = [
         { label: 'attached_url', value: 'attached_url' },
       ],
     },
-    defaultValue: 'url_context',
     helpMessage: [
       '默认从当前的网页中抽取数据',
       '选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',

@@ -14,6 +14,17 @@ const { hasPermission } = usePermission();
 
 export const columns: BasicColumn[] = [
   {
+    title: '状态',
+    dataIndex: 'status',
+    width: 100,
+    customRender: ({ record }) => {
+      const enable = record.status;
+      const color = enable == 1 ? 'green' : 'red';
+      const text = enable == 1 ? '正常' : enable == 0 ? '停用' : '出错';
+      return h(Tag, { color: color }, () => text);
+    },
+  },
+  {
     title: '媒体标识',
     dataIndex: 'name',
     width: 120,
@@ -41,47 +52,57 @@ export const columns: BasicColumn[] = [
   {
     title: '域名',
     dataIndex: 'domains',
-    width: 120,
+    width: 200,
+    align: 'left',
   },
   {
     title: '入口url',
     dataIndex: 'scanUrls',
-    width: 120,
+    width: 200,
+    align: 'left',
   },
   {
     title: '列表url',
     dataIndex: 'listUrls',
-    width: 120,
+    width: 300,
+    align: 'left',
   },
   {
     title: '内容url',
     dataIndex: 'contentUrls',
-    width: 120,
-  },
-  {
-    title: '输入编码',
-    dataIndex: 'inputEncoding',
-    width: 120,
-  },
-  {
-    title: '输出编码',
-    dataIndex: 'outputEncoding',
-    width: 180,
+    width: 260,
+    align: 'left',
   },
   {
     title: '爬取间隔（秒）',
     dataIndex: 'interval',
-    width: 100,
+    width: 160,
   },
   {
     title: '爬取超时（秒）',
     dataIndex: 'timeout',
-    width: 100,
+    width: 160,
   },
   {
     title: '失败重试',
     dataIndex: 'maxTry',
     width: 100,
+  },
+  {
+    title: '任务数',
+    dataIndex: 'tasknum',
+  },
+  {
+    title: '多服务器处理',
+    dataIndex: 'multiserver',
+  },
+  {
+    title: '保存运行状态',
+    dataIndex: 'saveRunningState',
+  },
+  {
+    title: '第几台服务器',
+    dataIndex: 'serverid',
   },
   {
     title: '爬取深度',
@@ -94,15 +115,22 @@ export const columns: BasicColumn[] = [
     width: 100,
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    width: 100,
-    customRender: ({ record }) => {
-      const enable = record.status;
-      const color = enable == 1 ? 'green' : 'red';
-      const text = enable == 1 ? '正常' : enable == 0 ? '停用' : '出错';
-      return h(Tag, { color: color }, () => text);
-    },
+    title: '输入编码',
+    dataIndex: 'inputEncoding',
+    width: 120,
+  },
+  {
+    title: '输出编码',
+    dataIndex: 'outputEncoding',
+    width: 180,
+  },
+  {
+    dataIndex: 'clientIp',
+    title: '伪IP',
+  },
+  {
+    dataIndex: 'userAgent',
+    title: '代理',
   },
   {
     title: '创建时间',
@@ -205,14 +233,18 @@ export const formSchema: FormSchema[] = [
     helpMessage: ['多个用英文逗号分隔', '可带正则规则的内容页url'],
   },
   {
-    field: 'inputEncoding',
-    label: '输入编码',
-    component: 'Input',
-  },
-  {
-    field: 'outputEncoding',
-    label: '输出编码',
-    component: 'Input',
+    field: 'status',
+    label: '状态',
+    component: 'RadioButtonGroup',
+    required: true,
+    componentProps: {
+      options: [
+        { label: '启用', value: 1 },
+        { label: '禁用', value: 0 },
+      ],
+    },
+    defaultValue: 1,
+    colProps: { span: 12 },
   },
   {
     field: 'interval',
@@ -230,8 +262,46 @@ export const formSchema: FormSchema[] = [
     field: 'maxTry',
     label: '失败重试',
     component: 'InputNumber',
-    defaultValue: 0,
+    defaultValue: 5,
     helpMessage: ['', '默认值为0，即不重复爬取'],
+  },
+  {
+    field: 'tasknum',
+    label: '任务数',
+    component: 'InputNumber',
+    defaultValue: 3,
+  },
+  {
+    field: 'multiserver',
+    label: '多服务器处理',
+    component: 'RadioButtonGroup',
+    componentProps: {
+      options: [
+        { label: '是', value: 1 },
+        { label: '否', value: 0 },
+      ],
+    },
+    defaultValue: 1,
+    colProps: { span: 12 },
+  },
+  {
+    field: 'saveRunningState',
+    label: '保存运行状态',
+    component: 'RadioButtonGroup',
+    componentProps: {
+      options: [
+        { label: '启用', value: 1 },
+        { label: '禁用', value: 0 },
+      ],
+    },
+    defaultValue: 1,
+    colProps: { span: 12 },
+  },
+  {
+    field: 'serverid',
+    label: '第几台服务器',
+    component: 'InputNumber',
+    defaultValue: 1,
   },
   {
     field: 'maxDepth',
@@ -248,56 +318,14 @@ export const formSchema: FormSchema[] = [
     helpMessage: ['', '默认值为0，即不限制'],
   },
   {
-    field: 'status',
-    label: '状态',
-    component: 'RadioButtonGroup',
-    required: true,
-    componentProps: {
-      options: [
-        { label: '启用', value: 1 },
-        { label: '禁用', value: 0 },
-      ],
-    },
-    defaultValue: 1,
-    colProps: { span: 12 },
+    field: 'inputEncoding',
+    label: '输入编码',
+    component: 'Input',
   },
   {
-    field: 'tasknum',
-    label: '任务数',
-    component: 'InputNumber',
-    defaultValue: 1,
-  },
-  {
-    field: 'multiserver',
-    label: '多服务器处理',
-    component: 'RadioButtonGroup',
-    componentProps: {
-      options: [
-        { label: '是', value: 1 },
-        { label: '否', value: 0 },
-      ],
-    },
-    defaultValue: 0,
-    colProps: { span: 12 },
-  },
-  {
-    field: 'saveRunningState',
-    label: '保存运行状态',
-    component: 'RadioButtonGroup',
-    componentProps: {
-      options: [
-        { label: '启用', value: 1 },
-        { label: '禁用', value: 0 },
-      ],
-    },
-    defaultValue: 0,
-    colProps: { span: 12 },
-  },
-  {
-    field: 'serverid',
-    label: '第几台服务器',
-    component: 'InputNumber',
-    defaultValue: 1,
+    field: 'outputEncoding',
+    label: '输出编码',
+    component: 'Input',
   },
   {
     field: 'clientIp',

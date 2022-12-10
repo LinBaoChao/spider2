@@ -69,7 +69,7 @@
       searchInfo.websiteId = websiteId.value;
 
       const [registerTable, { reload, updateTableDataRecord, expandAll }] = useTable({
-        title: mediaName.value + ' 的字段规则列表',
+        title: '【' + mediaName.value + '】字段规则列表',
         api: websiteFieldGetList,
         rowKey: 'id',
         columns,
@@ -84,7 +84,6 @@
         showTableSetting: true,
         bordered: true,
         showIndexColumn: false,
-        canResize: true,
         handleSearchInfoFn(info) {
           searchInfo.websiteId = websiteId.value;
           return info;
