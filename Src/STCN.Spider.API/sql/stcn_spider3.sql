@@ -69,7 +69,7 @@ CREATE TABLE `menu` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `menu` */
 
@@ -120,8 +120,13 @@ insert  into `menu`(`id`,`parent_id`,`menu_code`,`menu_name`,`title`,`icon`,`com
 (128,127,'BllConfig.Website.View','View','查看',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:30:24','2022-12-09 16:30:24'),
 (129,127,'BllConfig.Website.Update','Update','修改',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:30:46','2022-12-09 16:30:46'),
 (130,127,'BllConfig.Website.Delete','Delete','删除',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:31:41','2022-12-09 16:31:41'),
-(131,127,'BllConfig.Website.FieldConfig','FieldConfig','规则管理',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:32:33','2022-12-09 16:32:33'),
-(132,127,'BllConfig.Website.Create','Create','新增',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 17:19:35','2022-12-09 17:19:35');
+(131,127,'BllConfig.Website.FieldConfig','FieldConfig','规则配置',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:32:33','2022-12-09 16:32:33'),
+(132,127,'BllConfig.Website.Create','Create','新增',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 17:19:35','2022-12-09 17:19:35'),
+(133,126,'BllConfig.WebsiteField','WebsiteField','网站规则管理',NULL,'/bllConfig/websiteField/index',NULL,'websiteField/:id/:mediaName',NULL,0,0,0,'/bllConfig/website',1,2,3,1,1,888888,'2022-12-10 12:09:58','2022-12-10 12:09:58'),
+(134,133,'BllConfig.WebsiteField.View','View','查看',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:46:37','2022-12-10 12:46:37'),
+(135,133,'BllConfig.WebsiteField.Create','Create','新增',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:48:29','2022-12-10 12:48:29'),
+(136,133,'BllConfig.WebsiteField.Update','Update','修改',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:48:56','2022-12-10 12:48:56'),
+(137,133,'BllConfig.WebsiteField.Delete','Delete','删除',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:49:39','2022-12-10 12:49:39');
 
 /*Table structure for table `role` */
 
@@ -156,51 +161,56 @@ CREATE TABLE `role_menu` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1065 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1189 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `role_menu` */
 
 insert  into `role_menu`(`id`,`role_id`,`menu_id`,`create_time`,`update_time`) values 
-(1025,1,88,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1026,1,2,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1027,1,1,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1028,1,89,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1029,1,90,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1030,1,91,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1031,1,114,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1032,1,3,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1033,1,92,'2022-12-09 17:22:07','2022-12-09 17:22:07'),
-(1034,1,104,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1035,1,105,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1036,1,106,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1037,1,5,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1038,1,94,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1039,1,110,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1040,1,111,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1041,1,112,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1042,1,113,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1043,1,4,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1044,1,93,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1045,1,107,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1046,1,108,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1047,1,109,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1048,1,13,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1049,1,103,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1050,1,116,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1051,1,102,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1052,1,12,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1053,1,11,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1054,1,122,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1055,1,123,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1056,1,124,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1057,1,125,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1058,1,128,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1059,1,129,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1060,1,130,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1061,1,131,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1062,1,132,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1063,1,127,'2022-12-09 17:22:08','2022-12-09 17:22:08'),
-(1064,1,126,'2022-12-09 17:22:08','2022-12-09 17:22:08');
+(1144,1,88,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1145,1,2,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1146,1,1,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1147,1,89,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1148,1,90,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1149,1,91,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1150,1,114,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1151,1,3,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1152,1,92,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1153,1,104,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1154,1,105,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1155,1,106,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1156,1,5,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1157,1,94,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1158,1,110,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1159,1,111,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1160,1,112,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1161,1,113,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1162,1,4,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1163,1,93,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1164,1,107,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1165,1,108,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1166,1,109,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1167,1,13,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1168,1,103,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1169,1,116,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1170,1,102,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1171,1,12,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1172,1,11,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1173,1,122,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1174,1,123,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1175,1,124,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1176,1,125,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1177,1,128,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1178,1,127,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1179,1,129,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1180,1,130,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1181,1,131,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1182,1,132,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1183,1,133,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1184,1,134,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1185,1,135,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1186,1,136,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1187,1,137,'2022-12-10 12:54:43','2022-12-10 12:54:43'),
+(1188,1,126,'2022-12-10 12:54:43','2022-12-10 12:54:43');
 
 /*Table structure for table `user` */
 
@@ -232,12 +242,12 @@ CREATE TABLE `user` (
   KEY `idx_user_code` (`user_code`),
   KEY `idx_user_create_time` (`create_time`),
   KEY `idx_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-09 05:11:26','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-09 17:11:27');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-10 08:32:57','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-10 20:32:58');
 
 /*Table structure for table `user_dept` */
 
@@ -308,9 +318,17 @@ CREATE TABLE `website` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website` */
+
+insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`status`,`create_time`,`update_time`) values 
+(2,NULL,'aa','a','a','a','a','a','a','a','a','a','a',1,0,1,0,1,5,0,0,0,'a','a',1,'2022-12-09 18:42:28','2022-12-10 14:18:03'),
+(3,NULL,'s',NULL,NULL,NULL,'s','s','s','s','s',NULL,NULL,1,0,1,0,1,5,0,0,0,NULL,NULL,1,'2022-12-10 14:24:18','2022-12-10 14:24:18'),
+(4,NULL,'ss',NULL,NULL,NULL,'ss','s','s','s','s',NULL,NULL,1,0,1,0,1,5,0,0,0,NULL,NULL,1,'2022-12-10 14:25:01','2022-12-10 14:25:01'),
+(5,NULL,'sss',NULL,NULL,NULL,'sss','s','s','s','s',NULL,NULL,1,0,1,0,1,5,0,0,0,NULL,NULL,1,'2022-12-10 14:25:10','2022-12-10 14:25:10'),
+(6,NULL,'f',NULL,NULL,NULL,'f','f','f','f','f',NULL,NULL,1,0,1,0,1,5,0,0,0,NULL,NULL,1,'2022-12-10 14:28:02','2022-12-10 14:28:02'),
+(7,NULL,'e',NULL,NULL,NULL,'e','e','e','e','e',NULL,NULL,1,0,1,0,1,5,0,0,0,NULL,NULL,1,'2022-12-10 14:48:30','2022-12-10 14:48:30');
 
 /*Table structure for table `website_field` */
 
@@ -320,7 +338,7 @@ CREATE TABLE `website_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
-  `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
+  `field_name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
   `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
@@ -328,15 +346,19 @@ CREATE TABLE `website_field` (
   `source_type` varchar(50) DEFAULT 'url_context' COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
   `attached_url` varchar(200) DEFAULT NULL COMMENT '当source_type设置为attached_url时, 定义新请求的url',
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
-  `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符合分割及用什么符号连接内容',
+  `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
   `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
+
+insert  into `website_field`(`id`,`parent_id`,`website_id`,`field_name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
+(1,NULL,2,'title','//div[contains(@class,\'detail-title\')]','xpath',1,0,'url_context','http://10.254.15.33:3100/#/bllConfig/websiteField/2/aa',1,'title,resource','//div[contains(@class,\'social-bar\')]',1,'2022-12-10 17:12:23','2022-12-10 17:12:23'),
+(2,NULL,2,'title2','//div[contains(@class,\'detail-title\')]1','jsonpath',0,1,'attached_url','http://10.254.15.33:3100/#/bllConfig/websiteField/2/aa1',0,'title,resource1','//div[contains(@class,\'social-bar\')]1',1,'2022-12-10 17:13:45','2022-12-10 17:40:25');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

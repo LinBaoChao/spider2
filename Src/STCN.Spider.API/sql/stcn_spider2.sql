@@ -38,7 +38,7 @@ CREATE TABLE `article_spider` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59250 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=60631 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 
@@ -84,7 +84,7 @@ CREATE TABLE `menu` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `role` */
 
@@ -112,7 +112,7 @@ CREATE TABLE `role_menu` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=846 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1189 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `user` */
 
@@ -144,7 +144,7 @@ CREATE TABLE `user` (
   KEY `idx_user_code` (`user_code`),
   KEY `idx_user_create_time` (`create_time`),
   KEY `idx_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `user_dept` */
 
@@ -199,13 +199,13 @@ CREATE TABLE `website` (
   `max_try` int(11) DEFAULT '0' COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
   `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
   `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
-  `user_agent` varchar(300) DEFAULT NULL COMMENT '爬虫爬取网页所使用的浏览器类型,phpspider::AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
+  `user_agent` varchar(300) DEFAULT NULL COMMENT '爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
   `client_ip` varchar(100) DEFAULT NULL COMMENT '爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
-  `status` int(11) DEFAULT '1',
+  `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `website_field` */
 
@@ -215,7 +215,7 @@ CREATE TABLE `website_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
-  `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
+  `field_name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
   `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
@@ -223,13 +223,13 @@ CREATE TABLE `website_field` (
   `source_type` varchar(50) DEFAULT 'url_context' COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
   `attached_url` varchar(200) DEFAULT NULL COMMENT '当source_type设置为attached_url时, 定义新请求的url',
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
-  `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符合分割及用什么符号连接内容',
+  `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
   `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
-  `status` int(11) DEFAULT '1',
+  `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
