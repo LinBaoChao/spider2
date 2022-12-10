@@ -16,11 +16,11 @@ use enum\ResultCode;
 class WebsiteFieldController extends BaseController
 {
     /**
-     * @OA\Get(path="/websitefield/getList",
+     * @OA\Get(path="/websiteField/getList",
      *   tags={"网站管理"},
      *   summary="获取网站字段列表",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
-     *   @OA\Parameter(name="websiteId", in="query", description="网站Id", @OA\Schema(type="int")),
+     *   @OA\Parameter(name="websiteId", in="query", description="网站Id", required=true, @OA\Schema(type="int")),
      *   @OA\Parameter(name="keyword", in="query", description="关键字", @OA\Schema(type="string")),
      *   @OA\Parameter(name="status", in="query", description="状态", @OA\Schema(type="int")),
      *   @OA\Response(response="200", description="WebsiteField")
@@ -34,10 +34,10 @@ class WebsiteFieldController extends BaseController
 
         try {
             $list = WebsiteField::where(function ($query) use ($websiteId, $keyword, $status) {
-                $query->where('website_id', $websiteId);
+                $query->where('website_id', $websiteId)->whereNull('parent_id');
 
                 if (!empty($keyword)) {
-                    $query->whereLike('name|selector', "%{$keyword}%");
+                    $query->whereLike('field_name|selector', "%{$keyword}%");
                 }
 
                 if ($status !== null) {
@@ -46,32 +46,38 @@ class WebsiteFieldController extends BaseController
             })->select();
 
             $child = WebsiteField::where(function ($query) use ($websiteId, $keyword, $status) {
-                $query->where('parent.website_id', $websiteId);
+                $query->where('child.website_id', $websiteId)->whereNotNull('child.parent_id');
 
                 if (!empty($keyword)) {
-                    $query->whereLike('parent.name|parent.selector', "%{$keyword}%");
+                    $query->whereLike('parent.field_name|parent.selector', "%{$keyword}%");
                 }
 
                 if (!empty($status)) {
-                    $query->where('parent.status', $status);
                     $query->where('child.status', $status);
+                    // $query->where('child.status', $status);
                 }
             })
-                ->alias('parent')
+                ->alias('child')
                 ->field('child.*')
-                ->Join('website_field child', 'child.parent_id=parent.id')
+                //->Join('website_field child', 'child.parent_id=parent.id')
                 ->select();
 
-            if (!$child->isEmpty()) { // 如果没有子
+            if (!$child->isEmpty()) {
                 foreach ($list as $p) {
                     $cs = $child->where('parent_id', $p->id);
                     if (!$cs->isEmpty()) {
                         $p['children'] = $cs;
+                    } else {
+                        $p['children'] = null;
                     }
+                    unset($cs);
                 }
             }
 
             $retval->result = $list;
+
+            unset($list);
+            unset($child);
 
             return json($retval);
         } catch (\Exception $ex) {
@@ -83,7 +89,7 @@ class WebsiteFieldController extends BaseController
     }
 
     /**
-     * @OA\Post(path="/websitefield/create",
+     * @OA\Post(path="/websiteField/create",
      *   tags={"网站管理"},
      *   summary="创建网站字段",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
@@ -107,9 +113,10 @@ class WebsiteFieldController extends BaseController
             }
 
             $websiteId = $params['websiteId'];
-            $name = $params['name'];
+            $fieldName = $params['fieldName'];
+            $parentId = $params['parentId'] ?? null;
 
-            $o = WebsiteField::where('media_name', $websiteId)->where('name', $name)->findOrEmpty();
+            $o = WebsiteField::where('website_id', $websiteId)->where('field_name', $fieldName)->where('parent_id', $parentId)->findOrEmpty();
             if (!$o->isEmpty()) {
                 $retval->code = ResultCode::FAIL;
                 $retval->message = "已存在";
@@ -117,9 +124,9 @@ class WebsiteFieldController extends BaseController
             }
 
             $o = WebsiteField::create([
-                'parent_id' => $params['parentId'] ?? null,
+                'parent_id' => $parentId,
                 'website_id' => $websiteId,
-                'name' => $name,
+                'field_name' => $fieldName,
                 'selector' => $params['selector'] ?? null,
                 'selector_type' => $params['selectorType'] ?? null,
                 'required' => $params['required'] ?? 0,
@@ -144,7 +151,7 @@ class WebsiteFieldController extends BaseController
     }
 
     /**
-     * @OA\Put(path="/websitefield/update",
+     * @OA\Put(path="/websiteField/update",
      *   tags={"网站管理"},
      *   summary="修改网站字段",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
@@ -169,9 +176,22 @@ class WebsiteFieldController extends BaseController
             }
 
             $id = $params['id'];
+            $fieldName = $params['fieldName'];
+
+            $o = WebsiteField::where('id', $id)->findOrEmpty();
+            if ($o->fieldName != $fieldName) {
+                $o = WebsiteField::where('website_id', $o->websiteId)->where('fieldName', $fieldName)->where('parent_id', $o->parentId)->findOrEmpty();
+                if (!$o->isEmpty()) {
+                    $retval->code = ResultCode::FAIL;
+                    $retval->message = "已存在";
+                    return json($retval);
+                }
+            }
 
             $o = WebsiteField::update([
                 'id' => $id,
+                'field_name' => $fieldName,
+                'parent_id' => $params['parentId'] ?? null,
                 'selector' => $params['selector'] ?? null,
                 'selector_type' => $params['selectorType'] ?? null,
                 'required' => $params['required'] ?? 0,
@@ -196,7 +216,7 @@ class WebsiteFieldController extends BaseController
     }
 
     /**
-     * * @OA\Put(path="/websitefield/delete",
+     * * @OA\Put(path="/websiteField/delete",
      *   tags={"网站管理"},
      *   summary="删除网站字段",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),

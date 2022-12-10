@@ -138,7 +138,7 @@ export const formSchema: FormSchema[] = [
     field: 'name',
     label: '媒体标识',
     component: 'Input',
-    helpMessage: ['请输入媒体标识', '英文字母，媒体标识不能重复'],
+    helpMessage: ['', '英文字母，媒体标识不能重复'],
     rules: [
       {
         required: true,
@@ -148,13 +148,13 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'mediaName',
-    label: '媒体名',
+    label: '媒体名称',
     component: 'Input',
-    helpMessage: ['请输入媒体名', '媒体名不能重复'],
+    helpMessage: ['媒体名称不能重复', ''],
     rules: [
       {
         required: true,
-        message: '请输入媒体名',
+        message: '请输入媒体名称',
       },
     ],
   },
@@ -231,21 +231,21 @@ export const formSchema: FormSchema[] = [
     label: '失败重试',
     component: 'InputNumber',
     defaultValue: 0,
-    helpMessage: ['请输入', '默认值为0，即不重复爬取'],
+    helpMessage: ['', '默认值为0，即不重复爬取'],
   },
   {
     field: 'maxDepth',
     label: '爬取深度',
     component: 'InputNumber',
     defaultValue: 0,
-    helpMessage: ['请输入', '默认值为0，即不限制'],
+    helpMessage: ['', '默认值为0，即不限制'],
   },
   {
     field: 'maxFields',
     label: '最大内容数',
     component: 'InputNumber',
     defaultValue: 0,
-    helpMessage: ['请输入', '默认值为0，即不限制'],
+    helpMessage: ['', '默认值为0，即不限制'],
   },
   {
     field: 'status',

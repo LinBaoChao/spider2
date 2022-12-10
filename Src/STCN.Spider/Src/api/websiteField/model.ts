@@ -1,6 +1,7 @@
 import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
 
 export type SearchParams = {
+  websiteId: any;
   keyword?: string;
   status?: number;
 };
@@ -11,7 +12,7 @@ export type SearchParams = {
 export interface ListModel {
   id: string | number;
   parentId?: number;
-  website_id: number;
+  websiteId: number;
   name: string;
   selector?: string;
   selectorType?: string;

@@ -98,7 +98,7 @@
           return info;
         },
         actionColumn: {
-          width: 160,
+          width: 130,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -172,7 +172,7 @@
       }
 
       function handleFieldConfig(record: Recordable) {
-        go('/websitefield/index/' + record.id);
+        go('/bllConfig/websiteField/' + record.id + '/' + record.mediaName);
       }
 
       function handleView(record: Recordable) {

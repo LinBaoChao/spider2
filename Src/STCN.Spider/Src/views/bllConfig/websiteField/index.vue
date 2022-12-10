@@ -7,29 +7,23 @@
     v-loading="loadingRef"
     loading-tip="加载中..."
   >
-    <BasicTable @register="registerTable" :searchInfo="searchInfo">
+    <BasicTable @register="registerTable" :searchInfo="searchInfo" @fetch-success="onFetchSuccess">
       <template #toolbar>
         <a-button
           type="primary"
           @click="handleCreate"
-          v-if="hasPermission('BllConfig.Website.Create')"
+          v-if="hasPermission('BllConfig.WebsiteField.Create')"
           >新增</a-button
         >
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
-            // {
-            //   icon: 'clarity:info-standard-line',
-            //   tooltip: '查看用户详情',
-            //   onClick: handleDetail.bind(null, record),
-            //   auth: 'BllConfig.Website.Detail.View',
-            // },
             {
               icon: 'clarity:note-edit-line',
               tooltip: '修改',
               onClick: handleEdit.bind(null, record),
-              auth: 'BllConfig.Website.Update',
+              auth: 'BllConfig.WebsiteField.Update',
             },
             {
               icon: 'ant-design:delete-outlined',
@@ -39,66 +33,64 @@
                 title: '是否确认删除',
                 confirm: handleDelete.bind(null, record),
               },
-              auth: 'BllConfig.Website.Delete',
-            },
-            {
-              icon: 'mdi:pencil-ruler-outline',
-              tooltip: '规则管理',
-              onClick: handleFieldConfig.bind(null, record),
-              auth: 'BllConfig.Website.FieldConfig',
+              auth: 'BllConfig.WebsiteField.Delete',
             },
           ]"
         />
       </template>
     </BasicTable>
-    <WebsiteModal @register="registerModal" @success="handleSuccess" />
-    <Detail @register="registerDetail" />
+    <WebsiteFieldModal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, reactive, nextTick, ref } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  import { useDrawer } from '/@/components/Drawer';
-  import { useGo } from '/@/hooks/web/usePage';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { useRoute } from 'vue-router';
 
-  import { columns, searchFormSchema } from './data';
-  import { websiteGetListByPage, websiteDeleted } from '/@/api/website';
-  import WebsiteModal from './WebsiteModal.vue';
-  import Detail from './detail.vue';
+  import WebsiteFieldModal from './WebsiteFieldModal.vue';
+  import { columns, searchSchema } from './data';
+  import { websiteFieldGetList, websiteFieldDeleted } from '/@/api/websiteField';
 
   export default defineComponent({
-    name: 'WebsiteManagement',
-    components: { BasicTable, PageWrapper, WebsiteModal, TableAction, Detail },
+    name: 'WebsiteFieldManagement',
+    components: { BasicTable, WebsiteFieldModal, TableAction },
     setup() {
-      const [registerDetail, { openDrawer: openDetail }] = useDrawer();
-      const go = useGo();
+      const route = useRoute();
+      const mediaName = ref(route.params?.mediaName);
+      const websiteId = ref(route.params?.id);
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
       const loadingRef = ref(false);
       const { notification } = useMessage();
       const { hasPermission } = usePermission();
-      const [registerTable, { reload, updateTableDataRecord }] = useTable({
-        title: '网站列表',
-        api: websiteGetListByPage,
+      searchInfo.websiteId = websiteId.value;
+
+      const [registerTable, { reload, updateTableDataRecord, expandAll }] = useTable({
+        title: mediaName.value + ' 的字段规则列表',
+        api: websiteFieldGetList,
         rowKey: 'id',
         columns,
         formConfig: {
           labelWidth: 120,
-          schemas: searchFormSchema,
+          schemas: searchSchema,
           autoSubmitOnEnter: true,
         },
+        isTreeTable: true,
+        pagination: false,
         useSearchForm: true,
         showTableSetting: true,
         bordered: true,
+        showIndexColumn: false,
+        canResize: true,
         handleSearchInfoFn(info) {
+          searchInfo.websiteId = websiteId.value;
           return info;
         },
         actionColumn: {
-          width: 160,
+          width: 100,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -107,6 +99,7 @@
 
       function handleCreate() {
         openModal(true, {
+          websiteId: websiteId.value,
           isUpdate: false,
         });
       }
@@ -114,6 +107,7 @@
       function handleEdit(record: Recordable) {
         console.log(record);
         openModal(true, {
+          websiteId: websiteId.value,
           record,
           isUpdate: true,
         });
@@ -123,7 +117,7 @@
         nextTick(async () => {
           try {
             loadingRef.value = true;
-            await websiteDeleted(record.id);
+            await websiteFieldDeleted(record.id);
             loadingRef.value = false;
             notification.success({
               message: `删除${record.mediaName}成功.`,
@@ -153,12 +147,12 @@
               loadingRef.value = false;
               updateTableDataRecord(values.id, values);
               notification.success({
-                message: `更新${values.mediaName}成功.`,
+                message: `更新${values.fieldName}成功.`,
               });
             } else {
               loadingRef.value = false;
               notification.success({
-                message: `新增${values.mediaName}成功.`,
+                message: `新增${values.fieldName}成功.`,
               });
             }
             reload();
@@ -171,35 +165,23 @@
         });
       }
 
-      function handleFieldConfig(record: Recordable) {
-        go('/websitefield/index/' + record.id);
-      }
-
-      function handleView(record: Recordable) {
-        go('/website/detail/' + record.id);
-      }
-
-      function handleDetail(record: Recordable) {
-        nextTick(() => {
-          openDetail(true, record);
-        });
+      function onFetchSuccess() {
+        // 演示默认展开所有表项
+        nextTick(expandAll);
       }
 
       return {
         registerTable,
         registerModal,
-        registerDetail,
         handleCreate,
         handleEdit,
         handleDelete,
         handleSuccess,
-        handleView,
-        handleDetail,
-        handleFieldConfig,
         searchInfo,
         loadingRef,
         notification,
         hasPermission,
+        onFetchSuccess,
       };
     },
   });

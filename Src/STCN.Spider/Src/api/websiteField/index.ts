@@ -2,10 +2,10 @@ import { defHttp } from '/@/utils/http/axios';
 import { SearchParams, ListResult } from './model';
 
 enum Api {
-  getList = '/websitefield/getList',
-  create = '/websitefield/create',
-  update = '/websitefield/update',
-  delete = '/websitefield/delete',
+  getList = '/websiteField/getList',
+  create = '/websiteField/create',
+  update = '/websiteField/update',
+  delete = '/websiteField/delete',
 }
 
 export const websiteFieldGetList = (params: SearchParams) =>

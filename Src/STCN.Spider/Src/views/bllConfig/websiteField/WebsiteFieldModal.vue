@@ -7,16 +7,22 @@
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
+
   import { formSchema } from './data';
-  import { websiteCreated, websiteUpdated } from '/@/api/website';
+  import {
+    websiteFieldGetList,
+    websiteFieldCreated,
+    websiteFieldUpdated,
+  } from '/@/api/websiteField';
 
   export default defineComponent({
-    name: 'AccountModal',
+    name: 'WebsiteFieldModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const websiteId = ref();
 
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         labelWidth: 100,
@@ -31,6 +37,7 @@
         resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
+        websiteId.value = data?.websiteId;
 
         if (unref(isUpdate)) {
           rowId.value = data.record.id;
@@ -39,12 +46,21 @@
           });
         }
 
-        updateSchema([
-          {
-            field: 'mediaName',
-            show: !unref(isUpdate),
-          },
-        ]);
+        const treeData = await websiteFieldGetList({
+          websiteId: websiteId.value,
+        });
+        updateSchema({
+          field: 'parentId',
+          componentProps: { treeData },
+        });
+
+        // updateSchema([
+        //   {
+        //     field: 'websiteId',
+        //     defaultValue: websiteId.value,
+        //     show: !unref(isUpdate),
+        //   },
+        // ]);
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
@@ -54,11 +70,12 @@
           const values = await validate();
           setModalProps({ confirmLoading: true });
           if (!unref(isUpdate)) {
-            await websiteCreated(values);
+            await websiteFieldCreated({ ...values, websiteId: websiteId.value });
           } else {
-            await websiteUpdated({ ...values, id: rowId.value });
+            await websiteFieldUpdated({ ...values, id: rowId.value, websiteId: websiteId.value });
+            closeModal();
           }
-          closeModal();
+
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
           // } catch (err) {
           //   notification.error({

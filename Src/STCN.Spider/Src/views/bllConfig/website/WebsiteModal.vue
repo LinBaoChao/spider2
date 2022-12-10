@@ -11,7 +11,7 @@
   import { websiteCreated, websiteUpdated } from '/@/api/website';
 
   export default defineComponent({
-    name: 'AccountModal',
+    name: 'WebsiteModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -39,12 +39,12 @@
           });
         }
 
-        updateSchema([
-          {
-            field: 'mediaName',
-            show: !unref(isUpdate),
-          },
-        ]);
+        // updateSchema([
+        //   {
+        //     field: 'mediaName',
+        //     show: !unref(isUpdate),
+        //   },
+        // ]);
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增' : '编辑'));
@@ -57,8 +57,9 @@
             await websiteCreated(values);
           } else {
             await websiteUpdated({ ...values, id: rowId.value });
+            closeModal();
           }
-          closeModal();
+          // closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
           // } catch (err) {
           //   notification.error({
