@@ -247,7 +247,7 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-11 02:55:57','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-11 14:55:57');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-12 12:38:13','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-12 00:38:13');
 
 /*Table structure for table `user_dept` */
 
@@ -297,10 +297,10 @@ CREATE TABLE `website` (
   `platform` varchar(50) DEFAULT NULL COMMENT '平台，如网站、app、微信、微博',
   `channel` varchar(50) DEFAULT NULL COMMENT '栏目/频道',
   `name` varchar(50) DEFAULT NULL COMMENT '英文名，采集程序使用',
-  `domains` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
-  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫的入口链接',
-  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。列表页url的规则',
-  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。内容页url的规则',
+  `domains` varchar(200) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
+  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用【分割 爬虫的入口链接',
+  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 列表页url的规则',
+  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
   `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
@@ -312,19 +312,20 @@ CREATE TABLE `website` (
   `max_try` int(11) DEFAULT '0' COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
   `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
   `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
-  `user_agent` varchar(300) DEFAULT NULL COMMENT '爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
-  `client_ip` varchar(100) DEFAULT NULL COMMENT '多人用英文分号分割。爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
+  `user_agent` varchar(300) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
+  `client_ip` varchar(100) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
+  `proxy` varchar(100) DEFAULT NULL COMMENT '多个用【分割 代理服务器，如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website` */
 
-insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`status`,`create_time`,`update_time`) values 
-(10,NULL,'证券时报','证券时报网','网站','要闻','stcn.com','[\"stcn.com;www.stcn.com\"]','[\"http://www.stcn.com/\"]','[\"http://www.stcn.com/article/list/yw.html\",\"http://www.stcn.com/article/list/kx.html\",\"http://www.stcn.com/article/list/company.html\",\"http://www.stcn.com/article/list/gsxw.html\"]','[\"http://www.stcn.com/article/detail/\\d+.html\"]',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-10 23:53:02','2022-12-11 14:58:34'),
-(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock.com','[\"news.cnstock.com\",\"www.news.cnstock.com\"]','[\"https://news.cnstock.com/\"]','[\"https://news.cnstock.com/news/sns_jg/index.html\"]','[\"https://news.cnstock.com/news,bwkx-\\d+-\\d+.htm\"]',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-11 00:46:22','2022-12-11 14:59:41');
+insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`proxy`,`status`,`create_time`,`update_time`) values 
+(10,NULL,'证券时报','证券时报网','网站','要闻','stcn.com','stcn.com【www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html【http://www.stcn.com/article/list/kx.html【http://www.stcn.com/article/list/company.html【http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,NULL,1,'2022-12-10 23:53:02','2022-12-12 00:37:58'),
+(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock.com','news.cnstock.com【www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/newsbwkx-\\d+-\\d+.htm【http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,'','','',1,'2022-12-11 00:46:22','2022-12-12 01:31:57');
 
 /*Table structure for table `website_field` */
 
@@ -339,7 +340,7 @@ CREATE TABLE `website_field` (
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
   `repeated` tinyint(1) DEFAULT '0' COMMENT '定义该field抽取到的内容是否是有多项, 默认false,赋值为true的话, 无论该field是否真的是有多项, 抽取到的结果都是数组结构，''selector'' => "//*[@id=''zh-single-question-page'']//a[contains(@class,''zm-item-tag'')]",',
-  `source_type` varchar(50) DEFAULT 'url_context' COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
+  `source_type` varchar(50) DEFAULT NULL COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
   `attached_url` varchar(200) DEFAULT NULL COMMENT '当source_type设置为attached_url时, 定义新请求的url',
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
   `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
@@ -348,12 +349,12 @@ CREATE TABLE `website_field` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
 
 insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
-(11,NULL,10,'title','//div[contains(@class,\'detail-title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 00:33:53'),
+(11,NULL,10,'title','//div[contains(@class,\'detail-title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 15:15:45'),
 (12,NULL,10,'author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',1,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:14:20','2022-12-11 00:34:07'),
 (13,NULL,10,'source','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:15:40','2022-12-11 00:34:16'),
 (14,NULL,10,'publish_time','//div[contains(@class,\'detail-info\')]//span[3]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:17:15','2022-12-11 00:34:24'),

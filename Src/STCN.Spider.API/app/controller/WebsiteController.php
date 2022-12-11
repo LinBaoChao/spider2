@@ -10,6 +10,7 @@ use think\facade\Db;
 use app\BaseController;
 use app\model\Website;
 use app\model\WebsiteField;
+use app\service\WebsiteService;
 use app\validate\WebsiteValidate;
 use utils\Result;
 use enum\ResultCode;
@@ -122,6 +123,7 @@ class WebsiteController extends BaseController
                 'max_fields' => $params['maxFields'] ?? 0,
                 'user_agent' => $params['userAgent'] ?? null,
                 'client_ip' => $params['clientIp'] ?? null,
+                'proxy' => $params['proxy'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
 
@@ -207,6 +209,7 @@ class WebsiteController extends BaseController
                 'max_fields' => $params['maxFields'] ?? 0,
                 'user_agent' => $params['userAgent'] ?? null,
                 'client_ip' => $params['clientIp'] ?? null,
+                'proxy' => $params['proxy'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
 
@@ -257,5 +260,18 @@ class WebsiteController extends BaseController
             Log::error("{$retval->message}\r\nHead：" . json_encode($this->request->header()) . "\r\nParam：" . json_encode($this->request->param()));
             return json($retval);
         }
+    }
+
+    /**
+     * @OA\Get(path="/website/getWebsiteConfig",
+     *   tags={"网站管理"},
+     *   summary="获取网站所有配置信息",
+     *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
+     *   @OA\Response(response="200", description="Website")
+     * )
+     */
+    public function getWebsiteConfig()
+    {
+        return json(WebsiteService::getWebsiteConfig());
     }
 }

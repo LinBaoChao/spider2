@@ -121,8 +121,12 @@ export const columns: BasicColumn[] = [
     title: '伪IP',
   },
   {
+    dataIndex: 'proxy',
+    title: '代理服务器',
+  },
+  {
     dataIndex: 'userAgent',
-    title: '代理',
+    title: '浏览器类型',
   },
   {
     title: '创建时间',
@@ -198,31 +202,28 @@ export const formSchema: FormSchema[] = [
     label: '域名',
     component: 'InputTextArea',
     required: true,
-    helpMessage: [
-      'json格式["","",...]',
-      '爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
-    ],
+    helpMessage: ['多个用【分割', '爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度'],
   },
   {
     field: 'scanUrls',
     label: '入口urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['json格式["","",...]', '爬虫的入口链接'],
+    helpMessage: ['多个用【分割', '爬虫的入口链接'],
   },
   {
     field: 'listUrls',
     label: '列表urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['json格式["","",...]', '可带正则规则的列表页url'],
+    helpMessage: ['多个用【分割', '可带正则规则的列表页url'],
   },
   {
     field: 'contentUrls',
     label: '内容urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['json格式["","",...]', '可带正则规则的内容页url'],
+    helpMessage: ['多个用【分割', '可带正则规则的内容页url'],
   },
   {
     field: 'status',
@@ -324,15 +325,24 @@ export const formSchema: FormSchema[] = [
     label: '伪IP',
     component: 'InputTextArea',
     helpMessage: [
-      'json格式["","",...]',
+      '多个用【分割',
       '爬虫爬取网页所使用的伪IP，用于破解防采集如192.168.0.2,192.168.0.3,...',
     ],
   },
   {
-    field: 'userAgent',
-    label: '代理',
+    field: 'proxy',
+    label: '代理服务器',
     component: 'InputTextArea',
-    helpMessage: ['json格式["","",...]', '随机浏览器类型，用于破解防采集'],
+    helpMessage: [
+      '多个用【分割',
+      '代理服务器，如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
+    ],
+  },
+  {
+    field: 'userAgent',
+    label: '浏览器类型',
+    component: 'InputTextArea',
+    helpMessage: ['多个用【分割', '随机浏览器类型，用于破解防采集'],
 
     // AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
     // AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器

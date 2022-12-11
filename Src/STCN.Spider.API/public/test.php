@@ -1,9 +1,12 @@
 <?php
-
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../app/service/WebsiteService.php';
 //use think\App;
 
 use think\facade\Request;
 use think\helper\Str;
+
+use app\service\WebsiteService;
 
 error_reporting(0);
 $a = $_REQUEST['a'];
@@ -81,3 +84,18 @@ var_dump(json_decode($s, false)); // stdClass
 $js = json_decode($s, true); // array
 var_dump($js);
 var_dump(json_encode($js));
+var_dump(json_decode('', true));
+
+$config = WebsiteService::getWebsiteConfig();
+var_dump($config);
+
+$s = '{"a":"http://www.stcn.com/article/detail/\d+.html"}';
+var_dump(htmlspecialchars_decode($s));
+var_dump(json_decode(htmlspecialchars_decode($s), true));
+
+$s = stripslashes($s);
+var_dump($s);
+var_dump(json_decode($s, true));
+
+$s = 'a【】b【】c';
+var_dump(explode("【】", $s));

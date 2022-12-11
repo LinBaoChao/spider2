@@ -37,6 +37,7 @@ class Website extends BaseModel
         'max_fields' => 'int',
         'user_agent' => 'string',
         'client_ip' => 'string',
+        'proxy' => 'string',
         'status' => 'int',
         'create_time' => 'datetime',
         'update_time' => 'datetime',

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace app\service;
 
+use app\model\Website;
+use app\model\WebsiteField;
+use enum\ResultCode;
 use think\facade\Config;
 use think\facade\Log;
+use utils\Result;
 
 class WebsiteService
 {
@@ -157,9 +161,137 @@ class WebsiteService
     //         ),
     //     );
 
+    /**
+     * 获取所有网站配置信息
+     * @return Result
+     */
     public static function getWebsiteConfig()
     {
+        $retval = new Result();
+        $retval->code = ResultCode::SUCCESS;
+        $retval->message = '获取数据成功';
 
         $data = [];
+
+        try {
+            $websites = Website::where('status!=0')->order('create_time', 'desc')->select(); // 获取所有有效的网站配置数据
+            $websiteFields = WebsiteField::where('status!=0')->select();
+            $websiteFields2 = WebsiteField::where('f.status!=0')->where('f2.status!=0')
+                ->alias('f')
+                ->join('website_field f2', 'f2.parent_id=f.id')
+                ->select();
+            if (!$websites->isEmpty()) {
+                foreach ($websites as $website) {
+                    $fieldConfig = []; // 字段
+
+                    if (!$websiteFields->isEmpty()) { // 打包字段
+                        $fields = $websiteFields->where('website_id', $website->id); // 取出所有字段
+                        if (!$fields->isEmpty()) {
+                            $field2Config = [];
+
+                            foreach ($fields as $field) {
+                                if (!$websiteFields2->isEmpty()) { // 打包子字段
+                                    $fields2 = $websiteFields2->where('parent_id', $field->id); // 字段子集
+                                    if (!$fields2->isEmpty()) {
+                                        foreach ($fields2 as $field2) {
+                                            $field2Config[] = [
+                                                'name' => $field2->name,
+                                                'selector' => $field2->selector,
+                                                'selector_type' => $field2->selectorType,
+                                                'required' => (bool)$field2->required,
+                                                'repeated' => (bool)$field2->repeated,
+                                                'source_type' => $field2->sourceType,
+                                                'attached_url' => $field2->attachedUrl,
+                                                'is_write_db' => (bool)$field2->isWriteDb,
+                                                'join_field' => $field2->joinField,
+                                                'filter' => $field2->filter,
+                                            ];
+                                        }
+                                    }
+                                }
+
+                                $fieldConfig[] = [
+                                    'name' => $field->name,
+                                    'selector' => $field->selector,
+                                    'selector_type' => $field->selectorType,
+                                    'required' => (bool)$field->required,
+                                    'repeated' => (bool)$field->repeated,
+                                    'source_type' => $field->sourceType,
+                                    'attached_url' => $field->attachedUrl,
+                                    'is_write_db' => (bool)$field->isWriteDb,
+                                    'join_field' => $field->joinField,
+                                    'filter' => $field->filter,
+                                    //'children' => $field2Config,
+                                ];
+                                if (!empty($field2Config)) {
+                                    $fieldConfig['children'] = $field2Config;
+                                }
+                            }
+                        }
+                    }
+
+                    $proxy = $website->proxy ? explode('【', $website->proxy) : null;
+                    $userAgent = $website->userAgent ? explode('【', $website->userAgent) : null;
+                    $clientIp = $website->clientIp ? explode('【', $website->clientIp) : null;
+
+                    // 网站
+                    $data[] = [
+                        'name' => $website->name,
+                        'input_encoding' => $website->inputEncoding,
+                        'output_encoding' => $website->outputEncoding,
+                        'tasknum' => $website->tasknum,
+                        'multiserver' => (bool)$website->multiserver,
+                        'serverid' => $website->serverid,
+                        'save_running_state' => (bool)$website->saveRunningState,
+                        'proxy' => $proxy,
+                        'interval' => $website->interval,
+                        'timeout' => $website->timeout,
+                        'max_try' => $website->maxTry,
+                        'max_depth' => $website->maxDepth,
+                        'max_fields' => $website->maxFields,
+                        'user_agent' => $userAgent,
+                        'client_ip' => $clientIp,
+                        'domains' => explode('【', $website->domains ?? ''),
+                        'scan_urls' => explode('【', $website->scanUrls ?? ''),
+                        'list_url_regexes' => explode('【', $website->listUrls ?? ''),
+                        'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
+
+                        'log_show' => true,
+                        'log_file' => 'data/qiushibaike.log',
+                        'log_type' => 'error,debug,info,warn',
+                        'queue_config' => array(
+                            'host'      => '127.0.0.1',
+                            'port'      => 6379,
+                            'pass'      => '',
+                            'db'        => 5,
+                            'prefix'    => 'phpspider',
+                            'timeout'   => 30,
+                        ),
+                        'export' => array(
+                            'type' => 'db',
+                            'table' => 'article_spider',
+                        ),
+                        'db_config' => array(
+                            'host'  => '127.0.0.1',
+                            'port'  => 3306,
+                            'user'  => 'root',
+                            'pass'  => '123456',
+                            'name'  => 'stcn_spider',
+                        ),
+
+                        'fields' => $fieldConfig,
+                    ];
+                }
+            }
+
+            $retval->result = $data;
+
+            return $retval;
+        } catch (\Exception $ex) {
+            $retval->code = ResultCode::ERROR;
+            $retval->message = "获取数据失败：{$ex->getMessage()}";
+            Log::error("{$retval->message}\r\n");
+            return $retval;
+        }
     }
 }
