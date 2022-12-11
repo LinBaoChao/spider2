@@ -1,16 +1,8 @@
-import { viteImagemin } from 'vite-plugin-imagemin';
-import { h, Slots } from 'vue';
+import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
 import { DescItem } from '/@/components/Description/src/typing';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { commonTagRender } from '/@/utils/tagUtil';
-import { EnableSelectOptions, EnableRadioOptions } from '/@/utils/status';
-import { formatToDate } from '/@/utils/dateUtil';
-import { Rule } from '/@/components/Form';
-import { usePermission } from '/@/hooks/web/usePermission';
-
-const { hasPermission } = usePermission();
 
 export const columns: BasicColumn[] = [
   {
@@ -207,7 +199,7 @@ export const formSchema: FormSchema[] = [
     component: 'InputTextArea',
     required: true,
     helpMessage: [
-      '多个用英文逗号分隔',
+      'json格式["","",...]',
       '爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
     ],
   },
@@ -216,21 +208,21 @@ export const formSchema: FormSchema[] = [
     label: '入口urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['多个用英文逗号分隔', '爬虫的入口链接'],
+    helpMessage: ['json格式["","",...]', '爬虫的入口链接'],
   },
   {
     field: 'listUrls',
     label: '列表urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['多个用英文逗号分隔', '可带正则规则的列表页url'],
+    helpMessage: ['json格式["","",...]', '可带正则规则的列表页url'],
   },
   {
     field: 'contentUrls',
     label: '内容urls',
     component: 'InputTextArea',
     required: true,
-    helpMessage: ['多个用英文逗号分隔', '可带正则规则的内容页url'],
+    helpMessage: ['json格式["","",...]', '可带正则规则的内容页url'],
   },
   {
     field: 'status',
@@ -332,7 +324,7 @@ export const formSchema: FormSchema[] = [
     label: '伪IP',
     component: 'InputTextArea',
     helpMessage: [
-      '多个用英文逗号分隔',
+      'json格式["","",...]',
       '爬虫爬取网页所使用的伪IP，用于破解防采集如192.168.0.2,192.168.0.3,...',
     ],
   },
@@ -340,7 +332,7 @@ export const formSchema: FormSchema[] = [
     field: 'userAgent',
     label: '代理',
     component: 'InputTextArea',
-    helpMessage: ['随机浏览器类型', '用于破解防采集'],
+    helpMessage: ['json格式["","",...]', '随机浏览器类型，用于破解防采集'],
 
     // AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
     // AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器

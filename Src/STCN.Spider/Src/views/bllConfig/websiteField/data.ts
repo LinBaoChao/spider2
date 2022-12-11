@@ -2,7 +2,6 @@ import { h, Slots } from 'vue';
 import { Tag } from 'ant-design-vue';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { left } from 'inquirer/lib/utils/readline';
 
 export const searchSchema: FormSchema[] = [
   {
@@ -40,7 +39,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '字段',
-    dataIndex: 'fieldName',
+    dataIndex: 'name',
     width: 120,
   },
   {
@@ -115,7 +114,7 @@ export const columns: BasicColumn[] = [
 
 export const formSchema: FormSchema[] = [
   {
-    field: 'fieldName',
+    field: 'name',
     label: '字段',
     component: 'Input',
     helpMessage: ['不能重复，英文', '与写入数据库表的字段对应，如title,source...'],
@@ -226,7 +225,7 @@ export const formSchema: FormSchema[] = [
     component: 'TreeSelect',
     componentProps: {
       replaceFields: {
-        title: 'fieldName',
+        title: 'name',
         key: 'id',
         value: 'id',
       },

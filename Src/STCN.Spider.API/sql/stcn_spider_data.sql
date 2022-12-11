@@ -115,14 +115,14 @@ insert  into `menu`(`id`,`parent_id`,`menu_code`,`menu_name`,`title`,`icon`,`com
 (123,122,'Resources.Spider','Spider','采集资源',NULL,'/resources/spider/index',NULL,'spider',NULL,0,1,0,NULL,1,2,2,1,1,12,'2022-11-28 09:40:39','2022-11-28 09:40:39'),
 (124,123,'Resources.Spider.View','View','查看',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-11-28 10:58:03','2022-11-28 10:58:03'),
 (125,123,'Resources.Spider.Delete','Delete','删除',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-11-28 10:58:19','2022-11-28 10:58:19'),
-(126,NULL,'BllConfig','BllConfig','业务配置','file-icons:config-rust','LAYOUT','/bllConfig/website/index','/bllConfig',NULL,0,1,0,NULL,1,1,1,1,1,22,'2022-12-09 14:42:48','2022-12-09 14:42:48'),
+(126,NULL,'BllConfig','BllConfig','业务配置','grommet-icons:document-config','LAYOUT','/bllConfig/website/index','/bllConfig',NULL,0,1,0,NULL,1,1,1,1,1,22,'2022-12-09 14:42:48','2022-12-09 14:42:48'),
 (127,126,'BllConfig.Website','Website','网站配置',NULL,'/bllConfig/website/index','','website',NULL,0,1,0,NULL,1,2,2,1,1,23,'2022-12-09 14:45:38','2022-12-09 14:45:38'),
 (128,127,'BllConfig.Website.View','View','查看',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:30:24','2022-12-09 16:30:24'),
 (129,127,'BllConfig.Website.Update','Update','修改',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:30:46','2022-12-09 16:30:46'),
 (130,127,'BllConfig.Website.Delete','Delete','删除',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:31:41','2022-12-09 16:31:41'),
-(131,127,'BllConfig.Website.FieldConfig','FieldConfig','规则配置',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:32:33','2022-12-09 16:32:33'),
+(131,127,'BllConfig.Website.FieldConfig','FieldConfig','字段配置',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 16:32:33','2022-12-09 16:32:33'),
 (132,127,'BllConfig.Website.Create','Create','新增',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-09 17:19:35','2022-12-09 17:19:35'),
-(133,126,'BllConfig.WebsiteField','WebsiteField','网站规则管理',NULL,'/bllConfig/websiteField/index',NULL,'websiteField/:id/:mediaName',NULL,0,0,0,'/bllConfig/website',1,2,3,1,1,888888,'2022-12-10 12:09:58','2022-12-10 12:09:58'),
+(133,126,'BllConfig.WebsiteField','WebsiteField','字段规则管理',NULL,'/bllConfig/websiteField/index',NULL,'websiteField/:id/:mediaName',NULL,0,0,0,'/bllConfig/website',1,2,3,1,1,888888,'2022-12-10 12:09:58','2022-12-10 12:09:58'),
 (134,133,'BllConfig.WebsiteField.View','View','查看',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:46:37','2022-12-10 12:46:37'),
 (135,133,'BllConfig.WebsiteField.Create','Create','新增',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:48:29','2022-12-10 12:48:29'),
 (136,133,'BllConfig.WebsiteField.Update','Update','修改',NULL,NULL,NULL,NULL,NULL,0,1,0,NULL,1,3,3,0,1,NULL,'2022-12-10 12:48:56','2022-12-10 12:48:56'),
@@ -247,7 +247,7 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-10 11:43:20','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-10 23:43:20');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-11 02:55:57','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-11 14:55:57');
 
 /*Table structure for table `user_dept` */
 
@@ -297,10 +297,10 @@ CREATE TABLE `website` (
   `platform` varchar(50) DEFAULT NULL COMMENT '平台，如网站、app、微信、微博',
   `channel` varchar(50) DEFAULT NULL COMMENT '栏目/频道',
   `name` varchar(50) DEFAULT NULL COMMENT '英文名，采集程序使用',
-  `domains` varchar(200) DEFAULT NULL COMMENT '多个用英文逗号分隔。爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
-  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用英文逗号分隔。爬虫的入口链接',
-  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文逗号分隔。列表页url的规则',
-  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文逗号分隔。内容页url的规则',
+  `domains` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
+  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫的入口链接',
+  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。列表页url的规则',
+  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
   `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
@@ -313,7 +313,7 @@ CREATE TABLE `website` (
   `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
   `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
   `user_agent` varchar(300) DEFAULT NULL COMMENT '爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
-  `client_ip` varchar(100) DEFAULT NULL COMMENT '爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
+  `client_ip` varchar(100) DEFAULT NULL COMMENT '多人用英文分号分割。爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -323,8 +323,8 @@ CREATE TABLE `website` (
 /*Data for the table `website` */
 
 insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`status`,`create_time`,`update_time`) values 
-(10,NULL,'证券时报','证券时报网','网站','要闻','stcn.com','stcn.com, www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html,http://www.stcn.com/article/list/kx.html,http://www.stcn.com/article/list/company.html,http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-10 23:53:02','2022-12-10 23:53:02'),
-(11,NULL,'中国证券网','上海证券报','网站','要闻','cnstock.com','news.cnstock.com,www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/news,bwkx-\\d+-\\d+.htm',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-11 00:46:22','2022-12-11 00:46:22');
+(10,NULL,'证券时报','证券时报网','网站','要闻','stcn.com','[\"stcn.com;www.stcn.com\"]','[\"http://www.stcn.com/\"]','[\"http://www.stcn.com/article/list/yw.html\",\"http://www.stcn.com/article/list/kx.html\",\"http://www.stcn.com/article/list/company.html\",\"http://www.stcn.com/article/list/gsxw.html\"]','[\"http://www.stcn.com/article/detail/\\d+.html\"]',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-10 23:53:02','2022-12-11 14:58:34'),
+(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock.com','[\"news.cnstock.com\",\"www.news.cnstock.com\"]','[\"https://news.cnstock.com/\"]','[\"https://news.cnstock.com/news/sns_jg/index.html\"]','[\"https://news.cnstock.com/news,bwkx-\\d+-\\d+.htm\"]',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,1,'2022-12-11 00:46:22','2022-12-11 14:59:41');
 
 /*Table structure for table `website_field` */
 
@@ -334,7 +334,7 @@ CREATE TABLE `website_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
-  `field_name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
+  `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
   `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
@@ -352,7 +352,7 @@ CREATE TABLE `website_field` (
 
 /*Data for the table `website_field` */
 
-insert  into `website_field`(`id`,`parent_id`,`website_id`,`field_name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
+insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
 (11,NULL,10,'title','//div[contains(@class,\'detail-title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 00:33:53'),
 (12,NULL,10,'author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',1,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:14:20','2022-12-11 00:34:07'),
 (13,NULL,10,'source','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:15:40','2022-12-11 00:34:16'),

@@ -16,7 +16,7 @@ class WebsiteField extends BaseModel
         'id' => 'int',
         'parent_id' => 'int',
         'website_id' => 'int',
-        'field_name' => 'string',
+        'name' => 'string',
         'selector' => 'string',
         'selector_type' => 'string',
         'required' => 'int',

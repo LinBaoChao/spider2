@@ -146,12 +146,12 @@
               loadingRef.value = false;
               updateTableDataRecord(values.id, values);
               notification.success({
-                message: `更新${values.fieldName}成功.`,
+                message: `更新${values.name}成功.`,
               });
             } else {
               loadingRef.value = false;
               notification.success({
-                message: `新增${values.fieldName}成功.`,
+                message: `新增${values.name}成功.`,
               });
             }
             reload();

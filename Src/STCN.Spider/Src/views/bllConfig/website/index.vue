@@ -43,7 +43,7 @@
             },
             {
               icon: 'mdi:pencil-ruler-outline',
-              tooltip: '规则管理',
+              tooltip: '字段管理',
               onClick: handleFieldConfig.bind(null, record),
               auth: 'BllConfig.Website.FieldConfig',
             },

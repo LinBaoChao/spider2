@@ -38,7 +38,7 @@ CREATE TABLE `article_spider` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60644 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=60677 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 
@@ -184,10 +184,10 @@ CREATE TABLE `website` (
   `platform` varchar(50) DEFAULT NULL COMMENT '平台，如网站、app、微信、微博',
   `channel` varchar(50) DEFAULT NULL COMMENT '栏目/频道',
   `name` varchar(50) DEFAULT NULL COMMENT '英文名，采集程序使用',
-  `domains` varchar(200) DEFAULT NULL COMMENT '多个用英文逗号分隔。爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
-  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用英文逗号分隔。爬虫的入口链接',
-  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文逗号分隔。列表页url的规则',
-  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文逗号分隔。内容页url的规则',
+  `domains` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
+  `scan_urls` varchar(200) DEFAULT NULL COMMENT '多个用英文;分隔。爬虫的入口链接',
+  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。列表页url的规则',
+  `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用英文;分隔。内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
   `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
@@ -200,7 +200,7 @@ CREATE TABLE `website` (
   `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
   `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
   `user_agent` varchar(300) DEFAULT NULL COMMENT '爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
-  `client_ip` varchar(100) DEFAULT NULL COMMENT '爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
+  `client_ip` varchar(100) DEFAULT NULL COMMENT '多人用英文分号分割。爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -215,7 +215,7 @@ CREATE TABLE `website_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
-  `field_name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
+  `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
   `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
   `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',

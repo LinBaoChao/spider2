@@ -37,7 +37,7 @@ class WebsiteFieldController extends BaseController
                 $query->where('website_id', $websiteId)->whereNull('parent_id');
 
                 if (!empty($keyword)) {
-                    $query->whereLike('field_name|selector', "%{$keyword}%");
+                    $query->whereLike('name|selector', "%{$keyword}%");
                 }
 
                 if ($status !== null) {
@@ -49,7 +49,7 @@ class WebsiteFieldController extends BaseController
                 $query->where('child.website_id', $websiteId)->whereNotNull('child.parent_id');
 
                 if (!empty($keyword)) {
-                    $query->whereLike('parent.field_name|parent.selector', "%{$keyword}%");
+                    $query->whereLike('parent.name|parent.selector', "%{$keyword}%");
                 }
 
                 if (!empty($status)) {
@@ -113,10 +113,10 @@ class WebsiteFieldController extends BaseController
             }
 
             $websiteId = $params['websiteId'];
-            $fieldName = $params['fieldName'];
+            $name = $params['name'];
             $parentId = $params['parentId'] ?? null;
 
-            $o = WebsiteField::where('website_id', $websiteId)->where('field_name', $fieldName)->where('parent_id', $parentId)->findOrEmpty();
+            $o = WebsiteField::where('website_id', $websiteId)->where('name', $name)->where('parent_id', $parentId)->findOrEmpty();
             if (!$o->isEmpty()) {
                 $retval->code = ResultCode::FAIL;
                 $retval->message = "已存在";
@@ -126,7 +126,7 @@ class WebsiteFieldController extends BaseController
             $o = WebsiteField::create([
                 'parent_id' => $parentId,
                 'website_id' => $websiteId,
-                'field_name' => $fieldName,
+                'name' => $name,
                 'selector' => $params['selector'] ?? null,
                 'selector_type' => $params['selectorType'] ?? null,
                 'required' => $params['required'] ?? 0,
@@ -176,11 +176,11 @@ class WebsiteFieldController extends BaseController
             }
 
             $id = $params['id'];
-            $fieldName = $params['fieldName'];
+            $name = $params['name'];
 
             $o = WebsiteField::where('id', $id)->findOrEmpty();
-            if ($o->fieldName != $fieldName) {
-                $o = WebsiteField::where('website_id', $o->websiteId)->where('fieldName', $fieldName)->where('parent_id', $o->parentId)->findOrEmpty();
+            if ($o->name != $name) {
+                $o = WebsiteField::where('website_id', $o->websiteId)->where('name', $name)->where('parent_id', $o->parentId)->findOrEmpty();
                 if (!$o->isEmpty()) {
                     $retval->code = ResultCode::FAIL;
                     $retval->message = "已存在";
@@ -190,7 +190,7 @@ class WebsiteFieldController extends BaseController
 
             $o = WebsiteField::update([
                 'id' => $id,
-                'field_name' => $fieldName,
+                'name' => $name,
                 'parent_id' => $params['parentId'] ?? null,
                 'selector' => $params['selector'] ?? null,
                 'selector_type' => $params['selectorType'] ?? null,

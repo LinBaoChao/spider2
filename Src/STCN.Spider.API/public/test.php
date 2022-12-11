@@ -73,4 +73,11 @@ function check_user($arr, $s)
 test();
 echo str_replace("\\", "/", "http://10.254.15.33:9997/storage/upload/user-avatar/2022\1119\476dae523fa1653365\8a5040065a2961.png");
 
-var_dump(phpinfo());
+// //var_dump(phpinfo());
+// ,http://www.stcn.com/article/list/kx.html,http://www.stcn.com/article/list/company.html,http://www.stcn.com/article/list/gsxw.html
+$s = '{"a":"2"}'; //["a","b"]
+var_dump($s);
+var_dump(json_decode($s, false)); // stdClass
+$js = json_decode($s, true); // array
+var_dump($js);
+var_dump(json_encode($js));
