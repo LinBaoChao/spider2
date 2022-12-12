@@ -87,7 +87,7 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '过滤去除',
+    title: '过滤',
     dataIndex: 'filter',
     //width: 200,
     align: 'left',
@@ -215,7 +215,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'filter',
-    label: '过滤移除',
+    label: '过滤',
     component: 'InputTextArea',
     helpMessage: ['可正则表达式'],
   },

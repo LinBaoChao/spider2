@@ -175,21 +175,22 @@ class WebsiteService
 
         try {
             $websites = Website::where('status!=0')->order('create_time', 'desc')->select(); // 获取所有有效的网站配置数据
-            $websiteFields = WebsiteField::where('status!=0')->select();
-            $websiteFields2 = WebsiteField::where('f.status!=0')->where('f2.status!=0')
+            $websiteFields = WebsiteField::where('status!=0')->whereNull('parent_id')->select(); // 所有字段
+            // 所有子字段
+            $websiteFields2 = WebsiteField::where('f.status!=0')->whereNull('f.parent_id')->where('f2.status!=0')
                 ->alias('f')
+                ->field('f2.*')
                 ->join('website_field f2', 'f2.parent_id=f.id')
                 ->select();
+
             if (!$websites->isEmpty()) {
                 foreach ($websites as $website) {
                     $fieldConfig = []; // 字段
-
                     if (!$websiteFields->isEmpty()) { // 打包字段
                         $fields = $websiteFields->where('website_id', $website->id); // 取出所有字段
                         if (!$fields->isEmpty()) {
-                            $field2Config = [];
-
                             foreach ($fields as $field) {
+                                $field2Config = [];
                                 if (!$websiteFields2->isEmpty()) { // 打包子字段
                                     $fields2 = $websiteFields2->where('parent_id', $field->id); // 字段子集
                                     if (!$fields2->isEmpty()) {
@@ -210,7 +211,7 @@ class WebsiteService
                                     }
                                 }
 
-                                $fieldConfig[] = [
+                                $fc = [
                                     'name' => $field->name,
                                     'selector' => $field->selector,
                                     'selector_type' => $field->selectorType,
@@ -224,8 +225,9 @@ class WebsiteService
                                     //'children' => $field2Config,
                                 ];
                                 if (!empty($field2Config)) {
-                                    $fieldConfig['children'] = $field2Config;
+                                    $fc['children'] = $field2Config;
                                 }
+                                $fieldConfig[] = $fc;
                             }
                         }
                     }

@@ -102,7 +102,7 @@ export const columns: BasicColumn[] = [
     width: 100,
   },
   {
-    title: '最内容数',
+    title: '最大内容数',
     dataIndex: 'maxFields',
     width: 100,
   },
