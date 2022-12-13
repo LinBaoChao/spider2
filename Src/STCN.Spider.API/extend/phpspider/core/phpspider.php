@@ -1364,7 +1364,7 @@ class phpspider
         {
             return false;
         }
-        // 当前正在爬取的网页页面的对象
+        // 当前正在爬取的网页页面的对象 // lbc to do 可在这加入name给回调里判断是哪个网站，然后做逻辑处理
         $page = array(
             'url'     => $url,
             'raw'     => $html,

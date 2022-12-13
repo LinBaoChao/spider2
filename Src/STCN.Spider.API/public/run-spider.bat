@@ -1,6 +1,6 @@
 @echo off
 :do
-php -q spider.php
-timeout /nobreak /t 600
+php spider2.php
+timeout /nobreak /t 3600
 goto do
 pause

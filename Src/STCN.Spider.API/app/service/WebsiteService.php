@@ -259,8 +259,8 @@ class WebsiteService
                         'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
 
                         'log_show' => true,
-                        'log_file' => 'data/qiushibaike.log',
-                        'log_type' => 'error,debug,info,warn',
+                        //'log_file' => 'data/qiushibaike.log',
+                        //'log_type' => 'error,debug,info,warn',
                         'queue_config' => array(
                             'host'      => '127.0.0.1',
                             'port'      => 6379,

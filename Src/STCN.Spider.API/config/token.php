@@ -19,6 +19,6 @@ return [
     // Header头 Token 名称
     'header_token_key' => 'Token', // 前后端要一致
     // 不需要检查token的控制器/方法,小写
-    'no_token_list' => ['user/login', 'user/createmd5', 'user/gettoken', 'wechatmsg/list', 'wechatmsg/info', 'wechatmsg/detail', 'wechatmsg/list2'],
+    'no_token_list' => ['user/login', 'user/createmd5', 'user/gettoken', 'wechatmsg/list', 'wechatmsg/info', 'wechatmsg/detail', 'wechatmsg/list2', 'task/spider', 'website/getwebsiteconfig'],
     'pattern' => ['swagger', 'apidoc'], // 特殊放行
 ];
