@@ -381,6 +381,14 @@ class WebsiteService
                         $fds['user_agent'] = Config::get('spider.user_agent');
                     }
 
+                    // 回调
+                    if (!empty($website->callbackMethod)) {
+                        $fds['callback_method'] = explode('【', $website->callbackMethod);
+                    }
+                    if (!empty($website->callbackScript)) {
+                        $fds['callback_script'] = $website->callbackScript;
+                    }
+
                     // logo
                     if (!empty(Config::get('spider.log_show'))) {
                         $fds['log_show'] = (bool)Config::get('spider.log_show');

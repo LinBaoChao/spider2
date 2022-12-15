@@ -38,6 +38,8 @@ class Website extends BaseModel
         'user_agent' => 'string',
         'client_ip' => 'string',
         'proxy' => 'string',
+        'callback_method' => 'string',
+        'callback_script' => 'string',
         'status' => 'int',
         'create_time' => 'datetime',
         'update_time' => 'datetime',

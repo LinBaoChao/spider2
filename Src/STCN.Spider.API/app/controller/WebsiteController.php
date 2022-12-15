@@ -124,6 +124,8 @@ class WebsiteController extends BaseController
                 'user_agent' => $params['userAgent'] ?? null,
                 'client_ip' => $params['clientIp'] ?? null,
                 'proxy' => $params['proxy'] ?? null,
+                'callback_method' => $params['callbackMethod'] ?? null,
+                'callback_script' => $params['callbackScript'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
 
@@ -210,6 +212,8 @@ class WebsiteController extends BaseController
                 'user_agent' => $params['userAgent'] ?? null,
                 'client_ip' => $params['clientIp'] ?? null,
                 'proxy' => $params['proxy'] ?? null,
+                'callback_method' => $params['callbackMethod'] ?? null,
+                'callback_script' => $params['callbackScript'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
 

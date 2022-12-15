@@ -129,6 +129,14 @@ export const columns: BasicColumn[] = [
     title: '浏览器类型',
   },
   {
+    dataIndex: 'callbackMethod',
+    title: '回调函数',
+  },
+  {
+    dataIndex: 'callbackScript',
+    title: '回调脚本',
+  },
+  {
     title: '创建时间',
     dataIndex: 'createTime',
     width: 160,
@@ -326,7 +334,7 @@ export const formSchema: FormSchema[] = [
     component: 'InputTextArea',
     helpMessage: [
       '多个用【分割',
-      '代理服务器，如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
+      '如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
     ],
   },
   {
@@ -342,6 +350,24 @@ export const formSchema: FormSchema[] = [
     // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
     // "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
     // "Mozilla/5.0 (Linux; U; Android 6.0.1;zh_cn; Le X820 Build/FEXCNFN5801507014S) AppleWebKit/537.36 (KHTML, like Gecko)Version/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 EUI Browser/5.8.015S",
+  },
+  {
+    field: 'callbackMethod',
+    label: '回调函数',
+    component: 'InputTextArea',
+    helpMessage: [
+      '多个用【分割',
+      '目前支持回调函数有on_start、on_extract_field、on_extract_page、on_scan_page、on_list_page、on_content_page、on_handle_img、on_download_page、on_download_attached_page、on_fetch_url、on_status_code、is_anti_spider、on_attachment_file',
+    ],
+  },
+  {
+    field: 'callbackScript',
+    label: '回调脚本',
+    component: 'InputTextArea',
+    helpMessage: [
+      '要和回调函数配对',
+      '函数命名：函数名+_+媒体标识，如on_start_stcn，此脚本的每一个函数是一个php功能及业务逻辑完整的函数',
+    ],
   },
 ];
 
