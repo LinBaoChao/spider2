@@ -1,3 +1,5 @@
+
+--自己确认数据没问题后可以写入到sentiment_t表。
 -- sentiment_library.sentiment_tmp definition
 
 CREATE TABLE sentiment_library.sentiment_tmp

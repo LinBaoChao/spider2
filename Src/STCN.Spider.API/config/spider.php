@@ -47,6 +47,13 @@ return [
         'pass'  => '123456',
         'name'  => 'stcn_spider',
     ),
+    // clickHouse db
+    'click_house' => array(
+        'host' => '10.254.15.57',
+        'port' => '8123',
+        'username' => 'linbaocao',
+        'password' => '345556'
+    ),
 
     // 反爬
     'proxy' => array(),
