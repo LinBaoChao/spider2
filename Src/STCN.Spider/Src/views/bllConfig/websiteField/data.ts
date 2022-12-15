@@ -69,7 +69,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'isWriteDb',
     width: 80,
     customRender: ({ record }) => {
-      const enable = record.repeated;
+      const enable = record.isWriteDb;
       const color = enable == 1 ? 'green' : 'red';
       const text = enable == 1 ? '是' : '否';
       return h(Tag, { color: color }, () => text);
@@ -257,6 +257,6 @@ export const formSchema: FormSchema[] = [
     field: 'joinField',
     label: '合并字段',
     component: 'Input',
-    helpMessage: ['合并字段', ',用什么符号分割就用什么符号连接内容'],
+    helpMessage: ['合并字段', '用什么符号分割就用什么符号连接内容'],
   },
 ];

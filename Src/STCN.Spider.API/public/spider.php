@@ -24,7 +24,7 @@ function runSpider()
             foreach ($configs as $config) {
                 $spider = new phpspider($config);
                 $spider->on_start = "onStart";
-                $spider->on_extract_field = "onExtractField";
+                $spider->on_extract_field = "onExtractField"; // to do 从业务配置中是否有回调函数，及动态脚本，可以把脚本存入某个文件里，然后上面引入这个文件，即可回调到这个函数
                 $spider->start();
 
                 usleep(1000); // 微秒

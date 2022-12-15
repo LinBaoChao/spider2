@@ -4,7 +4,7 @@ namespace phpspider\core;
 
 class website
 {
-    const URL = "http://127.0.0.1:7777/website/getWebsiteConfig";
+    const URL = "http://127.0.0.1:7777/";
 
     /**
      * 获取所有网站配置信息
@@ -18,8 +18,10 @@ class website
             'result' => null
         ];
 
+        $url = self::URL . "website/getWebsiteConfig";
+
         try {
-            $retval = json_decode(self::httpRequest(self::URL), true);
+            $retval = json_decode(self::httpRequest($url), true);
             return $retval;
         } catch (\Exception $ex) {
             $retval['code'] = 'error';

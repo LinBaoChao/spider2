@@ -66,7 +66,7 @@ export const columns: BasicColumn[] = [
     align: 'left',
   },
   {
-    title: '爬取间隔（秒）',
+    title: '爬取间隔（毫秒）',
     dataIndex: 'interval',
     width: 160,
   },
@@ -241,28 +241,24 @@ export const formSchema: FormSchema[] = [
   },
   {
     field: 'interval',
-    label: '爬取间隔（秒）',
+    label: '爬取间隔(毫秒)',
     component: 'InputNumber',
-    defaultValue: 1,
   },
   {
     field: 'timeout',
     label: '爬取超时（秒）',
     component: 'InputNumber',
-    defaultValue: 5,
   },
   {
     field: 'maxTry',
     label: '失败重试',
     component: 'InputNumber',
-    defaultValue: 5,
     helpMessage: ['', '默认值为0，即不重复爬取'],
   },
   {
     field: 'tasknum',
     label: '任务数',
     component: 'InputNumber',
-    defaultValue: 3,
   },
   {
     field: 'multiserver',
@@ -274,7 +270,6 @@ export const formSchema: FormSchema[] = [
         { label: '否', value: 0 },
       ],
     },
-    defaultValue: 1,
     colProps: { span: 12 },
   },
   {
@@ -287,27 +282,23 @@ export const formSchema: FormSchema[] = [
         { label: '禁用', value: 0 },
       ],
     },
-    defaultValue: 1,
     colProps: { span: 12 },
   },
   {
     field: 'serverid',
     label: '第几台服务器',
     component: 'InputNumber',
-    defaultValue: 1,
   },
   {
     field: 'maxDepth',
     label: '爬取深度',
     component: 'InputNumber',
-    defaultValue: 0,
     helpMessage: ['', '默认值为0，即不限制'],
   },
   {
     field: 'maxFields',
     label: '最大内容数',
     component: 'InputNumber',
-    defaultValue: 0,
     helpMessage: ['', '默认值为0，即不限制'],
   },
   {

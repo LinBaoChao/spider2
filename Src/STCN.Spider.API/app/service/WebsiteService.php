@@ -195,18 +195,38 @@ class WebsiteService
                                     $fields2 = $websiteFields2->where('parent_id', $field->id); // 字段子集
                                     if (!$fields2->isEmpty()) {
                                         foreach ($fields2 as $field2) {
-                                            $field2Config[] = [
+                                            $fc2 = [
                                                 'name' => $field2->name,
                                                 'selector' => $field2->selector,
                                                 'selector_type' => $field2->selectorType,
                                                 'required' => (bool)$field2->required,
-                                                'repeated' => (bool)$field2->repeated,
-                                                'source_type' => $field2->sourceType,
-                                                'attached_url' => $field2->attachedUrl,
-                                                'is_write_db' => (bool)$field2->isWriteDb,
-                                                'join_field' => $field2->joinField,
-                                                'filter' => $field2->filter,
+                                                // 'repeated' => (bool)$field2->repeated,
+                                                // 'source_type' => $field2->sourceType,
+                                                // 'attached_url' => $field2->attachedUrl,
+                                                // 'is_write_db' => (bool)$field2->isWriteDb,
+                                                // 'join_field' => $field2->joinField,
+                                                // 'filter' => $field2->filter,
                                             ];
+                                            if (!empty($website->repeated)) {
+                                                $fc2['repeated'] = (bool)$field->repeated;
+                                            }
+                                            if (!empty($website->sourceType)) {
+                                                $fc2['source_type'] = $field->sourceType;
+                                            }
+                                            if (!empty($website->attachedUrl)) {
+                                                $fc2['attached_url'] = $field->attachedUrl;
+                                            }
+                                            if (!empty($website->isWriteDb)) {
+                                                $fc2['is_write_db'] = (bool)$field->isWriteDb;
+                                            }
+                                            if (!empty($website->joinField)) {
+                                                $fc2['join_field'] = $field->joinField;
+                                            }
+                                            if (!empty($website->filter)) {
+                                                $fc2['filter'] = $field->filter;
+                                            }
+
+                                            $field2Config[] = $fc2;
                                         }
                                     }
                                 }
@@ -216,73 +236,163 @@ class WebsiteService
                                     'selector' => $field->selector,
                                     'selector_type' => $field->selectorType,
                                     'required' => (bool)$field->required,
-                                    'repeated' => (bool)$field->repeated,
-                                    'source_type' => $field->sourceType,
-                                    'attached_url' => $field->attachedUrl,
-                                    'is_write_db' => (bool)$field->isWriteDb,
-                                    'join_field' => $field->joinField,
-                                    'filter' => $field->filter,
-                                    //'children' => $field2Config,
+                                    // 'repeated' => (bool)$field->repeated,
+                                    // 'source_type' => $field->sourceType,
+                                    // 'attached_url' => $field->attachedUrl,
+                                    // 'is_write_db' => (bool)$field->isWriteDb,
+                                    // 'join_field' => $field->joinField,
+                                    // 'filter' => $field->filter,
                                 ];
+                                if (!empty($website->repeated)) {
+                                    $fc['repeated'] = (bool)$field->repeated;
+                                }
+                                if (!empty($website->sourceType)) {
+                                    $fc['source_type'] = $field->sourceType;
+                                }
+                                if (!empty($website->attachedUrl)) {
+                                    $fc['attached_url'] = $field->attachedUrl;
+                                }
+                                if (!empty($website->isWriteDb)) {
+                                    $fc['is_write_db'] = (bool)$field->isWriteDb;
+                                }
+                                if (!empty($website->joinField)) {
+                                    $fc['join_field'] = $field->joinField;
+                                }
+                                if (!empty($website->filter)) {
+                                    $fc['filter'] = $field->filter;
+                                }
                                 if (!empty($field2Config)) {
                                     $fc['children'] = $field2Config;
                                 }
+
                                 $fieldConfig[] = $fc;
                             }
                         }
                     }
 
-                    $proxy = $website->proxy ? explode('【', $website->proxy) : null;
-                    $userAgent = $website->userAgent ? explode('【', $website->userAgent) : null;
-                    $clientIp = $website->clientIp ? explode('【', $website->clientIp) : null;
-
-                    // 网站
-                    $data[] = [
+                    // 网站 如果业务配置此项为空而且配置文件中此项也为空，则不需要此项，因为抓取业务中会用isset来判断是否存在，如果存在值又为空，则有可能出错，所以如果没值干脆没有此项最准确
+                    $fds = [
                         'name' => $website->name,
-                        'input_encoding' => $website->inputEncoding,
-                        'output_encoding' => $website->outputEncoding,
-                        'tasknum' => $website->tasknum,
-                        'multiserver' => (bool)$website->multiserver,
-                        'serverid' => $website->serverid,
-                        'save_running_state' => (bool)$website->saveRunningState,
-                        'proxy' => $proxy,
-                        'interval' => $website->interval,
-                        'timeout' => $website->timeout,
-                        'max_try' => $website->maxTry,
-                        'max_depth' => $website->maxDepth,
-                        'max_fields' => $website->maxFields,
-                        'user_agent' => $userAgent,
-                        'client_ip' => $clientIp,
                         'domains' => explode('【', $website->domains ?? ''),
                         'scan_urls' => explode('【', $website->scanUrls ?? ''),
                         'list_url_regexes' => explode('【', $website->listUrls ?? ''),
                         'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
 
-                        'log_show' => true,
-                        //'log_file' => 'data/qiushibaike.log',
-                        //'log_type' => 'error,debug,info,warn',
-                        'queue_config' => array(
-                            'host'      => '127.0.0.1',
-                            'port'      => 6379,
-                            'pass'      => '',
-                            'db'        => 5,
-                            'prefix'    => 'phpspider',
-                            'timeout'   => 30,
-                        ),
-                        'export' => array(
-                            'type' => 'db',
-                            'table' => 'article_spider',
-                        ),
-                        'db_config' => array(
-                            'host'  => '127.0.0.1',
-                            'port'  => 3306,
-                            'user'  => 'root',
-                            'pass'  => '123456',
-                            'name'  => 'stcn_spider',
-                        ),
-
                         'fields' => $fieldConfig,
                     ];
+
+                    // 编码
+                    if (!empty($website->inputEncoding)) {
+                        $fds['input_encoding'] = $website->inputEncoding;
+                    } elseif (!empty(Config::get('spider.input_encoding'))) {
+                        $fds['input_encoding'] = (int)Config::get('spider.input_encoding');
+                    }
+
+                    if (!empty($website->outputEncoding)) {
+                        $fds['output_encoding'] = $website->outputEncoding;
+                    } elseif (!empty(Config::get('spider.output_encoding'))) {
+                        $fds['output_encoding'] = (int)Config::get('spider.output_encoding');
+                    }
+
+                    // 频率相关
+                    if (!empty($website->interval)) {
+                        $fds['interval'] = $website->interval;
+                    } elseif (!empty(Config::get('spider.interval'))) {
+                        $fds['interval'] = (int)Config::get('spider.interval');
+                    }
+
+                    if (!empty($website->timeout)) {
+                        $fds['timeout'] = $website->timeout;
+                    } elseif (!empty(Config::get('spider.timeout'))) {
+                        $fds['timeout'] = (int)Config::get('spider.timeout');
+                    }
+
+                    if (!empty($website->maxTry)) {
+                        $fds['max_try'] = $website->maxTry;
+                    } elseif (!empty(Config::get('spider.max_try'))) {
+                        $fds['max_try'] = (int)Config::get('spider.max_try');
+                    }
+
+                    if (!empty($website->maxDepth)) {
+                        $fds['max_depth'] = $website->maxDepth;
+                    } elseif (!empty(Config::get('spider.max_depth'))) {
+                        $fds['max_depth'] = (int)Config::get('spider.max_depth');
+                    }
+
+                    if (!empty($website->maxFields)) {
+                        $fds['max_fields'] = $website->maxFields;
+                    } elseif (!empty(Config::get('spider.max_fields'))) {
+                        $fds['max_fields'] = (int)Config::get('spider.max_fields');
+                    }
+
+                    // 多服务 多线程 需要redis支持
+                    if (!empty($website->tasknum)) {
+                        $fds['tasknum'] = $website->tasknum;
+                    } elseif (!empty(Config::get('spider.tasknum'))) {
+                        $fds['tasknum'] = (int)Config::get('spider.tasknum');
+                    }
+
+                    if (!empty($website->multiserver)) {
+                        $fds['multiserver'] = (bool)$website->multiserver;
+                    } elseif (!empty(Config::get('spider.multiserver'))) {
+                        $fds['multiserver'] = (bool)Config::get('spider.multiserver');
+                    }
+
+                    if (!empty($website->serverid)) {
+                        $fds['serverid'] = $website->serverid;
+                    } elseif (!empty(Config::get('spider.serverid'))) {
+                        $fds['serverid'] = (int)Config::get('spider.serverid');
+                    }
+
+                    if (!empty($website->saveRunningState)) {
+                        $fds['save_running_state'] = (bool)$website->saveRunningState;
+                    } elseif (!empty(Config::get('spider.save_running_state'))) {
+                        $fds['save_running_state'] = (bool)Config::get('spider.save_running_state');
+                    }
+
+                    if (!empty(Config::get('spider.queue_config'))) {
+                        $fds['queue_config'] = Config::get('spider.queue_config');
+                    }
+
+                    // db
+                    if (!empty(Config::get('spider.export'))) {
+                        $fds['export'] = Config::get('spider.export');
+                    }
+                    if (!empty(Config::get('spider.db_config'))) {
+                        $fds['db_config'] = Config::get('spider.db_config');
+                    }
+
+                    // 反爬
+                    if (!empty($website->proxy)) {
+                        $fds['proxy'] = explode('【', $website->proxy);
+                    } elseif (!empty(Config::get('spider.proxy'))) {
+                        $fds['proxy'] = Config::get('spider.proxy');
+                    }
+
+                    if (!empty($website->clientIp)) {
+                        $fds['client_ip'] = explode('【', $website->clientIp);
+                    } elseif (!empty(Config::get('spider.client_ip'))) {
+                        $fds['client_ip'] = Config::get('spider.client_ip');
+                    }
+
+                    if (!empty($website->userAgent)) {
+                        $fds['user_agent'] = explode('【', $website->userAgent);
+                    } elseif (!empty(Config::get('spider.user_agent'))) {
+                        $fds['user_agent'] = Config::get('spider.user_agent');
+                    }
+
+                    // logo
+                    if (!empty(Config::get('spider.log_show'))) {
+                        $fds['log_show'] = (bool)Config::get('spider.log_show');
+                    }
+                    if (!empty(Config::get('spider.log_type'))) {
+                        $fds['log_type'] = Config::get('spider.log_type');
+                    }
+                    if (!empty(Config::get('spider.log_file'))) {
+                        $fds['log_file'] = Config::get('spider.log_file');
+                    }
+
+                    $data[] = $fds;
                 }
             }
 

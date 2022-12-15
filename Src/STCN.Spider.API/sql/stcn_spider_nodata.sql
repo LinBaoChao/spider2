@@ -38,7 +38,7 @@ CREATE TABLE `article_spider` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60797 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=61713 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 
@@ -190,15 +190,15 @@ CREATE TABLE `website` (
   `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
-  `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
-  `multiserver` tinyint(1) DEFAULT '0' COMMENT '多服务器处理',
-  `serverid` int(11) DEFAULT '1' COMMENT '第几台服务器id',
-  `save_running_state` tinyint(1) DEFAULT '0' COMMENT '保存爬虫运行状态',
-  `interval` int(11) DEFAULT '1' COMMENT '单位：秒，爬虫爬取每个网页的时间间隔',
-  `timeout` int(11) DEFAULT '5' COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
-  `max_try` int(11) DEFAULT '0' COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
-  `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
-  `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
+  `tasknum` int(11) DEFAULT NULL COMMENT '同时工作的爬虫任务数',
+  `multiserver` tinyint(1) DEFAULT NULL COMMENT '多服务器处理',
+  `serverid` int(11) DEFAULT NULL COMMENT '第几台服务器id',
+  `save_running_state` tinyint(1) DEFAULT NULL COMMENT '保存爬虫运行状态',
+  `interval` int(11) DEFAULT NULL COMMENT '单位：毫秒，爬虫爬取每个网页的时间间隔',
+  `timeout` int(11) DEFAULT NULL COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
+  `max_try` int(11) DEFAULT NULL COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
+  `max_depth` int(11) DEFAULT NULL COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
+  `max_fields` int(11) DEFAULT NULL COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
   `user_agent` varchar(300) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
   `client_ip` varchar(100) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
   `proxy` varchar(100) DEFAULT NULL COMMENT '多个用【分割 代理服务器，如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
@@ -206,7 +206,7 @@ CREATE TABLE `website` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `website_field` */
 
@@ -230,7 +230,7 @@ CREATE TABLE `website_field` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
