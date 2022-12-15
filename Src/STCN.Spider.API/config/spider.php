@@ -10,8 +10,8 @@ return [
 
     // logo
     'log_show' => true, // 是否开启
-    'log_type' => 'error,warn', // 'error,debug,info,warn' 默认空为所有
-    'log_file' => '', // '/../data/logo/phpspider.log', // 存放文件路径
+    'log_type' => 'error,debug,info,warn', // 'error,debug,info,warn' 默认空为所有
+    'log_file' => '', // '/../data/log/phpspider.log', // 存放文件路径
 
     // 频率相关
     'interval' => 1000, // 爬取间隔（毫秒）
