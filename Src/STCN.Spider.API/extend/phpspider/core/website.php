@@ -12,13 +12,16 @@ class website
      */
     public static function getWebsiteConfig()
     {
+        $spiderConfig = require_once __DIR__ . '../../../../config/spider.php';
+        $urlconfig = isset($spiderConfig['api_url']) ? $spiderConfig['api_url'] : self::URL;
+
         $retval = [
             'code' => 'success',
             'message' => '获取数据成功',
             'result' => null
         ];
 
-        $url = self::URL . "website/getWebsiteConfig";
+        $url = $urlconfig . "website/getWebsiteConfig";
 
         try {
             $retval = json_decode(self::httpRequest($url), true);

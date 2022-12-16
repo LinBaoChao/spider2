@@ -92,7 +92,8 @@ class log
         {
             echo $msg;
         }
-        file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX); // lbc todo add to db and trace
+        file_put_contents(PATH_DATA . "/log/spider/" . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
+        //file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX); // lbc todo add to db and trace
     }
 
     /**
@@ -111,8 +112,7 @@ class log
         {
             echo $msg;
         }
-        //file_put_contents(PATH_DATA."/log/".strtolower($log_type).".log", $msg, FILE_APPEND | LOCK_EX);
-        file_put_contents(PATH_DATA."/log/error.log", $msg, FILE_APPEND | LOCK_EX);
+        file_put_contents(PATH_DATA."/log/".strtolower($log_type).".log", $msg, FILE_APPEND | LOCK_EX);
     }
 
 }

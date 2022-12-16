@@ -362,6 +362,11 @@ class WebsiteService
                         $fds['db_config'] = Config::get('spider.db_config');
                     }
 
+                    // click house
+                    if (!empty(Config::get('spider.click_house'))) {
+                        $fds['click_house'] = Config::get('spider.click_house');
+                    }
+
                     // 反爬
                     if (!empty($website->proxy)) {
                         $fds['proxy'] = explode('【', $website->proxy);

@@ -1,18 +1,58 @@
 <?php
+var_dump(__DIR__);
+require_once __DIR__ . '/../vendor/autoload.php';
+//include_once __DIR__ . '/../include.php';
 
-function GUID()
-{
-    if (function_exists('com_create_guid') === true) {
-        return trim(com_create_guid(), '{}');
-    }
+//$config = include_once __DIR__ . '/00_config_connect.php';
 
-    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
-}
+ use ClickHouseDB\Client;
 
-var_dump(GUID());
+// function GUID()
+// {
+//     if (function_exists('com_create_guid') === true) {
+//         return trim(com_create_guid(), '{}');
+//     }
 
-// use phpspider\core\website;
-// require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+//     return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+// }
+
+// // var_dump(GUID());
+
+$config = array(
+    'host' => '10.254.15.57',
+    'port' => '8123',
+    'username' => 'linbaocao',
+    'password' => '345556',
+    'dbname' => 'sentiment_db',
+    'table' => 'sentiment_tmp',
+    'auth_method' => 1, // On of HTTP::AUTH_METHODS_LIST
+);
+
+$db = new Client($config);
+$db->database('sentiment_db');
+
+//var_dump($db);
+// $stat = $db->insert(
+//     'sentiment_tmp',
+//     [
+//         [GUID(), 'test1', 'test2', 'test3', 'test4']
+//     ],
+//     ['id', 'source_title', 'source_content', 'source_url', 'source_name']
+// );
+
+// var_dump($stat);
+
+//$db->verbose();
+//$db->settings()->readonly(false);
+var_dump($db->showTables());
+
+// $result = $db->select("SELECT * FROM sentiment_tmp LIMIT 100");
+// print_r($result->fetchOne());
+
+require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+
+use phpspider\core\log;
+use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
 // var_dump($config['is_run_spider']);
@@ -164,3 +204,8 @@ error_reporting(E_ALL);
 
 // $config = WebsiteService::getWebsiteConfig();
 // var_dump(json($config));
+
+log::$log_show = false;
+$msg = var_export($data, true);
+log::add('$msg', 'debug');
+log::add("var_export($config, true)", 'info');

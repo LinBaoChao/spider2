@@ -31,13 +31,13 @@ return [
         'port'      => 6379,
         'pass'      => '',
         'db'        => 5,
-        'prefix'    => 'phpspider',
+        'prefix'    => 'stcn-spider',
         'timeout'   => 30,
     ),
 
     // db
     'export' => array(
-        'type' => 'db',
+        'type' => 'db', // csv、sql、db、clickhouse
         'table' => 'article_spider',
     ),
     'db_config' => array(
@@ -52,7 +52,9 @@ return [
         'host' => '10.254.15.57',
         'port' => '8123',
         'username' => 'linbaocao',
-        'password' => '345556'
+        'password' => '345556',
+        'dbname' => 'sentiment_db',
+        'table' => 'sentiment_tmp',
     ),
 
     // 反爬
