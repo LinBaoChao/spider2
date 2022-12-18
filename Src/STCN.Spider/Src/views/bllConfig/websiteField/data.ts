@@ -40,7 +40,7 @@ export const columns: BasicColumn[] = [
   {
     title: '字段',
     dataIndex: 'name',
-    width: 120,
+    width: 130,
   },
   {
     title: '抽取规则',
@@ -169,7 +169,7 @@ export const formSchema: FormSchema[] = [
         { label: '否', value: 0 },
       ],
     },
-    defaultValue: 1,
+    defaultValue: 0,
     colProps: { span: 12 },
   },
   {

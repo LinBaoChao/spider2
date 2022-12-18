@@ -207,23 +207,23 @@ class WebsiteService
                                                 // 'join_field' => $field2->joinField,
                                                 // 'filter' => $field2->filter,
                                             ];
-                                            if (!empty($website->repeated)) {
-                                                $fc2['repeated'] = (bool)$field->repeated;
+                                            if (!empty($field2->repeated)) {
+                                                $fc2['repeated'] = (bool)$field2->repeated;
                                             }
-                                            if (!empty($website->sourceType)) {
-                                                $fc2['source_type'] = $field->sourceType;
+                                            if (!empty($field2->sourceType)) {
+                                                $fc2['source_type'] = $field2->sourceType;
                                             }
-                                            if (!empty($website->attachedUrl)) {
-                                                $fc2['attached_url'] = $field->attachedUrl;
+                                            if (!empty($field2->attachedUrl)) {
+                                                $fc2['attached_url'] = $field2->attachedUrl;
                                             }
-                                            if (!empty($website->isWriteDb)) {
-                                                $fc2['is_write_db'] = (bool)$field->isWriteDb;
+                                            if (!empty($field2->isWriteDb)) {
+                                                $fc2['is_write_db'] = (bool)$field2->isWriteDb;
                                             }
-                                            if (!empty($website->joinField)) {
-                                                $fc2['join_field'] = $field->joinField;
+                                            if (!empty($field2->joinField)) {
+                                                $fc2['join_field'] = $field2->joinField;
                                             }
-                                            if (!empty($website->filter)) {
-                                                $fc2['filter'] = $field->filter;
+                                            if (!empty($field2->filter)) {
+                                                $fc2['filter'] = $field2->filter;
                                             }
 
                                             $field2Config[] = $fc2;
@@ -243,22 +243,22 @@ class WebsiteService
                                     // 'join_field' => $field->joinField,
                                     // 'filter' => $field->filter,
                                 ];
-                                if (!empty($website->repeated)) {
+                                if (!empty($field->repeated)) {
                                     $fc['repeated'] = (bool)$field->repeated;
                                 }
-                                if (!empty($website->sourceType)) {
+                                if (!empty($field->sourceType)) {
                                     $fc['source_type'] = $field->sourceType;
                                 }
-                                if (!empty($website->attachedUrl)) {
+                                if (!empty($field->attachedUrl)) {
                                     $fc['attached_url'] = $field->attachedUrl;
                                 }
-                                if (!empty($website->isWriteDb)) {
+                                if (!empty($field->isWriteDb)) {
                                     $fc['is_write_db'] = (bool)$field->isWriteDb;
                                 }
-                                if (!empty($website->joinField)) {
+                                if (!empty($field->joinField)) {
                                     $fc['join_field'] = $field->joinField;
                                 }
-                                if (!empty($website->filter)) {
+                                if (!empty($field->filter)) {
                                     $fc['filter'] = $field->filter;
                                 }
                                 if (!empty($field2Config)) {
@@ -273,6 +273,14 @@ class WebsiteService
                     // 网站 如果业务配置此项为空而且配置文件中此项也为空，则不需要此项，因为抓取业务中会用isset来判断是否存在，如果存在值又为空，则有可能出错，所以如果没值干脆没有此项最准确
                     $fds = [
                         'name' => $website->name,
+
+                        //----网站属性，与爬虫业务逻辑无关，只为数据入库关联----
+                        'media_name' => $website->mediaName,
+                        'product_name' => $website->productName,
+                        'platform' => $website->platform,
+                        'channel' => $website->channel,
+                        //----网站属性----
+
                         'domains' => explode('【', $website->domains ?? ''),
                         'scan_urls' => explode('【', $website->scanUrls ?? ''),
                         'list_url_regexes' => explode('【', $website->listUrls ?? ''),

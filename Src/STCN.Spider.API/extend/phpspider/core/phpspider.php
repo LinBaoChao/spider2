@@ -1806,6 +1806,17 @@ class phpspider
                     exit(0);
                 }
 
+                // 打包网站属性关联字段
+                $fields['pub_media_name'] = self::$configs['media_name'];
+                $fields['pub_product_name'] = self::$configs['product_name'];
+                $fields['pub_platform_name'] = self::$configs['platform'];
+                $fields['pub_channel_name'] = self::$configs['channel'];
+                // 原文url
+                $fields['source_url'] = $url;
+
+                // lbc to do 是否入库，只有入库的才保留、合并fields
+
+
                 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
                     $fields_str = json_encode($fields);
                     $fields_str = preg_replace_callback("#\\\u([0-9a-f]{4})#i", function ($matchs) {
@@ -1819,8 +1830,6 @@ class phpspider
                     $fields_str = mb_convert_encoding($fields_str, 'gb2312', 'utf-8');
                 }
                 log::info("Result[{$fields_num}]: " . $fields_str);
-
-                // lbc to do 是否入库，只有入库的才保留、合并fields
 
                 // 如果设置了导出选项
                 if (!empty(self::$configs['export'])) {
@@ -1906,6 +1915,24 @@ class phpspider
                     $values = $this->get_fields_regex($html, $conf['selector'], $conf['name']);
                 }
 
+                // 过滤项 lbc
+                if(isset($conf['filter']) && !empty($conf['filter'])){
+                    $filterstr = $conf['filter'];
+                    // $filterval = selector::remove($values, $filterstr);
+                    // if(!empty($filterval)){
+                    //     $values = $filterval;
+                    // }
+                    $values = str_replace($filterstr, '', $values);
+                    // try {
+                    //     $filterval = preg_replace($filterstr, '', $values);
+                    //     if (!empty($filterval)) {
+                    //         $values = $filterval;
+                    //     }
+                    // } catch (Exception $ex) {
+                    //     log::error('过滤出错：' . $ex->getMessage());
+                    // }
+                }
+
                 // field不为空而且存在子配置
                 if (isset($values) && !empty($conf['children'])) {
                     // 如果提取到的结果是字符串，就转为数组，方便下面统一foreach
@@ -1956,8 +1983,6 @@ class phpspider
 
         if (!empty($fields)) {
             foreach ($fields as $fieldname => $data) {
-                // lbc to do filter
-
                 $pattern = "/<img\s+.*?src=[\"']{0,1}(.*)[\"']{0,1}[> \r\n\t]{1,}/isu";
                 /*$pattern = "/<img.*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.jpeg|\.png]))[\'|\"].*?[\/]?>/i"; */
                 // 在抽取到field内容之后调用, 对其中包含的img标签进行回调处理

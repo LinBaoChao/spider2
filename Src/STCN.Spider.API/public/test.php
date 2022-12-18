@@ -205,7 +205,11 @@ error_reporting(E_ALL);
 // $config = WebsiteService::getWebsiteConfig();
 // var_dump(json($config));
 
-log::$log_show = false;
-$msg = var_export($data, true);
-log::add('$msg', 'debug');
-log::add("var_export($config, true)", 'info');
+// log::$log_show = false;
+// $msg = var_export($data, true);
+// log::add('$msg', 'debug');
+// log::add("var_export($config, true)", 'info');
+
+var_dump(preg_match("php/i", "PHP is the web scripting language of choice."));
+var_dump(str_replace('/dd/u', '', "作者：李三无作者：dd"));
+var_dump(preg_replace("",'', '作者：李三无作者：ee'));

@@ -7,24 +7,15 @@ require_once __DIR__ . '../../../phpclickhouse/include.php';
 
 use ClickHouseDB\Client;
 use phpspider\core\log;
+use phpspider\core\util;
 
 class clickhouse
 {
-    // clickHouse db config
-    private static $dbconfig = array(
-        'host' => '10.254.15.57',
-        'port' => '8123',
-        'username' => 'linbaocao',
-        'password' => '345556',
-        'dbname' => 'sentiment_db',
-        'table' => 'sentiment_tmp', // 生产表为sentiment_t
-    );
-
     public static function connect($config = null)
     {
         if (empty($config)) {
-            $spiderConfig = require_once __DIR__ . '../../../../config/spider.php';
-            $config = isset($spiderConfig['click_house']) ? $spiderConfig['click_house'] : self::$dbconfig;
+            $spiderConfig = util::get_spider_config();
+            $config = $spiderConfig['click_house'];
         }
 
         $db = new Client($config);
@@ -42,37 +33,37 @@ class clickhouse
 
     public static function insert($data, $config = null)
     {
-        $msg = var_export($data, true);
-        log::add('data:' . $msg, 'debug');
-        log::add('config:' . var_export($config, true), 'info');
+        if (empty($data)) {
+            return false;
+        }
 
-        $db = self::connect($config);
-        $table = $config['table'];
+        date_default_timezone_set('PRC');
+        $data['source_pub_time'] = strtotime($data['source_pub_time']);
 
         $items = [];
         $values = [];
 
         $items[] = 'id';
         $value = [];
-        $value[] = self::getGuid();
+        $value[] = util::get_guid();
+        $items[] = 'c_time';
+        $value[] = strtotime(date('Y-m-d h:i:s', time()));
+        $items[] = 'u_time';
+        $value[] = strtotime(date('Y-m-d h:i:s', time()));
+
         foreach ($data as $k => $v) {
             $items[] = $k;
             $value[] = $v;
         }
         $values[] = $value;
 
-        log::add('fields:' . var_export($items, true), 'data');
-        log::add('values:' . var_export($values, true), 'data');
+        $db = self::connect($config);
+        $table = $config['table'];
+        $stat = $db->insert($table, $values, $items);
 
-        //$stat = $db->insert($table, $values, $items);
-    }
-
-    public static function getGuid()
-    {
-        if (function_exists('com_create_guid') === true) {
-            return trim(com_create_guid(), '{}');
+        // var_export($data, true)
+        if ($stat->isError()) {
+            log::error("写入clickhouse失败！url:{$data['source_url']}");
         }
-
-        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
 }

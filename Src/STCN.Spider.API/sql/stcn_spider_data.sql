@@ -16,6 +16,35 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`stcn_spider` /*!40100 DEFAULT CHARACTER
 
 USE `stcn_spider`;
 
+/*Table structure for table `article_spider` */
+
+DROP TABLE IF EXISTS `article_spider`;
+
+CREATE TABLE `article_spider` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `source_name` varchar(100) DEFAULT NULL COMMENT '来源',
+  `pub_source_name` varchar(100) DEFAULT NULL,
+  `pub_media_name` varchar(100) DEFAULT NULL,
+  `pub_product_name` varchar(100) DEFAULT NULL,
+  `pub_platform_name` varchar(50) DEFAULT NULL,
+  `pub_channel_name` varchar(100) DEFAULT NULL,
+  `source_title` varchar(300) DEFAULT NULL,
+  `source_content` blob,
+  `source_author` varchar(100) DEFAULT NULL,
+  `source_url` varchar(300) DEFAULT NULL,
+  `source_pub_time` datetime DEFAULT NULL,
+  `source_media_name` varchar(100) DEFAULT NULL COMMENT '媒体',
+  `source_product_name` varchar(100) DEFAULT NULL COMMENT '子媒',
+  `source_platform_name` varchar(50) DEFAULT NULL COMMENT '平台',
+  `source_channel_name` varchar(100) DEFAULT NULL COMMENT '频道栏目',
+  `status` int(11) DEFAULT '1',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `article_spider` */
+
 /*Table structure for table `dept` */
 
 DROP TABLE IF EXISTS `dept`;
@@ -247,7 +276,7 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-12 12:38:13','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-12 00:38:13');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-17 01:09:06','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-17 13:09:06');
 
 /*Table structure for table `user_dept` */
 
@@ -303,29 +332,31 @@ CREATE TABLE `website` (
   `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
-  `tasknum` int(11) DEFAULT '1' COMMENT '同时工作的爬虫任务数',
-  `multiserver` tinyint(1) DEFAULT '0' COMMENT '多服务器处理',
-  `serverid` int(11) DEFAULT '1' COMMENT '第几台服务器id',
-  `save_running_state` tinyint(1) DEFAULT '0' COMMENT '保存爬虫运行状态',
-  `interval` int(11) DEFAULT '1' COMMENT '单位：秒，爬虫爬取每个网页的时间间隔',
-  `timeout` int(11) DEFAULT '5' COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
-  `max_try` int(11) DEFAULT '0' COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
-  `max_depth` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
-  `max_fields` int(11) DEFAULT '0' COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
+  `tasknum` int(11) DEFAULT NULL COMMENT '同时工作的爬虫任务数',
+  `multiserver` tinyint(1) DEFAULT NULL COMMENT '多服务器处理',
+  `serverid` int(11) DEFAULT NULL COMMENT '第几台服务器id',
+  `save_running_state` tinyint(1) DEFAULT NULL COMMENT '保存爬虫运行状态',
+  `interval` int(11) DEFAULT NULL COMMENT '单位：毫秒，爬虫爬取每个网页的时间间隔',
+  `timeout` int(11) DEFAULT NULL COMMENT '单位：秒，爬虫爬取每个网页的超时时间',
+  `max_try` int(11) DEFAULT NULL COMMENT '默认值为0，即不重复爬取，爬虫爬取每个网页失败后尝试次数',
+  `max_depth` int(11) DEFAULT NULL COMMENT '默认值为0，即不限制，爬虫爬取网页深度，超过深度的页面不再采集',
+  `max_fields` int(11) DEFAULT NULL COMMENT '默认值为0，即不限制，爬虫爬取内容网页最大条数',
   `user_agent` varchar(300) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的浏览器类型,AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器',
   `client_ip` varchar(100) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取网页所使用的伪IP，用于破解防采集 ''192.168.0.2'',',
   `proxy` varchar(100) DEFAULT NULL COMMENT '多个用【分割 代理服务器，如果爬取的网站根据IP做了反爬虫, 可以设置此项，如http://host:port http://user:pass@host:port',
+  `callback_method` varchar(300) DEFAULT NULL COMMENT '多个用【分割 目前支持回调函数有on_start、on_extract_field、on_extract_page、on_scan_page、on_list_page、on_content_page、on_handle_img、on_download_page、on_download_attached_page、on_fetch_url、on_status_code、is_anti_spider、on_attachment_file',
+  `callback_script` text COMMENT '要和回调函数配对，函数命名：函数名+_+媒体标识，如on_start_stcn，此脚本的每一个函数是一个php功能及业务逻辑完整的函数',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website` */
 
-insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`proxy`,`status`,`create_time`,`update_time`) values 
-(10,NULL,'证券时报','证券时报网','网站','要闻','stcn.com','stcn.com【www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html【http://www.stcn.com/article/list/kx.html【http://www.stcn.com/article/list/company.html【http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,NULL,1,'2022-12-10 23:53:02','2022-12-12 00:37:58'),
-(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock.com','news.cnstock.com【www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/newsbwkx-\\d+-\\d+.htm【http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,'','','',1,'2022-12-11 00:46:22','2022-12-12 01:31:57');
+insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`proxy`,`callback_method`,`callback_script`,`status`,`create_time`,`update_time`) values 
+(10,NULL,'证券时报','证券时报网','网站','要闻','stcn','stcn.com【www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html【http://www.stcn.com/article/list/kx.html【http://www.stcn.com/article/list/company.html【http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,NULL,'on_start【on_extract_field','function on_start_stcn($spider)\n{\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_stcn($fieldname, $data, $page)\n{\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    } elseif ($fieldname == \'source_content\') {\n        $data = selector::remove($data, \"//div[contains(@class,\'social-bar\')]\");\n    }\n\n    return $data;\n}',1,'2022-12-10 23:53:02','2022-12-17 14:00:18'),
+(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock','news.cnstock.com【www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/newsbwkx-\\d+-\\d+.htm【http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,'','','','on_start【on_extract_field','function on_start_cnstock($spider)\n{\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_cnstock($fieldname, $data, $page)\n{\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    }\n\n    return $data;\n}',1,'2022-12-11 00:46:22','2022-12-17 13:59:56');
 
 /*Table structure for table `website_field` */
 
@@ -349,26 +380,21 @@ CREATE TABLE `website_field` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
 
 insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
-(11,NULL,10,'title','//div[contains(@class,\'detail-title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 15:15:45'),
-(12,NULL,10,'author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',1,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:14:20','2022-12-11 00:34:07'),
-(13,NULL,10,'source','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:15:40','2022-12-11 00:34:16'),
-(14,NULL,10,'publish_time','//div[contains(@class,\'detail-info\')]//span[3]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:17:15','2022-12-11 00:34:24'),
-(15,NULL,10,'content','//div[contains(@class,\'detail-content\')]','xpath',1,0,NULL,NULL,1,NULL,'//div[contains(@class,\'social-bar\')]',1,'2022-12-11 00:21:00','2022-12-11 00:34:30'),
-(16,NULL,10,'url','//div[contains(@class,\'detail-info\')]//span[2]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:27:45','2022-12-11 00:34:36'),
-(17,NULL,10,'editor','//div[contains(@class,\'detail-content-editor\')]','xpath',0,0,NULL,NULL,1,NULL,'责任编辑：',1,'2022-12-11 00:30:12','2022-12-11 00:34:42'),
-(18,NULL,10,'news_type','//div[contains(@class,\'breadcrumb\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,'',1,'2022-12-11 00:30:50','2022-12-11 00:34:49'),
-(19,NULL,11,'title','//h1[contains(@class,\'title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:47:12','2022-12-11 00:47:12'),
-(20,NULL,11,'author','//span[contains(@class,\'author\')]','xpath',1,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:47:34','2022-12-11 00:48:53'),
-(21,NULL,11,'source','//span[contains(@class,\'source\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:48:14','2022-12-11 00:48:14'),
-(22,NULL,11,'publish_time','//span[contains(@class,\'timer\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:49:34','2022-12-11 00:49:34'),
-(23,NULL,11,'content','//div[contains(@id,\'content\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:50:04','2022-12-11 00:50:04'),
-(24,NULL,11,'url','//div[contains(@id,\'content\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:50:19','2022-12-11 00:50:19'),
-(25,NULL,11,'news_type','//span[contains(@class,\'current\')]//a','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:50:57','2022-12-11 00:50:57');
+(11,NULL,10,'source_title','//div[contains(@class,\'detail-title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 15:15:45'),
+(12,NULL,10,'source_author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',0,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:14:20','2022-12-11 00:34:07'),
+(13,NULL,10,'source_name','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:15:40','2022-12-11 00:34:16'),
+(14,NULL,10,'source_pub_time','//div[contains(@class,\'detail-info\')]//span[3]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:17:15','2022-12-11 00:34:24'),
+(15,NULL,10,'source_content','//div[contains(@class,\'detail-content\')]','xpath',0,0,NULL,NULL,1,NULL,'//div[contains(@class,\'social-bar\')]',1,'2022-12-11 00:21:00','2022-12-11 00:34:30'),
+(19,NULL,11,'source_title','//h1[contains(@class,\'title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:47:12','2022-12-11 00:47:12'),
+(20,NULL,11,'source_author','//span[contains(@class,\'author\')]','xpath',0,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:47:34','2022-12-11 00:48:53'),
+(21,NULL,11,'source_name','//span[contains(@class,\'source\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:48:14','2022-12-11 00:48:14'),
+(22,NULL,11,'source_pub_time','//span[contains(@class,\'timer\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:49:34','2022-12-11 00:49:34'),
+(23,NULL,11,'source_content','//div[contains(@id,\'content\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:50:04','2022-12-11 00:50:04');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

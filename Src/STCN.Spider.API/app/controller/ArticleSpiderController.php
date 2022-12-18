@@ -10,10 +10,10 @@ use utils\Result;
 use enum\ResultCode;
 use think\facade\Log;
 
-class SpiderController extends BaseController
+class ArticleSpiderController extends BaseController
 {
     /**
-     * @OA\Get(path="/spider/getListByPage",
+     * @OA\Get(path="/articleSpider/getListByPage",
      *   tags={"资源采集"},
      *   summary="获取采集资源列表",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
@@ -32,10 +32,10 @@ class SpiderController extends BaseController
         try {
             $list = ArticleSpider::where(function ($query) use ($keyword) {
                 if (!empty($keyword)) {
-                    $query->whereLike('source|title|author|editor|news_type|content', "%{$keyword}%");
+                    $query->whereLike('source_name|pub_source_name|pub_media_name|pub_product_name|pub_platform_name|pub_channel_name|source_title|source_author|source_pub_time|source_content', "%{$keyword}%");
                 }
             })
-                ->orderRaw('publish_time desc')
+                ->orderRaw('source_pub_time desc')
                 ->paginate(['page' => $page, 'pageSize' => $pageSize], false,);
 
             $r = [
@@ -55,7 +55,7 @@ class SpiderController extends BaseController
     }
 
     /**
-     * @OA\Delete(path="/spider/delete",
+     * @OA\Delete(path="/articleSpider/delete",
      *   tags={"资源采集"},
      *   summary="删除",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),

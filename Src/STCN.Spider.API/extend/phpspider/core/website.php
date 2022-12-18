@@ -2,6 +2,8 @@
 
 namespace phpspider\core;
 
+use phpspider\core\util;
+
 class website
 {
     const URL = "http://127.0.0.1:7777/";
@@ -12,7 +14,7 @@ class website
      */
     public static function getWebsiteConfig()
     {
-        $spiderConfig = require_once __DIR__ . '../../../../config/spider.php';
+        $spiderConfig = util::get_spider_config();
         $urlconfig = isset($spiderConfig['api_url']) ? $spiderConfig['api_url'] : self::URL;
 
         $retval = [

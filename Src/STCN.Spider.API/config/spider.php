@@ -65,6 +65,7 @@ return [
     // api url
     'api_url' => 'http://127.0.0.1:7777/', // 以/结尾
 
+    // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
     'sleep_seconds' => 60 * 60 * 1, // 单位秒，爬虫轮询周期，一般2小时
 ];

@@ -22,23 +22,26 @@ DROP TABLE IF EXISTS `article_spider`;
 
 CREATE TABLE `article_spider` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `source` varchar(100) DEFAULT NULL COMMENT '来源',
-  `quote` varchar(100) DEFAULT NULL COMMENT '转载处',
-  `title` varchar(300) DEFAULT NULL,
-  `content` blob,
-  `author` varchar(100) DEFAULT NULL,
-  `editor` varchar(100) DEFAULT NULL,
-  `url` varchar(300) DEFAULT NULL,
-  `news_type` varchar(100) DEFAULT NULL COMMENT '新闻类别',
-  `terminal_type` varchar(50) DEFAULT NULL COMMENT '终端类别',
-  `country` varchar(100) DEFAULT NULL,
-  `area` varchar(100) DEFAULT NULL COMMENT '地区',
+  `source_name` varchar(100) DEFAULT NULL COMMENT '来源',
+  `pub_source_name` varchar(100) DEFAULT NULL,
+  `pub_media_name` varchar(100) DEFAULT NULL,
+  `pub_product_name` varchar(100) DEFAULT NULL,
+  `pub_platform_name` varchar(50) DEFAULT NULL,
+  `pub_channel_name` varchar(100) DEFAULT NULL,
+  `source_title` varchar(300) DEFAULT NULL,
+  `source_content` blob,
+  `source_author` varchar(100) DEFAULT NULL,
+  `source_url` varchar(300) DEFAULT NULL,
+  `source_pub_time` datetime DEFAULT NULL,
+  `source_media_name` varchar(100) DEFAULT NULL COMMENT '媒体',
+  `source_product_name` varchar(100) DEFAULT NULL COMMENT '子媒',
+  `source_platform_name` varchar(50) DEFAULT NULL COMMENT '平台',
+  `source_channel_name` varchar(100) DEFAULT NULL COMMENT '频道栏目',
   `status` int(11) DEFAULT '1',
-  `publish_time` datetime DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61738 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 

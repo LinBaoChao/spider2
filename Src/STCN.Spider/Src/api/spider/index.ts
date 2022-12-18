@@ -2,8 +2,8 @@ import { defHttp } from '/@/utils/http/axios';
 import { SpiderParams, SpiderListResult } from './model';
 
 enum Api {
-  List = '/spider/getListByPage',
-  Delete = '/spider/delete',
+  List = '/articleSpider/getListByPage',
+  Delete = '/articleSpider/delete',
 }
 
 export const spiderList = (params: SpiderParams) =>
