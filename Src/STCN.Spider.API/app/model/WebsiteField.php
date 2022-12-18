@@ -25,6 +25,7 @@ class WebsiteField extends BaseModel
         'attached_url' => 'string',
         'is_write_db' => 'bool',
         'join_field' => 'string',
+        'filter_type' => 'string',
         'filter' => 'string',
         'status' => 'int',
         'create_time' => 'datetime',

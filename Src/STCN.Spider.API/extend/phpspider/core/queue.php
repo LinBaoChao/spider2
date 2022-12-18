@@ -35,7 +35,7 @@ class queue
     /**
      *  默认redis前缀
      */
-    public static $prefix = 'phpspider';
+    public static $prefix = 'stcnspider';
 
     public static $error = '';
 

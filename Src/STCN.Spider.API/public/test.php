@@ -1,4 +1,5 @@
 <?php
+use think\helper\Str;
 var_dump(__DIR__);
 require_once __DIR__ . '/../vendor/autoload.php';
 //include_once __DIR__ . '/../include.php';
@@ -210,6 +211,201 @@ error_reporting(E_ALL);
 // log::add('$msg', 'debug');
 // log::add("var_export($config, true)", 'info');
 
-var_dump(preg_match("php/i", "PHP is the web scripting language of choice."));
-var_dump(str_replace('/dd/u', '', "作者：李三无作者：dd"));
-var_dump(preg_replace("",'', '作者：李三无作者：ee'));
+// var_dump(preg_match("php/i", "PHP is the web scripting language of choice."));
+// var_dump(str_replace('/dd/u', '', "作者：李三无作者：dd"));
+// var_dump(preg_replace("",'', '作者：李三无作者：ee'));
+
+// switch('b'){
+//     case 'a':
+//     case 'b':
+//     case 'c':
+//         var_dump('abc');
+//         break;
+//     default:
+//         var_dump('111');
+// }
+
+$sear = <<<STR
+            <div class="social-bar">
+              <div class="tt">点赞</div>
+              <div class="like like-btn " data-id="757276" data-url="/operation/like.html"/>
+              <div class="fav post-btn " data-id="757276" data-url="/operation/collect.html"/>
+              <a class="comment" href="#comment"/>
+              <div class="tt">分享</div>
+              <div class="share-popup social-share" data-initialized="true" data-title="&#x76CA;&#x751F;&#x80A1;&#x4EFD;&#xFF1A;&#x603B;&#x4F53;&#x9884;&#x5224;&#xFF0C;&#x660E;&#x5E74;&#x7956;&#x4EE3;&#x8089;&#x79CD;&#x9E21;&#x7684;&#x5F15;&#x79CD;&#x91CF;&#x4E0D;&#x4F1A;&#x592A;&#x591A;" data-description="&#x76CA;&#x751F;&#x80A1;&#x4EFD;&#xFF1A;&#x603B;&#x4F53;&#x9884;&#x5224;&#xFF0C;&#x660E;&#x5E74;&#x7956;&#x4EE3;&#x8089;&#x79CD;&#x9E21;&#x7684;&#x5F15;&#x79CD;&#x91CF;&#x4E0D;&#x4F1A;&#x592A;&#x591A;" data-image="" data-url="https://h5.stcn.com/pages/detail/detail?id=757276&amp;jump_type=fast_info">
+                <a class="social-share-icon icon-wechat wx"/>
+                <a class="social-share-icon icon-qzone qq"/>
+                <a class="social-share-icon icon-weibo wb"/>
+              </div>
+            </div>
+STR;
+
+$html = <<<STR
+            <div class="social-bar">
+              <div class="tt">点赞</div>
+              <div class="like like-btn " data-id="757276" data-url="/operation/like.html"/>
+              <div class="fav post-btn " data-id="757276" data-url="/operation/collect.html"/>
+              <a class="comment" href="#comment"/>
+              <div class="tt">分享</div>
+              <div class="share-popup social-share" data-initialized="true" data-title="益生股份：总体预判，明年祖代肉种鸡的引种量不会太多" data-description="益生股份：总体预判，明年祖代肉种鸡的引种量不会太多" data-image="" data-url="https://h5.stcn.com/pages/detail/detail?id=757276&amp;jump_type=fast_info">
+                <a class="social-share-icon icon-wechat wx"/>
+                <a class="social-share-icon icon-qzone qq"/>
+                <a class="social-share-icon icon-weibo wb"/>
+              </div>
+            </div>
+            <div class="detail-content">
+                                <p style="text-indent:0"><script src="https://static-web.stcn.com/static/scripts/echarts.min.js"/>证券时报e公司讯，益生股份在机构调研时表示，据公司了解，今年11月份，我国没有进口祖代肉种鸡，截至目前，12月份只有公司进口了2万套祖代肉种鸡，1-11月份，我国祖代肉种鸡的更新量同比下降30%多，因美国安伟捷公司的供种计划比较紧张，明年一季度的引种情况还要看影响引种的不利因素是否缓解或者消除，总体预判，明年的引种量不会太多。</p>                            </div>
+                          <div class="detail-content-editor">责任编辑： 郑灶金</div>
+                        <div class="detail-content-tags">
+                <!--普通文章标签-->
+                                <!--快讯标签-->
+            </div>
+            <div class="stock-tags">
+                              <div>
+                                    <a href="/quotes/index/sz002458.html" target="_blank">
+                                    <span>SZ</span>
+                  <span>益生股份</span>
+                  <span class="red fetch-stock-tag-data" data-code="002458"/>
+                  </a>
+                </div>
+                          </div>
+                        <div class="detail-content-statement">
+                <div>声明：证券时报力求信息真实、准确，文章提及内容仅供参考，不构成实质性投资建议，据此操作风险自担</div>
+                <div>下载“证券时报”官方APP，或关注官方微信公众号，即可随时了解股市动态，洞察政策信息，把握财富机会。</div>
+            </div>
+                        <div class="comment" id="comment">
+                <div class="comment-tt">网友评论</div>
+                <div class="comment-input">
+                                        <div class="ds-tip"><span login-btn="">登录</span>后可以发言</div>
+                    <textarea name="content" placeholder="请输入内容" class="hidden"/>
+                                        <div class="btn send-comment-btn" data-url="/operation/submit-comment.html?table=news&amp;id=757276" data-id="757276">发送</div>
+                </div>
+                <div class="comment-tip">网友评论仅供其表达个人看法，并不表明证券时报立场</div>
+                <div class="comment-list">
+                                        <div class="empty comment text-center" style="display: block">
+                      暂无评论
+                    </div>
+                                    </div>
+            </div>
+                        <div class="list-page-tab black">
+                <div class="active">为你推荐</div>
+            </div>
+            <ul class="list" data-fetch="true" data-url="">
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757239.html" target="_blank">
+                            重磅会议召开，A股如何应对？市场孕育哪些机会？来看最新解读                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>券商中国</span>
+                                                        <span>詹晨</span>
+                                                        <span>2022-12-18 14:55</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757239.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/wechat/20221218/639eb8c3c2247.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757228.html" target="_blank">
+                            高位买百亿私募产品，反弹了，居然还亏好多？                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>中国基金报</span>
+                                                        <span>吴君</span>
+                                                        <span>2022-12-18 12:55</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757228.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/202208/stcn_news_media/W020220809839268524041.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757233.html" target="_blank">
+                            北上资金连续六周净流入，持续看好大消费板块，这些高人气股获资金抢筹                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>数据宝</span>
+                                                        <span>张智博</span>
+                                                        <span>2022-12-18 13:18</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757233.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/wechat/20221218/639ea1f8b1f64.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757186.html" target="_blank">
+                            "她力量"崛起！3000份问卷揭示女性理财面面观！如何提供有温度服务？这家券商给出答案                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>券商中国</span>
+                                                        <span>奚艾思</span>
+                                                        <span>2022-12-18 08:51</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757186.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/wechat/20221218/639e6084f289b.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757268.html" target="_blank">
+                            中央重磅定调！刚刚，超万字最新解读                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>中国基金报</span>
+                                                        <span>曹雯璟 莫琳</span>
+                                                        <span>2022-12-18 17:14</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757268.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/wechat/20221218/639ed8b44e4da.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                                <li class="no-tag ">
+                    <div class="content">
+                        <div class="tt">
+                            <a href="/article/detail/757194.html" target="_blank">
+                            明年二季度经济有望出现大幅反弹、防范化解房地产市场风险是重中之重…权威人士解读中央经济工作会议精神                            </a>
+                        </div>
+                        <div class="info mt-60">
+                            <span>e公司</span>
+                                                        <span>江聃</span>
+                                                        <span>2022-12-18 09:04</span>
+                        </div>
+                    </div>
+                                        <div class="side">
+                        <a href="/article/detail/757194.html" target="_blank">
+                            <img src="https://static-web.stcn.com/upload/wechat/20221218/639e643d7ac20.png" alt=""/>
+                        </a>
+                    </div>
+                                    </li>
+                            </ul>
+STR;
+
+var_dump(strpos($html, $sear));
+var_dump(str_replace($sear, '', $html));
+
+$a = ['a' => 'a1', 'b' => 'b1', 'c' => 3];
+var_dump($a);
+unset($a['b']);
+var_dump($a);

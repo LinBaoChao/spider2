@@ -1815,7 +1815,22 @@ class phpspider
                 $fields['source_url'] = $url;
 
                 // lbc to do 是否入库，只有入库的才保留、合并fields
+                foreach (self::$configs['fields'] as $config) {
+                    // 合并字段处理
+                    if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] === true && isset($config['join_field']) && !empty($config['join_field'])) {
+                        $joinFields = explode($config['join_field_split'], $config['join_field']);
+                        $joinval = $fields[$config['name']];
+                        foreach ($joinFields as $joinField) {
 
+                        }
+                        $fields[$config['name']] = $joinval;
+                    }
+
+                    // 不入库则移除
+                    if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] !== true) {
+                        unset($fields[$config['name']]);
+                    }
+                }
 
                 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
                     $fields_str = json_encode($fields);
@@ -1913,24 +1928,8 @@ class phpspider
                     $values = $this->get_fields_css($html, $conf['selector'], $conf['name']);
                 } elseif ($conf['selector_type'] == 'regex') {
                     $values = $this->get_fields_regex($html, $conf['selector'], $conf['name']);
-                }
-
-                // 过滤项 lbc
-                if(isset($conf['filter']) && !empty($conf['filter'])){
-                    $filterstr = $conf['filter'];
-                    // $filterval = selector::remove($values, $filterstr);
-                    // if(!empty($filterval)){
-                    //     $values = $filterval;
-                    // }
-                    $values = str_replace($filterstr, '', $values);
-                    // try {
-                    //     $filterval = preg_replace($filterstr, '', $values);
-                    //     if (!empty($filterval)) {
-                    //         $values = $filterval;
-                    //     }
-                    // } catch (Exception $ex) {
-                    //     log::error('过滤出错：' . $ex->getMessage());
-                    // }
+                } elseif ($conf['selector_type'] == 'self') { // 本身内容 lbc
+                    $values = $conf['selector'];
                 }
 
                 // field不为空而且存在子配置
@@ -1978,6 +1977,47 @@ class phpspider
                 }
                 // 不重复抽取则只取第一个元素
                 //$fields[$conf['name']] = $repeated ? $values : $values[0];
+
+                // 过滤项 lbc
+                if (isset($conf['filter']) && !empty($conf['filter']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
+                    $filter_values = $fields[$conf['name']];
+                    $filterstr = $conf['filter'];
+
+                    if (isset($conf['filter_type']) && !empty($conf['filter_type'])) {
+                        switch ($conf['filter_type']) {
+                            case 'replace':
+                                $filter_values = str_replace($filterstr, "", $filter_values);
+                                break;
+                            case 'regex':
+                                if (@preg_match_all($filterstr, $filter_values, $out) === false) {
+                                } else {
+                                    $filterval = preg_replace($filterstr, "", $filter_values);
+                                    if (!empty($filterval)) {
+                                        $filter_values = $filterval;
+                                    }
+                                }
+                                break;
+                            case 'xpath':
+                            case 'css':
+                                try {
+                                    $filterval = selector::remove($filter_values, $filterstr, $conf['filter_type']);
+                                    if (!empty($filterval)) {
+                                        $filter_values = $filterval;
+                                    }
+                                } catch (Exception $ex) {
+                                    log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
+                                }
+                                break;
+                            default:
+                                $filter_values = str_replace($filterstr, "", $filter_values);
+                                break;
+                        }
+                    } else {
+                        $filter_values = str_replace($filterstr, "", $filter_values);
+                    }
+
+                    $fields[$conf['name']] = $filter_values;
+                }
             }
         }
 

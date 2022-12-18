@@ -59,7 +59,7 @@ CREATE TABLE `dept` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `dept` */
 
@@ -98,7 +98,7 @@ CREATE TABLE `menu` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `menu` */
 
@@ -170,7 +170,7 @@ CREATE TABLE `role` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `role` */
 
@@ -271,12 +271,12 @@ CREATE TABLE `user` (
   KEY `idx_user_code` (`user_code`),
   KEY `idx_user_create_time` (`create_time`),
   KEY `idx_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-17 01:09:06','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-17 13:09:06');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2022-12-18 02:58:08','2042-10-19 00:00:00','2022-08-23 16:39:30','2022-12-18 14:58:09');
 
 /*Table structure for table `user_dept` */
 
@@ -350,7 +350,7 @@ CREATE TABLE `website` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website` */
 
@@ -375,26 +375,27 @@ CREATE TABLE `website_field` (
   `attached_url` varchar(200) DEFAULT NULL COMMENT '当source_type设置为attached_url时, 定义新请求的url',
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
   `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
+  `filter_type` varchar(50) DEFAULT NULL COMMENT 'replace regex xpath css',
   `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
 
-insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter`,`status`,`create_time`,`update_time`) values 
-(11,NULL,10,'source_title','//div[contains(@class,\'detail-title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 15:15:45'),
-(12,NULL,10,'source_author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',0,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:14:20','2022-12-11 00:34:07'),
-(13,NULL,10,'source_name','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:15:40','2022-12-11 00:34:16'),
-(14,NULL,10,'source_pub_time','//div[contains(@class,\'detail-info\')]//span[3]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:17:15','2022-12-11 00:34:24'),
-(15,NULL,10,'source_content','//div[contains(@class,\'detail-content\')]','xpath',0,0,NULL,NULL,1,NULL,'//div[contains(@class,\'social-bar\')]',1,'2022-12-11 00:21:00','2022-12-11 00:34:30'),
-(19,NULL,11,'source_title','//h1[contains(@class,\'title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:47:12','2022-12-11 00:47:12'),
-(20,NULL,11,'source_author','//span[contains(@class,\'author\')]','xpath',0,0,NULL,NULL,1,NULL,'作者：',1,'2022-12-11 00:47:34','2022-12-11 00:48:53'),
-(21,NULL,11,'source_name','//span[contains(@class,\'source\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,'来源：',1,'2022-12-11 00:48:14','2022-12-11 00:48:14'),
-(22,NULL,11,'source_pub_time','//span[contains(@class,\'timer\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:49:34','2022-12-11 00:49:34'),
-(23,NULL,11,'source_content','//div[contains(@id,\'content\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,1,'2022-12-11 00:50:04','2022-12-11 00:50:04');
+insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`selector_type`,`required`,`repeated`,`source_type`,`attached_url`,`is_write_db`,`join_field`,`filter_type`,`filter`,`status`,`create_time`,`update_time`) values 
+(11,NULL,10,'source_title','//div[contains(@class,\'detail-title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-11 15:15:45'),
+(12,NULL,10,'source_author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',0,0,NULL,NULL,1,NULL,'replace','作者：',1,'2022-12-11 00:14:20','2022-12-18 15:15:07'),
+(13,NULL,10,'source_name','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,'replace','来源：',1,'2022-12-11 00:15:40','2022-12-18 15:14:57'),
+(14,NULL,10,'source_pub_time','//div[contains(@class,\'detail-info\')]//span[3]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,1,'2022-12-11 00:17:15','2022-12-11 00:34:24'),
+(15,NULL,10,'source_content','//div[contains(@class,\'detail-content\')]','xpath',0,0,NULL,NULL,1,NULL,'xpath','//div[contains(@class,\'social-bar\')]',1,'2022-12-11 00:21:00','2022-12-18 15:00:58'),
+(19,NULL,11,'source_title','//h1[contains(@class,\'title\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,1,'2022-12-11 00:47:12','2022-12-11 00:47:12'),
+(20,NULL,11,'source_author','//span[contains(@class,\'author\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,'作者：',1,'2022-12-11 00:47:34','2022-12-11 00:48:53'),
+(21,NULL,11,'source_name','//span[contains(@class,\'source\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,NULL,'来源：',1,'2022-12-11 00:48:14','2022-12-11 00:48:14'),
+(22,NULL,11,'source_pub_time','//span[contains(@class,\'timer\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,1,'2022-12-11 00:49:34','2022-12-11 00:49:34'),
+(23,NULL,11,'source_content','//div[contains(@id,\'content\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,1,'2022-12-11 00:50:04','2022-12-11 00:50:04');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

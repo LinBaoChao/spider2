@@ -225,6 +225,9 @@ class WebsiteService
                                             if (!empty($field2->filter)) {
                                                 $fc2['filter'] = $field2->filter;
                                             }
+                                            if (!empty($field2->filterType)) {
+                                                $fc2['filter_type'] = $field2->filterType;
+                                            }
 
                                             $field2Config[] = $fc2;
                                         }
@@ -260,6 +263,9 @@ class WebsiteService
                                 }
                                 if (!empty($field->filter)) {
                                     $fc['filter'] = $field->filter;
+                                }
+                                if (!empty($field->filterType)) {
+                                    $fc['filter_type'] = $field->filterType;
                                 }
                                 if (!empty($field2Config)) {
                                     $fc['children'] = $field2Config;

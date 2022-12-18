@@ -89,8 +89,12 @@ export const columns: BasicColumn[] = [
   {
     title: '过滤',
     dataIndex: 'filter',
-    //width: 200,
-    align: 'left',
+    width: 200,
+  },
+  {
+    title: '过滤类型',
+    dataIndex: 'filterType',
+    width: 80,
   },
   {
     title: '数据源类型',
@@ -143,14 +147,14 @@ export const formSchema: FormSchema[] = [
     component: 'Select',
     componentProps: {
       options: [
-        { label: 'xpath', value: 'xpath', default: true },
-        { label: 'jsonpath', value: 'jsonpath' },
+        { label: 'xpath', value: 'xpath' },
+        { label: 'css', value: 'css' },
         { label: 'regex', value: 'regex' },
         { label: 'self', value: 'self' }, // selector的原内容
       ],
     },
     defaultValue: 'xpath',
-    helpMessage: ['抽取规则的类型', '默认xpath，目前可用xpath, jsonpath, regex'],
+    helpMessage: ['抽取规则的类型', '默认xpath，目前可用xpath, css, regex'],
     rules: [
       {
         required: true,
@@ -217,7 +221,20 @@ export const formSchema: FormSchema[] = [
     field: 'filter',
     label: '过滤',
     component: 'InputTextArea',
-    helpMessage: ['可正则表达式'],
+    helpMessage: ['输入符合过滤类型的过滤规则或过滤内容，并选择过滤类型'],
+  },
+  {
+    field: 'filterType',
+    label: '过滤类型',
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: 'replace', value: 'replace' },
+        { label: 'regex', value: 'regex' },
+        { label: 'xpath', value: 'xpath' },
+        { label: 'css', value: 'css' },
+      ],
+    },
   },
   {
     field: 'parentId',

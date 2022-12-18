@@ -135,6 +135,7 @@ class WebsiteFieldController extends BaseController
                 'attached_url' => $params['attachedUrl'] ?? null,
                 'is_write_db' => $params['isWriteDb'] ?? 1,
                 'join_field' => $params['joinField'] ?? null,
+                'filter_type' => $params['filterType'] ?? null,
                 'filter' => $params['filter'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
@@ -200,6 +201,7 @@ class WebsiteFieldController extends BaseController
                 'attached_url' => $params['attachedUrl'] ?? null,
                 'is_write_db' => $params['isWriteDb'] ?? 1,
                 'join_field' => $params['joinField'] ?? null,
+                'filter_type' => $params['filterType'] ?? null,
                 'filter' => $params['filter'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);

@@ -36,11 +36,11 @@ class ArticleSpiderController extends BaseController
                 }
             })
                 ->orderRaw('source_pub_time desc')
-                ->paginate(['page' => $page, 'pageSize' => $pageSize], false,);
+                ->paginate(['page' => $page, 'pageSize' => $pageSize], false);
 
             $r = [
                 'items' => $list->items(),
-                'total' => $list->total()
+                'total' => count($list->items())
             ];
 
             $retval->result = $r;
