@@ -222,6 +222,9 @@ class WebsiteService
                                             if (!empty($field2->joinField)) {
                                                 $fc2['join_field'] = $field2->joinField;
                                             }
+                                            if (!empty($field2->joinFieldSplit)) {
+                                                $fc2['join_field_split'] = $field2->joinFieldSplit;
+                                            }
                                             if (!empty($field2->filter)) {
                                                 $fc2['filter'] = $field2->filter;
                                             }
@@ -260,6 +263,9 @@ class WebsiteService
                                 }
                                 if (!empty($field->joinField)) {
                                     $fc['join_field'] = $field->joinField;
+                                }
+                                if (!empty($field->joinFieldSplit)) {
+                                    $fc['join_field_split'] = $field->joinFieldSplit;
                                 }
                                 if (!empty($field->filter)) {
                                     $fc['filter'] = $field->filter;

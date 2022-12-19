@@ -31,7 +31,7 @@ return [
         'port'      => 6379,
         'pass'      => '',
         'db'        => 5,
-        'prefix'    => 'stcnspider',
+        'prefix'    => 'phpspider',
         'timeout'   => 30,
     ),
 

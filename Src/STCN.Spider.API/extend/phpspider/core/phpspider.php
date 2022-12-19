@@ -481,7 +481,7 @@ class phpspider
 
         // 不同项目的采集以采集名称作为前缀区分 缩短 spider name md5长度到4位，减少内存占用
         if (isset(self::$queue_config['prefix'])) {
-            self::$queue_config['prefix'] = self::$queue_config['prefix'] . '-' . $configs['name']; // substr(md5($configs['name']), 0, 4); lbc 
+            self::$queue_config['prefix'] = self::$queue_config['prefix'] . '-' . $configs['name']; // substr(md5($configs['name']), 0, 4); lbc
         }
 
         // 当前服务器ID
@@ -1243,7 +1243,7 @@ class phpspider
         if (!$html) {
             return false;
         }
-        // 当前正在爬取的网页页面的对象 // lbc to do 可在这加入name给回调里判断是哪个网站，然后做逻辑处理
+        // 当前正在爬取的网页页面的对象 // lbc todo 可在这加入name给回调里判断是哪个网站，然后做逻辑处理
         $page = array(
             'url'     => $url,
             'raw'     => $html,
@@ -1257,7 +1257,7 @@ class phpspider
                 'max_try'      => $link['max_try'],
                 'depth'        => $link['depth'],
                 'taskid'       => self::$taskid,
-                //'name'        => $link['name'], // lbc to do 
+                //'name'        => $link['name'], // lbc todo 
             ),
         );
         //printf("memory usage: %.2f M\n", memory_get_usage() / 1024 / 1024 ); 
@@ -1807,6 +1807,7 @@ class phpspider
                 }
 
                 // 打包网站属性关联字段
+                $fields['pub_source_name'] = self::$configs['product_name'];
                 $fields['pub_media_name'] = self::$configs['media_name'];
                 $fields['pub_product_name'] = self::$configs['product_name'];
                 $fields['pub_platform_name'] = self::$configs['platform'];
@@ -1814,23 +1815,39 @@ class phpspider
                 // 原文url
                 $fields['source_url'] = $url;
 
-                // lbc to do 是否入库，只有入库的才保留、合并fields
+                // log::add(var_export($fields, true), 'fields');
+
+                $fieldscopy = $fields; // 因为下面逻辑会把不入库的移除，所以备份一份，合并时能取出用
+                // lbc 是否入库，只有入库的才保留、合并fields
                 foreach (self::$configs['fields'] as $config) {
                     // 合并字段处理
                     if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] === true && isset($config['join_field']) && !empty($config['join_field'])) {
-                        $joinFields = explode($config['join_field_split'], $config['join_field']);
-                        $joinval = $fields[$config['name']];
+                        $split = $config['join_field_split'];
+                        $joinFields = explode($split, $config['join_field']); 
+                        $joinval = "";
                         foreach ($joinFields as $joinField) {
-
+                            if ($split == "|no|") { // 没有连接符号则直接连接值，否用符号连接各值
+                                $joinval .= $fieldscopy[$joinField];
+                            }else{
+                                $joinval = $split . $fieldscopy[$joinField];
+                            }
+                        }
+                        if ($split != "|no|") {
+                            $joinval = substr($joinval, 1); // 去掉开始的$split
                         }
                         $fields[$config['name']] = $joinval;
+
+                        // log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}", 'fields');
                     }
 
                     // 不入库则移除
-                    if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] !== true) {
+                    if (!isset($config['is_write_db']) || empty($config['is_write_db']) || $config['is_write_db'] !== true) {
                         unset($fields[$config['name']]);
                     }
                 }
+                unset($fieldscopy);
+
+                // log::add("filter after:" . var_export($fields, true), 'fields');
 
                 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
                     $fields_str = json_encode($fields);
@@ -1864,6 +1881,8 @@ class phpspider
                     clickhouse::insert($fields, self::$click_house_config);
                 }
             }
+
+            unset($fields);
         }
     }
 
@@ -1956,8 +1975,8 @@ class phpspider
 
             if (!isset($values)) {
                 // 如果值为空而且值设置为必须项, 跳出foreach循环
-                if ($required) {
-                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must");
+                if ($required) { // lbc to do trace
+                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must.url:{$url}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();
                     break;
@@ -2100,7 +2119,7 @@ class phpspider
                     exit;
                 }
 
-                // lbc to do check click house
+                // lbc todo check click house
             }
         }
     }
@@ -2737,7 +2756,7 @@ class phpspider
     {
         $result = selector::select($html, $selector);
         if (selector::$error) {
-            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // lbc todo trace
+            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // lbc todo trace 出错预警
         }
         return $result;
     }

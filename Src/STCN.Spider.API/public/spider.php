@@ -98,7 +98,8 @@ function runSpider()
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
                     } catch (Exception $ex) {
-                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{var_export($config, true)}\r\n", 'runSpider');
+                        $configstr = var_export($config, true);
+                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpider');
                     }
                 }
             }

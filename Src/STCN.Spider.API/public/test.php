@@ -402,10 +402,13 @@ $html = <<<STR
                             </ul>
 STR;
 
-var_dump(strpos($html, $sear));
-var_dump(str_replace($sear, '', $html));
+// var_dump(strpos($html, $sear));
+// var_dump(str_replace($sear, '', $html));
 
-$a = ['a' => 'a1', 'b' => 'b1', 'c' => 3];
-var_dump($a);
-unset($a['b']);
-var_dump($a);
+// $a = ['a' => 'a1', 'b' => 'b1', 'c' => 3];
+// var_dump($a);
+// unset($a['b']);
+// var_dump($a);
+
+$str = explode("|no|", "dwq脸|no|e肝ewq");
+var_dump(sprintf('%01dd', 'ffff'));

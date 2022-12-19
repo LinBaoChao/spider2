@@ -102,12 +102,16 @@ export const columns: BasicColumn[] = [
     width: 100,
   },
   {
-    title: '新Url',
-    dataIndex: 'attachedUrl',
-  },
-  {
     title: '合并字段',
     dataIndex: 'joinField',
+  },
+  {
+    title: '合并分割符',
+    dataIndex: 'joinFieldSplit',
+  },
+  {
+    title: '新Url',
+    dataIndex: 'attachedUrl',
   },
   {
     title: '创建时间',
@@ -237,6 +241,18 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
+    field: 'joinField',
+    label: '合并字段',
+    component: 'Input',
+    helpMessage: ['合并字段', '用什么符号分割就用什么符号连接内容'],
+  },
+  {
+    field: 'joinFieldSplit',
+    label: '合并分割符',
+    component: 'Input',
+    helpMessage: ['合并字段分割符', '如果值直接连接不用分割则是|no|'],
+  },
+  {
     field: 'parentId',
     label: '父字段',
     component: 'TreeSelect',
@@ -269,11 +285,5 @@ export const formSchema: FormSchema[] = [
     label: '新Url',
     component: 'Input',
     helpMessage: ['定义新请求的url', '当source_type设置为attached_url时'],
-  },
-  {
-    field: 'joinField',
-    label: '合并字段',
-    component: 'Input',
-    helpMessage: ['合并字段', '用什么符号分割就用什么符号连接内容'],
   },
 ];

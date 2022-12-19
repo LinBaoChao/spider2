@@ -40,7 +40,7 @@ class ArticleSpiderController extends BaseController
 
             $r = [
                 'items' => $list->items(),
-                'total' => count($list->items())
+                'total' => $list->total()
             ];
 
             $retval->result = $r;
