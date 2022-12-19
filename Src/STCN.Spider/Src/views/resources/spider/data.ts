@@ -29,11 +29,11 @@ export const columns: BasicColumn[] = [
     dataIndex: 'sourceName',
     width: 100,
   },
-  {
-    title: '发布源',
-    dataIndex: 'pubSourceName',
-    width: 100,
-  },
+  // {
+  //   title: '发布源',
+  //   dataIndex: 'pubSourceName',
+  //   width: 100,
+  // },
   {
     title: '媒体',
     dataIndex: 'pubMediaName',

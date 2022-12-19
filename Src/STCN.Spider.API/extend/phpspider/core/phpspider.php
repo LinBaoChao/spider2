@@ -1807,11 +1807,21 @@ class phpspider
                 }
 
                 // 打包网站属性关联字段
-                $fields['pub_source_name'] = self::$configs['product_name'];
-                $fields['pub_media_name'] = self::$configs['media_name'];
-                $fields['pub_product_name'] = self::$configs['product_name'];
-                $fields['pub_platform_name'] = self::$configs['platform'];
-                $fields['pub_channel_name'] = self::$configs['channel'];
+                if (!isset($fields['pub_source_name']) || empty($fields['pub_source_name'])) {
+                    $fields['pub_source_name'] = self::$configs['product_name'];
+                }                
+                if (!isset($fields['pub_media_name']) || empty($fields['pub_media_name'])) {
+                    $fields['pub_media_name'] = self::$configs['media_name'];
+                }                
+                if (!isset($fields['pub_product_name']) || empty($fields['pub_product_name'])) {
+                    $fields['pub_product_name'] = self::$configs['product_name'];
+                }                
+                if (!isset($fields['pub_platform_name']) || empty($fields['pub_platform_name'])) {
+                    $fields['pub_platform_name'] = self::$configs['platform'];
+                }                
+                if (!isset($fields['pub_channel_name']) || empty($fields['pub_channel_name'])) {
+                    $fields['pub_channel_name'] = self::$configs['channel'];
+                }
                 // 原文url
                 $fields['source_url'] = $url;
 
@@ -1846,6 +1856,11 @@ class phpspider
                     }
                 }
                 unset($fieldscopy);
+
+                // 如果来源为空则为发布源 lbc
+                if(!isset($fields['source_name']) || empty($fields['source_name'])){
+                    $fields['source_name'] = $fields['pub_source_name'];
+                }
 
                 // log::add("filter after:" . var_export($fields, true), 'fields');
 

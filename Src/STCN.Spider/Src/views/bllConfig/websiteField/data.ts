@@ -140,7 +140,7 @@ export const formSchema: FormSchema[] = [
     helpMessage: ['定义抽取规则', '默认使用xpath,如selector => //*[@id=single-next-link]'],
     rules: [
       {
-        required: true,
+        //required: true,
         message: '请输入抽取规则',
       },
     ],
@@ -161,7 +161,7 @@ export const formSchema: FormSchema[] = [
     helpMessage: ['抽取规则的类型', '默认xpath，目前可用xpath, css, regex'],
     rules: [
       {
-        required: true,
+        //required: true,
         message: '请输入抽取规则的类型',
       },
     ],
@@ -170,7 +170,7 @@ export const formSchema: FormSchema[] = [
     field: 'required',
     label: '是否必须',
     component: 'RadioButtonGroup',
-    required: true,
+    //required: true,
     componentProps: {
       options: [
         { label: '是', value: 1 },
@@ -184,7 +184,7 @@ export const formSchema: FormSchema[] = [
     field: 'isWriteDb',
     label: '是否入库',
     component: 'RadioButtonGroup',
-    required: true,
+    //required: true,
     componentProps: {
       options: [
         { label: '是', value: 1 },
@@ -198,7 +198,7 @@ export const formSchema: FormSchema[] = [
     field: 'repeated',
     label: '是否多项',
     component: 'RadioButtonGroup',
-    required: true,
+    //required: true,
     componentProps: {
       options: [
         { label: '是', value: 1 },

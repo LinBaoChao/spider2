@@ -282,150 +282,152 @@ class WebsiteService
                         }
                     }
 
-                    // 网站 如果业务配置此项为空而且配置文件中此项也为空，则不需要此项，因为抓取业务中会用isset来判断是否存在，如果存在值又为空，则有可能出错，所以如果没值干脆没有此项最准确
-                    $fds = [
-                        'name' => $website->name,
+                    if (!empty($fieldConfig)) {
+                        // 网站 如果业务配置此项为空而且配置文件中此项也为空，则不需要此项，因为抓取业务中会用isset来判断是否存在，如果存在值又为空，则有可能出错，所以如果没值干脆没有此项最准确
+                        $fds = [
+                            'name' => $website->name,
 
-                        //----网站属性，与爬虫业务逻辑无关，只为数据入库关联----
-                        'media_name' => $website->mediaName,
-                        'product_name' => $website->productName,
-                        'platform' => $website->platform,
-                        'channel' => $website->channel,
-                        //----网站属性----
+                            //----网站属性，与爬虫业务逻辑无关，只为数据入库关联----
+                            'media_name' => $website->mediaName,
+                            'product_name' => $website->productName,
+                            'platform' => $website->platform,
+                            'channel' => $website->channel,
+                            //----网站属性----
 
-                        'domains' => explode('【', $website->domains ?? ''),
-                        'scan_urls' => explode('【', $website->scanUrls ?? ''),
-                        'list_url_regexes' => explode('【', $website->listUrls ?? ''),
-                        'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
+                            'domains' => explode('【', $website->domains ?? ''),
+                            'scan_urls' => explode('【', $website->scanUrls ?? ''),
+                            'list_url_regexes' => explode('【', $website->listUrls ?? ''),
+                            'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
 
-                        'fields' => $fieldConfig,
-                    ];
+                            'fields' => $fieldConfig,
+                        ];
 
-                    // 编码
-                    if (!empty($website->inputEncoding)) {
-                        $fds['input_encoding'] = $website->inputEncoding;
-                    } elseif (!empty(Config::get('spider.input_encoding'))) {
-                        $fds['input_encoding'] = (int)Config::get('spider.input_encoding');
-                    }
+                        // 编码
+                        if (!empty($website->inputEncoding)) {
+                            $fds['input_encoding'] = $website->inputEncoding;
+                        } elseif (!empty(Config::get('spider.input_encoding'))) {
+                            $fds['input_encoding'] = (int) Config::get('spider.input_encoding');
+                        }
 
-                    if (!empty($website->outputEncoding)) {
-                        $fds['output_encoding'] = $website->outputEncoding;
-                    } elseif (!empty(Config::get('spider.output_encoding'))) {
-                        $fds['output_encoding'] = (int)Config::get('spider.output_encoding');
-                    }
+                        if (!empty($website->outputEncoding)) {
+                            $fds['output_encoding'] = $website->outputEncoding;
+                        } elseif (!empty(Config::get('spider.output_encoding'))) {
+                            $fds['output_encoding'] = (int) Config::get('spider.output_encoding');
+                        }
 
-                    // 频率相关
-                    if (!empty($website->interval)) {
-                        $fds['interval'] = $website->interval;
-                    } elseif (!empty(Config::get('spider.interval'))) {
-                        $fds['interval'] = (int)Config::get('spider.interval');
-                    }
+                        // 频率相关
+                        if (!empty($website->interval)) {
+                            $fds['interval'] = $website->interval;
+                        } elseif (!empty(Config::get('spider.interval'))) {
+                            $fds['interval'] = (int) Config::get('spider.interval');
+                        }
 
-                    if (!empty($website->timeout)) {
-                        $fds['timeout'] = $website->timeout;
-                    } elseif (!empty(Config::get('spider.timeout'))) {
-                        $fds['timeout'] = (int)Config::get('spider.timeout');
-                    }
+                        if (!empty($website->timeout)) {
+                            $fds['timeout'] = $website->timeout;
+                        } elseif (!empty(Config::get('spider.timeout'))) {
+                            $fds['timeout'] = (int) Config::get('spider.timeout');
+                        }
 
-                    if (!empty($website->maxTry)) {
-                        $fds['max_try'] = $website->maxTry;
-                    } elseif (!empty(Config::get('spider.max_try'))) {
-                        $fds['max_try'] = (int)Config::get('spider.max_try');
-                    }
+                        if (!empty($website->maxTry)) {
+                            $fds['max_try'] = $website->maxTry;
+                        } elseif (!empty(Config::get('spider.max_try'))) {
+                            $fds['max_try'] = (int) Config::get('spider.max_try');
+                        }
 
-                    if (!empty($website->maxDepth)) {
-                        $fds['max_depth'] = $website->maxDepth;
-                    } elseif (!empty(Config::get('spider.max_depth'))) {
-                        $fds['max_depth'] = (int)Config::get('spider.max_depth');
-                    }
+                        if (!empty($website->maxDepth)) {
+                            $fds['max_depth'] = $website->maxDepth;
+                        } elseif (!empty(Config::get('spider.max_depth'))) {
+                            $fds['max_depth'] = (int) Config::get('spider.max_depth');
+                        }
 
-                    if (!empty($website->maxFields)) {
-                        $fds['max_fields'] = $website->maxFields;
-                    } elseif (!empty(Config::get('spider.max_fields'))) {
-                        $fds['max_fields'] = (int)Config::get('spider.max_fields');
-                    }
+                        if (!empty($website->maxFields)) {
+                            $fds['max_fields'] = $website->maxFields;
+                        } elseif (!empty(Config::get('spider.max_fields'))) {
+                            $fds['max_fields'] = (int) Config::get('spider.max_fields');
+                        }
 
-                    // 多服务 多线程 需要redis支持
-                    if (!empty($website->tasknum)) {
-                        $fds['tasknum'] = $website->tasknum;
-                    } elseif (!empty(Config::get('spider.tasknum'))) {
-                        $fds['tasknum'] = (int)Config::get('spider.tasknum');
-                    }
+                        // 多服务 多线程 需要redis支持
+                        if (!empty($website->tasknum)) {
+                            $fds['tasknum'] = $website->tasknum;
+                        } elseif (!empty(Config::get('spider.tasknum'))) {
+                            $fds['tasknum'] = (int) Config::get('spider.tasknum');
+                        }
 
-                    if (!empty($website->multiserver)) {
-                        $fds['multiserver'] = (bool)$website->multiserver;
-                    } elseif (!empty(Config::get('spider.multiserver'))) {
-                        $fds['multiserver'] = (bool)Config::get('spider.multiserver');
-                    }
+                        if (!empty($website->multiserver)) {
+                            $fds['multiserver'] = (bool) $website->multiserver;
+                        } elseif (!empty(Config::get('spider.multiserver'))) {
+                            $fds['multiserver'] = (bool) Config::get('spider.multiserver');
+                        }
 
-                    if (!empty($website->serverid)) {
-                        $fds['serverid'] = $website->serverid;
-                    } elseif (!empty(Config::get('spider.serverid'))) {
-                        $fds['serverid'] = (int)Config::get('spider.serverid');
-                    }
+                        if (!empty($website->serverid)) {
+                            $fds['serverid'] = $website->serverid;
+                        } elseif (!empty(Config::get('spider.serverid'))) {
+                            $fds['serverid'] = (int) Config::get('spider.serverid');
+                        }
 
-                    if (!empty($website->saveRunningState)) {
-                        $fds['save_running_state'] = (bool)$website->saveRunningState;
-                    } elseif (!empty(Config::get('spider.save_running_state'))) {
-                        $fds['save_running_state'] = (bool)Config::get('spider.save_running_state');
-                    }
+                        if (!empty($website->saveRunningState)) {
+                            $fds['save_running_state'] = (bool) $website->saveRunningState;
+                        } elseif (!empty(Config::get('spider.save_running_state'))) {
+                            $fds['save_running_state'] = (bool) Config::get('spider.save_running_state');
+                        }
 
-                    if (!empty(Config::get('spider.queue_config'))) {
-                        $fds['queue_config'] = Config::get('spider.queue_config');
-                    }
+                        if (!empty(Config::get('spider.queue_config'))) {
+                            $fds['queue_config'] = Config::get('spider.queue_config');
+                        }
 
-                    // db
-                    if (!empty(Config::get('spider.export'))) {
-                        $fds['export'] = Config::get('spider.export');
-                    }
-                    if (!empty(Config::get('spider.db_config'))) {
-                        $fds['db_config'] = Config::get('spider.db_config');
-                    }
+                        // db
+                        if (!empty(Config::get('spider.export'))) {
+                            $fds['export'] = Config::get('spider.export');
+                        }
+                        if (!empty(Config::get('spider.db_config'))) {
+                            $fds['db_config'] = Config::get('spider.db_config');
+                        }
 
-                    // click house
-                    if (!empty(Config::get('spider.click_house'))) {
-                        $fds['click_house'] = Config::get('spider.click_house');
-                    }
+                        // click house
+                        if (!empty(Config::get('spider.click_house'))) {
+                            $fds['click_house'] = Config::get('spider.click_house');
+                        }
 
-                    // 反爬
-                    if (!empty($website->proxy)) {
-                        $fds['proxy'] = explode('【', $website->proxy);
-                    } elseif (!empty(Config::get('spider.proxy'))) {
-                        $fds['proxy'] = Config::get('spider.proxy');
-                    }
+                        // 反爬
+                        if (!empty($website->proxy)) {
+                            $fds['proxy'] = explode('【', $website->proxy);
+                        } elseif (!empty(Config::get('spider.proxy'))) {
+                            $fds['proxy'] = Config::get('spider.proxy');
+                        }
 
-                    if (!empty($website->clientIp)) {
-                        $fds['client_ip'] = explode('【', $website->clientIp);
-                    } elseif (!empty(Config::get('spider.client_ip'))) {
-                        $fds['client_ip'] = Config::get('spider.client_ip');
-                    }
+                        if (!empty($website->clientIp)) {
+                            $fds['client_ip'] = explode('【', $website->clientIp);
+                        } elseif (!empty(Config::get('spider.client_ip'))) {
+                            $fds['client_ip'] = Config::get('spider.client_ip');
+                        }
 
-                    if (!empty($website->userAgent)) {
-                        $fds['user_agent'] = explode('【', $website->userAgent);
-                    } elseif (!empty(Config::get('spider.user_agent'))) {
-                        $fds['user_agent'] = Config::get('spider.user_agent');
-                    }
+                        if (!empty($website->userAgent)) {
+                            $fds['user_agent'] = explode('【', $website->userAgent);
+                        } elseif (!empty(Config::get('spider.user_agent'))) {
+                            $fds['user_agent'] = Config::get('spider.user_agent');
+                        }
 
-                    // 回调
-                    if (!empty($website->callbackMethod)) {
-                        $fds['callback_method'] = explode('【', $website->callbackMethod);
-                    }
-                    if (!empty($website->callbackScript)) {
-                        $fds['callback_script'] = $website->callbackScript;
-                    }
+                        // 回调
+                        if (!empty($website->callbackMethod)) {
+                            $fds['callback_method'] = explode('【', $website->callbackMethod);
+                        }
+                        if (!empty($website->callbackScript)) {
+                            $fds['callback_script'] = $website->callbackScript;
+                        }
 
-                    // logo
-                    if (!empty(Config::get('spider.log_show'))) {
-                        $fds['log_show'] = (bool)Config::get('spider.log_show');
-                    }
-                    if (!empty(Config::get('spider.log_type'))) {
-                        $fds['log_type'] = Config::get('spider.log_type');
-                    }
-                    if (!empty(Config::get('spider.log_file'))) {
-                        $fds['log_file'] = Config::get('spider.log_file');
-                    }
+                        // logo
+                        if (!empty(Config::get('spider.log_show'))) {
+                            $fds['log_show'] = (bool) Config::get('spider.log_show');
+                        }
+                        if (!empty(Config::get('spider.log_type'))) {
+                            $fds['log_type'] = Config::get('spider.log_type');
+                        }
+                        if (!empty(Config::get('spider.log_file'))) {
+                            $fds['log_file'] = Config::get('spider.log_file');
+                        }
 
-                    $data[] = $fds;
+                        $data[] = $fds;
+                    }
                 }
             }
 

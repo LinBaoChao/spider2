@@ -56,7 +56,7 @@ do {
     //'table' => 'content',
     //),
     $configs = array(
-        'name' => 'stcn.com',
+        'name' => 'bjnews',
         'log_show' => true, // 查看日志tail -f data/phpspider.log
         //'log_type' => 'error,debug',
         'multiserver' => true,
@@ -86,64 +86,56 @@ do {
         ),
         // 定义爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度
         'domains' => array(
-            'stcn.com',
-            'www.stcn.com',
+            'bjnews.com',
+            'www.bjnews.com',
+            'bjnews.com.cn',
+            'www.bjnews.com.cn',
         ),
         // 定义爬虫的入口链接, 爬虫从这些链接开始爬取,同时这些链接也是监控爬虫所要监控的链接 数组类型 不能为空
         'scan_urls' => array(
-            'http://www.stcn.com/',
+            'https://www.bjnews.com.cn/news',
+            'https://www.bjnews.com.cn/financial',
         ),
         // 定义列表页url的规则 对于有列表页的网站, 使用此配置可以大幅提高爬虫的爬取速率 列表页是指包含内容页列表的网页 数组类型 正则表达式 "http://www.qiushibaike.com/8hr/page/\d+\?s=\d+"
         'list_url_regexes' => array(
-            "http://www.stcn.com/article/list/yw.html",
-            "http://www.stcn.com/article/list/kx.html",
-            "http://www.stcn.com/article/list/company.html",
-            "http://www.stcn.com/article/list/gsxw.html",
+            "https://www.bjnews.com.cn/news",
+            "https://www.bjnews.com.cn/news/\d+.html",
+            "https://www.bjnews.com.cn/financial",
+            "https://www.bjnews.com.cn/financial/\d+.html",
         ),
         // 定义内容页url的规则 内容页是指包含要爬取内容的网页数组类型 正则表达式 最好填写以提高爬取效率
         'content_url_regexes' => array(
-            "http://www.stcn.com/article/detail/\d+.html",
+            "https://www.bjnews.com.cn/detail/\d+.html",
         ),
         // 定义内容页的抽取规则 规则由一个个field组成, 一个field代表一个数据抽取项 数组类型 不能为空
         'fields' => array(
             array(
-                'name' => "title",
-                'selector' => "//div[contains(@class,'detail-title')]",
+                'name' => "source_title",
+                'selector' => "//div[contains(@class,'content')]//h1",
                 'required' => true,
             ),
             array(
-                'name' => "author",
-                'selector' => "//div[contains(@class,'detail-info')]//span[2]",
+                'name' => "source_content",
+                'selector' => "//div[contains(@class,'articleCenter')]",
                 'required' => true,
             ),
             array(
-                'name' => "source",
+                'name' => "source_name",
                 'selector' => "//div[contains(@class,'detail-info')]//span[1]",
                 'required' => false,
             ),
             array(
-                'name' => "publish_time",
-                'selector' => "//div[contains(@class,'detail-info')]//span[3]",
-                'required' => true,
+                'name' => "source_author",
+                'selector' => "//span[contains(@class,'reporter')]//em",
+                //'required' => true,
+            ),            
+            array(
+                'name' => "source_pub_time",
+                'selector' => "//span[contains(@class,'timer')]",
             ),
             array(
-                'name' => "content",
-                'selector' => "//div[contains(@class,'detail-content')]",
-                'required' => true,
-            ),
-            array(
-                'name' => "url",
-                'selector' => "//div[contains(@class,'detail-info')]//span[2]",
-                'required' => true,
-            ),
-            array(
-                'name' => "editor",
-                'selector' => "//div[contains(@class,'detail-content-editor')]",
-                'required' => false,
-            ),
-            array(
-                'name' => "news_type",
-                'selector' => "//div[contains(@class,'breadcrumb')]//a[2]",
+                'name' => "source_channel_name",
+                'selector' => "//i[contains(@class,'twoTit')]",
                 'required' => false,
             ),
         ),
