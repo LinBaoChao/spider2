@@ -216,6 +216,8 @@ do {
         'list_url_regexes' => array(
             "https://news.cnstock.com/news/sns_jg/index.html",
         ),
+        'list_url_regexes_remove' => '',
+        'content_url_regexes_remove'=>'',
         // 定义内容页url的规则 内容页是指包含要爬取内容的网页数组类型 正则表达式 最好填写以提高爬取效率
         'content_url_regexes' => array(
             "https://news.cnstock.com/news,bwkx-\d+-\d+.htm",

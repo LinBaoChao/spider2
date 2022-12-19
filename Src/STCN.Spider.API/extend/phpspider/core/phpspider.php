@@ -628,7 +628,7 @@ class phpspider
         }
 
         //增加 要排除的列表页特征正则 BY KEN <a-site@foxmail.com>
-        if (!empty(self::$configs['list_url_regexes_remove'])) {
+        if (!empty(self::$configs['list_url_regexes_remove'])) { // lbc todo
             foreach (self::$configs['list_url_regexes_remove'] as $regex) {
                 if (preg_match("#{$regex}#i", $url)) {
                     return false;
@@ -642,7 +642,7 @@ class phpspider
         }
 
         //增加泛列表页，即所有页面都是列表页，只抓取链接，不抓取内容
-        if (self::$configs['list_url_regexes'][0] == '*') {
+        if (self::$configs['list_url_regexes'][0] == '*') { // lbc todo
             return true;
         }
 
@@ -682,7 +682,7 @@ class phpspider
             }
         }
 
-        //增加泛内容模式，即所有页面都要提取内容
+        //增加泛内容模式，即所有页面都要提取内容 lbc todo
         if (empty(self::$configs['content_url_regexes']) or self::$configs['content_url_regexes'][0] == '*') {
             return true;
         }
