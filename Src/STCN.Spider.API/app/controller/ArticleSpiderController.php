@@ -25,6 +25,10 @@ class ArticleSpiderController extends BaseController
      */
     public function getListByPage(string $keyword = '', int $page = 1, int $pageSize = 20)
     {
+        // 永不超时
+        // ini_set('max_execution_time', 0);
+        // set_time_limit(0);
+
         $retval = new Result();
         $retval->code = ResultCode::SUCCESS;
         $retval->message = '获取列表成功';
@@ -32,7 +36,7 @@ class ArticleSpiderController extends BaseController
         try {
             $list = ArticleSpider::where(function ($query) use ($keyword) {
                 if (!empty($keyword)) {
-                    $query->whereLike('source_name|pub_source_name|pub_media_name|pub_product_name|pub_platform_name|pub_channel_name|source_title|source_author|source_pub_time|source_content', "%{$keyword}%");
+                    $query->whereLike('source_name|pub_source_name|pub_media_name|pub_product_name|pub_platform_name|pub_channel_name|source_title|source_author|source_content', "%{$keyword}%");
                 }
             })
                 ->orderRaw('source_pub_time desc')

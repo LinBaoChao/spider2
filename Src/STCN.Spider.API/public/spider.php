@@ -21,7 +21,7 @@ function runSpider()
     $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
 
     // 轮询间隔 秒
-    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 60 * 1;
+    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 60 * 2;
 
     do {
         try {
@@ -97,6 +97,7 @@ function runSpider()
 
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
+                        log::add($config['name'],'runtime');
                     } catch (Exception $ex) {
                         $configstr = var_export($config, true);
                         log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpider');
@@ -104,7 +105,7 @@ function runSpider()
                 }
             }
 
-            sleep($sleepSeconds); // 轮询更新周期
+            sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (Exception $ex) {
             log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpider');
         }

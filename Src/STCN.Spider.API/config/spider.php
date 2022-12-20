@@ -10,11 +10,11 @@ return [
 
     // logo
     'log_show' => true, // 是否开启
-    'log_type' => 'error,debug,info,warn', // 'error,debug,info,warn' 默认空为所有
+    'log_type' => 'error,debug,warn', // 'error,debug,info,warn' 默认空为所有
     'log_file' => '', // '/../data/log/phpspider.log', // 存放文件路径
 
     // 频率相关
-    'interval' => 1000, // 爬取间隔（毫秒）
+    'interval' => 300, // 爬取间隔（毫秒），此值不配默认为100毫秒
     'timeout' => 5, // 爬取超时（秒）
     'max_try' => 5, // 失败重试
     'max_depth' => 0, // 爬取深度,默认值为0，即不限制
@@ -33,6 +33,7 @@ return [
         'db'        => 5,
         'prefix'    => 'phpspider',
         'timeout'   => 30,
+        // 'queue_order' => 'rand', 此项先不配，默认为列表采集
     ),
 
     // db
@@ -67,5 +68,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 60 * 1, // 单位秒，爬虫轮询周期，一般2小时
+    'sleep_seconds' => 60 * 60 * 2, // 单位秒，爬虫轮询周期，一般2小时
 ];

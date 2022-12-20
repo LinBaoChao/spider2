@@ -2421,7 +2421,7 @@ class phpspider
                     queue::set($key, time());
                     // 入队列
                     $link = json_encode($link);
-                    //根据采集设置为顺序采集还是随机采集，使用列表或集合对象 2018-5 BY KEN <a-site@foxmail.com>
+                    //根据采集设置为顺序采集还是随机采集，使用列表或集合对象
                     if (self::$configs['queue_order'] == 'rand') {
                         queue::sadd('collect_queue', $link);
                     } else {

@@ -410,5 +410,9 @@ STR;
 // unset($a['b']);
 // var_dump($a);
 
-$str = explode("|no|", "dwq脸|no|e肝ewq");
-var_dump(sprintf('%01dd', 'ffff'));
+// $str = explode("|no|", "dwq脸|no|e肝ewq");
+// var_dump(sprintf('%01dd', 'ffff'));
+ 
+$regex= "https://www.bjnews.com.cn/guoji/\d+.html";
+$url = "https://www.bjnews.com.cn/guoji/4324324321.html";
+var_dump(preg_match("#{$regex}#i", $url));
