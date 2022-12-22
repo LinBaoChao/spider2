@@ -6,7 +6,6 @@ use phpspider\core\phpspider;
 use phpspider\core\selector;
 use phpspider\core\website;
 use phpspider\core\log;
-use Exception;
 
 ignore_user_abort();
 set_time_limit(0);
@@ -97,17 +96,17 @@ function runSpider()
 
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'],'runtime');
-                    } catch (Exception $ex) {
+                        log::add($config['name'],'runtimes');
+                    } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpider');
+                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr');
                     }
                 }
             }
 
             sleep($sleepSeconds); // 轮询更新周期 秒
-        } catch (Exception $ex) {
-            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpider');
+        } catch (\Exception $ex) {
+            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
         }
     } while ($isRunSpider);
 }

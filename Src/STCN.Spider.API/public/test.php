@@ -1,4 +1,5 @@
 <?php
+use phpspider\core\selector;
 use think\helper\Str;
 var_dump(__DIR__);
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -55,6 +56,12 @@ require_once __DIR__ . '/../extend/phpspider/autoloader.php';
 use phpspider\core\log;
 use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
+
+$url = "http://finance.ynet.com/2022/07/15/3494804t632.html";
+$data = website::httpRequest($url);
+var_dump($data);
+$data = selector::select($data, "//span[contains(@class,'timeMsg')]");
+var_dump($data);
 
 // var_dump($config['is_run_spider']);
 
@@ -413,6 +420,6 @@ STR;
 // $str = explode("|no|", "dwq脸|no|e肝ewq");
 // var_dump(sprintf('%01dd', 'ffff'));
  
-$regex= "https://www.bjnews.com.cn/guoji/\d+.html";
-$url = "https://www.bjnews.com.cn/guoji/4324324321.html";
-var_dump(preg_match("#{$regex}#i", $url));
+// $regex= "https://www.bjnews.com.cn/guoji/\d+.html";
+// $url = "https://www.bjnews.com.cn/guoji/4324324321.html";
+// var_dump(preg_match("#{$regex}#i", $url));

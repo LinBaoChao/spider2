@@ -1202,7 +1202,7 @@ class phpspider
             }
         }
 
-        //当前 host 并发检测 2018-5 BY KEN <a-site@foxmail.com>
+        //当前 host 并发检测 
         if (self::$configs['max_task_per_host'] > 0) {
             $task_per_host = $this->get_task_per_host_num($url);
             if ($task_per_host < self::$configs['max_task_per_host']) {
@@ -1838,6 +1838,8 @@ class phpspider
                         foreach ($joinFields as $joinField) {
                             if ($split == "|no|") { // 没有连接符号则直接连接值，否用符号连接各值
                                 $joinval .= $fieldscopy[$joinField];
+                            }elseif($split == "|space|"){ // 空格
+                                $joinval = " " . $fieldscopy[$joinField]; // 空格连接
                             }else{
                                 $joinval = $split . $fieldscopy[$joinField];
                             }
