@@ -120,18 +120,18 @@ do {
                 'required' => true,
             ),
             array(
-                'name' => "source_name",
-                'selector' => "//div[contains(@class,'detail-info')]//span[1]",
-                'required' => false,
+                'name' => "source_pub_time",
+                'selector' => "//span[contains(@class,'timer')]",
+                'required' => true,
             ),
             array(
                 'name' => "source_author",
                 'selector' => "//span[contains(@class,'reporter')]//em",
-                //'required' => true,
-            ),            
+            ),
             array(
-                'name' => "source_pub_time",
-                'selector' => "//span[contains(@class,'timer')]",
+                'name' => "source_name",
+                'selector' => "//div[contains(@class,'detail-info')]//span[1]",
+                'required' => false,
             ),
             array(
                 'name' => "source_channel_name",

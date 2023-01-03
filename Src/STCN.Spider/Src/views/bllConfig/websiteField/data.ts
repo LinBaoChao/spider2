@@ -125,7 +125,10 @@ export const formSchema: FormSchema[] = [
     field: 'name',
     label: '字段',
     component: 'Input',
-    helpMessage: ['不能重复，英文', '与写入数据库表的字段对应，如title,source...'],
+    helpMessage: [
+      '不能重复，英文',
+      '与写入数据库表的字段要对应，如source_title,source_content,source_author,source_pub_time,source_name,source_channel_name',
+    ],
     rules: [
       {
         required: true,
@@ -170,7 +173,7 @@ export const formSchema: FormSchema[] = [
     field: 'required',
     label: '是否必须',
     component: 'RadioButtonGroup',
-    //required: true,
+    required: true,
     componentProps: {
       options: [
         { label: '是', value: 1 },
