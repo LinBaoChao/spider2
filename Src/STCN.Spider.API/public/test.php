@@ -57,10 +57,10 @@ use phpspider\core\log;
 use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "http://www.thegreatwall.cn/xinwen/2022/0409/3437.html";
+$url = "http://www.hbgrb.net/cj/202301/t20230102_128873.html";
 $data = website::httpRequest($url);
 var_dump($data);
-$data = selector::select($data, "//div[contains(@class,'after_title mb25')]");
+$data = selector::select($data, "//div[contains(@class,'CurrentLocation')]//p//a[2]//text()");
 var_dump($data);
 
 // var_dump($config['is_run_spider']);

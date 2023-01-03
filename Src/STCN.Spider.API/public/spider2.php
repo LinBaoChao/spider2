@@ -134,7 +134,7 @@ do {
                 'required' => false,
             ),
             array(
-                'name' => "source_channel_name",
+                'name' => "pub_channel_name",
                 'selector' => "//i[contains(@class,'twoTit')]",
                 'required' => false,
             ),

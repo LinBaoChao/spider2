@@ -1855,7 +1855,12 @@ class phpspider
                     // 不入库则移除
                     if (!isset($config['is_write_db']) || empty($config['is_write_db']) || $config['is_write_db'] !== true) {
                         unset($fields[$config['name']]);
-                    }
+                    } else {
+                        // 去除前后空格
+                        if (!empty($fields[$config['name']])) {
+                            $fields[$config['name']] = trim($fields[$config['name']]);
+                        }
+                    }                                       
                 }
                 unset($fieldscopy);
 
@@ -1993,7 +1998,7 @@ class phpspider
             if (!isset($values)) {
                 // 如果值为空而且值设置为必须项, 跳出foreach循环
                 if ($required) { // lbc to do trace
-                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must.url:{$url}");
+                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();
                     break;
