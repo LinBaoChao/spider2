@@ -40,7 +40,7 @@ export const columns: BasicColumn[] = [
   {
     title: '字段',
     dataIndex: 'name',
-    width: 130,
+    width: 160,
   },
   {
     title: '抽取规则',
