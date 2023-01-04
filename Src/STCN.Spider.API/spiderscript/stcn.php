@@ -5,23 +5,25 @@ use phpspider\core\selector;
 use phpspider\core\website;
 use phpspider\core\log;
 use phpspider\core\util;
-function on_start_cnstock($spider)
+function on_start_stcn($spider)
 {
-    // log::add("on_start_cnstock","script");
+    //log::add("on_start_stcn","script");
     // 把列表页重新加入增量更新抓取，这样不会排重url
     foreach ($spider::$configs['list_url_regexes'] as $url) {
         $spider->add_scan_url($url);
     }
 }
 
-function on_extract_field_cnstock($fieldname, $data, $page)
+function on_extract_field_stcn($fieldname, $data, $page)
 {
-    // log::add("on_extract_field_cnstock".$data,"script");
+    //log::add("on_extract_field_stcn".$data,"script");
 
     if ($fieldname == 'source_author') {
         $data = str_replace("作者：", "", $data);
     } elseif ($fieldname == 'source_name') {
         $data = str_replace("来源：", "", $data);
+    } elseif ($fieldname == 'source_content') {
+        $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
     }
 
     return $data;
