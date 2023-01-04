@@ -66,8 +66,16 @@ var_dump($data);
 // var_dump($config['is_run_spider']);
 
 // $r = website::getWebsiteConfig();
-// var_dump($r['result'][0]['domains']);
-// var_dump($r);
+// // var_dump($r['result'][0]['domains']);
+// // var_dump($r);
+// $configs = $r['result'];
+// foreach ($configs as $config) {
+//     if (isset($config['callback_script']) && !empty($config['callback_script'])) {
+//         // 保存到文件
+
+//         // 动态包入
+//     }
+// }
 
 // require_once __DIR__ . '/../vendor/autoload.php';
 

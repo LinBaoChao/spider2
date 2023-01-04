@@ -6,3 +6,16 @@ http://localhost:9001/index.php
 孙聪:
 admin
 stcn@2022
+
+阿里云服务器 
+【注意】：仅为影响力项目使用，其他项目任务切勿在该服务器上运行。
+主机：39.108.148.16
+用户名：linbaocao
+密码：linbaocao123456
+
+云数据库clickhouse
+【注意】：下面为生产库，切勿随便操作。
+内网ip:cc-wz9mfwjh6aa64dl77.clickhouse.ads.aliyuncs.com 用于阿里云服务器登录，如果任务在阿里云服务器上，需要用内网ip连接数据库
+外网ip:cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com 用于DBeaver客户端查看数据
+普通账号：stcn_influence_dev
+密码：NC95XPRyzodLuvB

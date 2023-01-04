@@ -127,6 +127,7 @@ do {
             array(
                 'name' => "source_author",
                 'selector' => "//span[contains(@class,'reporter')]//em",
+                'required' => false,
             ),
             array(
                 'name' => "source_name",
@@ -135,7 +136,7 @@ do {
             ),
             array(
                 'name' => "pub_channel_name",
-                'selector' => "//i[contains(@class,'twoTit')]",
+                'selector' => "//div[contains(@class,'breadcrumb')]//a[2]//text()",
                 'required' => false,
             ),
         ),
@@ -293,6 +294,46 @@ do {
 
     sleep($sleepSeconds);
 } while ($doFlag);
+
+
+
+function on_start_stcn($spider)
+{
+    foreach ($spider::$configs['list_url_regexes'] as $url) {
+        $spider->add_scan_url($url);
+    }
+}
+
+function on_extract_field_stcn($fieldname, $data, $page)
+{
+    // if ($fieldname == 'source_author') {
+    //     $data = str_replace("作者：", "", $data);
+    // } elseif ($fieldname == 'source_name') {
+    //     $data = str_replace("来源：", "", $data);
+    // } elseif ($fieldname == 'source_content') {
+    //     $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
+    // }
+
+    return $data;
+}
+
+function on_start_cnstock($spider)
+{
+    foreach ($spider::$configs['list_url_regexes'] as $url) {
+        $spider->add_scan_url($url);
+    }
+}
+
+function on_extract_field_cnstock($fieldname, $data, $page)
+{
+    // if ($fieldname == 'source_author') {
+    //     $data = str_replace("作者：", "", $data);
+    // } elseif ($fieldname == 'source_name') {
+    //     $data = str_replace("来源：", "", $data);
+    // }
+
+    return $data;
+}
 
 //$html =<<<STR
 //<div id="demo">

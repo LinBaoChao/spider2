@@ -6,16 +6,58 @@ use phpspider\core\phpspider;
 use phpspider\core\selector;
 use phpspider\core\website;
 use phpspider\core\log;
+use phpspider\core\util;
 
 ignore_user_abort();
 set_time_limit(0);
+
+define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
+util::path_exists(SCRIPT_DIR);
+
+// 生成脚本保存到文件及动态引入
+// $configs = website::getWebsiteConfig();
+// if (!empty($configs) && $configs['code'] == 'success') {
+//     $configs = $configs['result'];
+//     foreach ($configs as $config) {
+//         try {
+//             // 回调脚本，把脚本存成一个以媒体标识名为名字的php文件，然后动态包入此文件，即可供上面的回调函数来调用此脚本
+//             if (isset($config['callback_script']) && !empty($config['callback_script'])) {
+//                 //echo $config['callback_script'];
+//                 $name = $config['name'];
+//                 // 保存到文件
+//                 $dir = SCRIPT_DIR . "/";
+//                 $filename = $dir . $name . '.php';
+
+//                 $head = <<<STR
+//                 <?php
+//                 require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+//                 use phpspider\core\phpspider;
+//                 use phpspider\core\selector;
+//                 use phpspider\core\website;
+//                 use phpspider\core\log;
+//                 use phpspider\core\util;
+
+//                 STR;
+
+//                 //file_put_contents($filename, "<?php", FILE_APPEND | LOCK_EX);
+//                 file_put_contents($filename, $head . $config['callback_script']);
+//                 // 动态包入
+//                 include_once($filename);
+//             }
+//         } catch (\Exception $ex) {
+//             $configstr = var_export($config, true);
+//             log::add("脚本配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'spiderScriptErr');
+//         }
+//     }
+// }
+// ---------------------------------------
 
 function runSpider()
 {
     ignore_user_abort();
     set_time_limit(0);
 
-    $spiderConfig = require_once __DIR__ . '/../config/spider.php';
+    $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
     // 是否运行
     $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
 
@@ -90,8 +132,24 @@ function runSpider()
                         // 回调脚本，把脚本存成一个以媒体标识名为名字的php文件，然后动态包入此文件，即可供上面的回调函数来调用此脚本
                         if (isset($config['callback_script']) && !empty($config['callback_script'])) {
                             // 保存到文件
+                            $dir = SCRIPT_DIR . "/";
+                            $filename = $dir . $name . '.php';
+
+                            $head = <<<STR
+                            <?php
+                            require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+                            use phpspider\core\phpspider;
+                            use phpspider\core\selector;
+                            use phpspider\core\website;
+                            use phpspider\core\log;
+                            use phpspider\core\util;
+
+                            STR;
+                            
+                            file_put_contents($filename, $head . $config['callback_script']);
 
                             // 动态包入
+                            include_once($filename);
                         }
 
                         $spider->start();
@@ -183,41 +241,40 @@ function on_extract_field($fieldname, $data, $page)
 
 //----统一回调处理 end----//
 
+// function on_start_stcn($spider)
+// {
+//     foreach ($spider::$configs['list_url_regexes'] as $url) {
+//         $spider->add_scan_url($url);
+//     }
+// }
 
-function on_start_stcn($spider)
-{
-    foreach ($spider::$configs['list_url_regexes'] as $url) {
-        $spider->add_scan_url($url);
-    }
-}
+// function on_extract_field_stcn($fieldname, $data, $page)
+// {
+//     if ($fieldname == 'source_author') {
+//         $data = str_replace("作者：", "", $data);
+//     } elseif ($fieldname == 'source_name') {
+//         $data = str_replace("来源：", "", $data);
+//     } elseif ($fieldname == 'source_content') {
+//         $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
+//     }
 
-function on_extract_field_stcn($fieldname, $data, $page)
-{
-    // if ($fieldname == 'source_author') {
-    //     $data = str_replace("作者：", "", $data);
-    // } elseif ($fieldname == 'source_name') {
-    //     $data = str_replace("来源：", "", $data);
-    // } elseif ($fieldname == 'source_content') {
-    //     $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
-    // }
+//     return $data;
+// }
 
-    return $data;
-}
+// function on_start_cnstock($spider)
+// {
+//     foreach ($spider::$configs['list_url_regexes'] as $url) {
+//         $spider->add_scan_url($url);
+//     }
+// }
 
-function on_start_cnstock($spider)
-{
-    foreach ($spider::$configs['list_url_regexes'] as $url) {
-        $spider->add_scan_url($url);
-    }
-}
+// function on_extract_field_cnstock($fieldname, $data, $page)
+// {
+//     if ($fieldname == 'source_author') {
+//         $data = str_replace("作者：", "", $data);
+//     } elseif ($fieldname == 'source_name') {
+//         $data = str_replace("来源：", "", $data);
+//     }
 
-function on_extract_field_cnstock($fieldname, $data, $page)
-{
-    // if ($fieldname == 'source_author') {
-    //     $data = str_replace("作者：", "", $data);
-    // } elseif ($fieldname == 'source_name') {
-    //     $data = str_replace("来源：", "", $data);
-    // }
-
-    return $data;
-}
+//     return $data;
+// }
