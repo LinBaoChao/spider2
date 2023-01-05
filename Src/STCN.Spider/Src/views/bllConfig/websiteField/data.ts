@@ -50,8 +50,8 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '规则类型',
-    dataIndex: 'selectorType',
-    width: 80,
+    dataIndex: 'selectorTypeDisplay',
+    width: 100,
   },
   {
     title: '是否必须',
@@ -93,8 +93,8 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '过滤类型',
-    dataIndex: 'filterType',
-    width: 80,
+    dataIndex: 'filterTypeDisplay',
+    width: 100,
   },
   {
     title: '数据源类型',
@@ -140,13 +140,13 @@ export const formSchema: FormSchema[] = [
     field: 'selector',
     label: '抽取规则',
     component: 'InputTextArea',
-    helpMessage: ['定义抽取规则', '默认使用xpath,如selector => //*[@id=single-next-link]'],
-    rules: [
-      {
-        //required: true,
-        message: '请输入抽取规则',
-      },
-    ],
+    helpMessage: ['多个用【分割', "默认使用xpath,如//div[contains(@class,'content')]"],
+    // rules: [
+    //   {
+    //     //required: true,
+    //     //message: '请输入抽取规则',
+    //   },
+    // ],
   },
   {
     field: 'selectorType',
@@ -159,15 +159,16 @@ export const formSchema: FormSchema[] = [
         { label: 'regex', value: 'regex' },
         { label: 'self', value: 'self' }, // selector的原内容
       ],
+      mode: 'multiple',
     },
     defaultValue: 'xpath',
-    helpMessage: ['抽取规则的类型', '默认xpath，目前可用xpath, css, regex'],
-    rules: [
-      {
-        //required: true,
-        message: '请输入抽取规则的类型',
-      },
-    ],
+    helpMessage: ['可多选，顺序与抽取规则对应', '默认xpath，目前可用xpath, css,regex,self'],
+    // rules: [
+    //   {
+    //     //required: true,
+    //     //message: '请输入抽取规则的类型',
+    //   },
+    // ],
   },
   {
     field: 'required',
@@ -228,7 +229,7 @@ export const formSchema: FormSchema[] = [
     field: 'filter',
     label: '过滤',
     component: 'InputTextArea',
-    helpMessage: ['输入符合过滤类型的过滤规则或过滤内容，并选择过滤类型'],
+    helpMessage: ['多个用【分割', '输入符合过滤类型的过滤规则或过滤内容，并选择对应的过滤类型'],
   },
   {
     field: 'filterType',
@@ -241,7 +242,9 @@ export const formSchema: FormSchema[] = [
         { label: 'xpath', value: 'xpath' },
         { label: 'css', value: 'css' },
       ],
+      mode: 'multiple',
     },
+    helpMessage: ['可多选', '顺序要和过滤项相对应'],
   },
   {
     field: 'joinField',

@@ -63,6 +63,20 @@ var_dump($data);
 $data = selector::select($data, "//div[contains(@class,'CurrentLocation')]//p//a[2]//text()");
 var_dump($data);
 
+$a = '["replace", "regex", "xpath"]';
+$a = json_decode($a, true);
+var_dump(implode(",", $a));
+$b = '["a", "b", "c"]';
+$b = json_decode($b, true);
+for ($i = 0; $i < count($a);$i++){
+    var_dump($a[$i] . "," . $b[$i]);
+}
+
+var_dump(is_null(json_decode('["replace", "regex", "xpath"]')));
+var_dump(json_encode('[""]'));
+
+var_dump(explode("【", ""));
+var_dump(json_decode(""));
 // var_dump($config['is_run_spider']);
 
 // $r = website::getWebsiteConfig();

@@ -1926,6 +1926,7 @@ class phpspider
             $repeated = isset($conf['repeated']) && $conf['repeated'] ? true : false;
             // 当前field抽取到的内容是否必须有值
             $required = isset($conf['required']) && $conf['required'] ? true : false;
+            $joinfield = isset($conf['join_field']) && $conf['join_field'] ? $conf['join_field'] : '';
 
             if (empty($conf['name'])) {
                 log::error("The field name is null, please check your \"fields\" and add the name of the field\n");
@@ -1996,8 +1997,8 @@ class phpspider
             }
 
             if (!isset($values)) {
-                // 如果值为空而且值设置为必须项, 跳出foreach循环
-                if ($required) { // lbc to do trace
+                // 如果值为空而且值设置为必须项并且没有合并项, 跳出foreach循环
+                if ($required && empty($joinfield)) { // lbc to do trace
                     log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();

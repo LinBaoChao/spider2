@@ -62,13 +62,38 @@ class WebsiteFieldController extends BaseController
                 //->Join('website_field child', 'child.parent_id=parent.id')
                 ->select();
 
-            if (!$child->isEmpty()) {
-                foreach ($list as $p) {
+            foreach ($list as $p) {
+                $p['selectorTypeDisplay'] = $p->selectorType;
+                if (!empty($p->selectorType)) {
+                    if(!is_null(json_decode($p->selectorType, true))){
+                        $p->selectorType = json_decode($p->selectorType, true);
+                    }else{
+                        $p->selectorType = [$p->selectorType];
+                    }                    
+                } else {
+                    $p->selectorType = [];
+                }
+
+                $p['filterTypeDisplay'] = $p->filterType;
+                if (!empty($p->filterType)) {
+                    if (!is_null(json_decode($p->filterType, true))) {
+                        $p->filterType = json_decode($p->filterType, true);
+                    } else {
+                        $p->filterType = [$p->filterType];
+                    }
+                } else {
+                    $p->filterType = [];
+                }
+
+                $p['children'] = null;
+                if (!$child->isEmpty()) {
                     $cs = $child->where('parent_id', $p->id);
                     if (!$cs->isEmpty()) {
+                        if (!empty($cs->filterType)) {
+                            $cs->filterType = json_decode($cs->filterType, true);
+                        }
+
                         $p['children'] = $cs;
-                    } else {
-                        $p['children'] = null;
                     }
                     unset($cs);
                 }
@@ -128,7 +153,8 @@ class WebsiteFieldController extends BaseController
                 'website_id' => $websiteId,
                 'name' => $name,
                 'selector' => $params['selector'] ?? null,
-                'selector_type' => $params['selectorType'] ?? null,
+                'selector_type' =>
+                (isset($params['selectorType']) && !empty($params['selectorType'])) ? json_encode($params['selectorType']) : null,
                 'required' => $params['required'] ?? 0,
                 'repeated' => $params['repeated'] ?? 0,
                 'source_type' => $params['sourceType'] ?? null,
@@ -136,7 +162,7 @@ class WebsiteFieldController extends BaseController
                 'is_write_db' => $params['isWriteDb'] ?? 1,
                 'join_field' => $params['joinField'] ?? null,
                 'join_field_split' => $params['joinFieldSplit'] ?? null,
-                'filter_type' => $params['filterType'] ?? null,
+                'filter_type' => (isset($params['filterType']) && !empty($params['filterType'])) ? json_encode($params['filterType']) : null,
                 'filter' => $params['filter'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
@@ -195,7 +221,8 @@ class WebsiteFieldController extends BaseController
                 'name' => $name,
                 'parent_id' => $params['parentId'] ?? null,
                 'selector' => $params['selector'] ?? null,
-                'selector_type' => $params['selectorType'] ?? null,
+                'selector_type' =>
+                (isset($params['selectorType']) && !empty($params['selectorType'])) ? json_encode($params['selectorType']) : null,
                 'required' => $params['required'] ?? 0,
                 'repeated' => $params['repeated'] ?? 0,
                 'source_type' => $params['sourceType'] ?? null,
@@ -203,7 +230,7 @@ class WebsiteFieldController extends BaseController
                 'is_write_db' => $params['isWriteDb'] ?? 1,
                 'join_field' => $params['joinField'] ?? null,
                 'join_field_split' => $params['joinFieldSplit'] ?? null,
-                'filter_type' => $params['filterType'] ?? null,
+                'filter_type' => (isset($params['filterType']) && !empty($params['filterType'])) ? json_encode($params['filterType']) : null,
                 'filter' => $params['filter'] ?? null,
                 'status' => $params['status'] ?? 1,
             ]);
