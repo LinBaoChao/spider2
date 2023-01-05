@@ -77,6 +77,10 @@ var_dump(json_encode('[""]'));
 
 var_dump(explode("【", ""));
 var_dump(json_decode(""));
+var_dump(Strlen(",f"));
+$len = Strlen(",$");
+$joinval = substr("123456789", $len);
+var_dump($joinval);
 // var_dump($config['is_run_spider']);
 
 // $r = website::getWebsiteConfig();

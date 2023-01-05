@@ -50,7 +50,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '规则类型',
-    dataIndex: 'selectorTypeDisplay',
+    dataIndex: 'selectorType',
     width: 100,
   },
   {
@@ -93,7 +93,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '过滤类型',
-    dataIndex: 'filterTypeDisplay',
+    dataIndex: 'filterType',
     width: 100,
   },
   {
@@ -151,25 +151,35 @@ export const formSchema: FormSchema[] = [
   {
     field: 'selectorType',
     label: '抽取规则类型',
-    component: 'Select',
-    componentProps: {
-      options: [
-        { label: 'xpath', value: 'xpath' },
-        { label: 'css', value: 'css' },
-        { label: 'regex', value: 'regex' },
-        { label: 'self', value: 'self' }, // selector的原内容
-      ],
-      mode: 'multiple',
-    },
+    component: 'Input',
     defaultValue: 'xpath',
-    helpMessage: ['可多选，顺序与抽取规则对应', '默认xpath，目前可用xpath, css,regex,self'],
-    // rules: [
-    //   {
-    //     //required: true,
-    //     //message: '请输入抽取规则的类型',
-    //   },
-    // ],
+    helpMessage: [
+      '多个用【分割，顺序与抽取规则对应',
+      '默认xpath，目前可用有xpath, css, regex, self',
+    ],
   },
+  // {
+  //   field: 'selectorType',
+  //   label: '抽取规则类型',
+  //   component: 'Select',
+  //   componentProps: {
+  //     options: [
+  //       { label: 'xpath', value: 'xpath' },
+  //       { label: 'css', value: 'css' },
+  //       { label: 'regex', value: 'regex' },
+  //       { label: 'self', value: 'self' }, // selector的原内容
+  //     ],
+  //     mode: 'multiple',
+  //   },
+  //   defaultValue: 'xpath',
+  //   helpMessage: ['可多选，顺序与抽取规则对应', '默认xpath，目前可用有xpath, css, regex, self'],
+  //   // rules: [
+  //   //   {
+  //   //     //required: true,
+  //   //     //message: '请输入抽取规则的类型',
+  //   //   },
+  //   // ],
+  // },
   {
     field: 'required',
     label: '是否必须',
@@ -234,18 +244,28 @@ export const formSchema: FormSchema[] = [
   {
     field: 'filterType',
     label: '过滤类型',
-    component: 'Select',
-    componentProps: {
-      options: [
-        { label: 'replace', value: 'replace' },
-        { label: 'regex', value: 'regex' },
-        { label: 'xpath', value: 'xpath' },
-        { label: 'css', value: 'css' },
-      ],
-      mode: 'multiple',
-    },
-    helpMessage: ['可多选', '顺序要和过滤项相对应'],
+    component: 'Input',
+    helpMessage: [
+      '多个用【分割，顺序要和过滤项相对应',
+      '目前可用有replace, xpath, regex, css, self',
+    ],
   },
+  // {
+  //   field: 'filterType',
+  //   label: '过滤类型',
+  //   component: 'Select',
+  //   componentProps: {
+  //     options: [
+  //       { label: 'replace', value: 'replace' },
+  //       { label: 'regex', value: 'regex' },
+  //       { label: 'xpath', value: 'xpath' },
+  //       { label: 'css', value: 'css' },
+  //       { label: 'self', value: 'self' },
+  //     ],
+  //     mode: 'multiple',
+  //   },
+  //   helpMessage: ['可多选', '顺序要和过滤项相对应，目前可用有xpath, css,regex,self'],
+  // },
   {
     field: 'joinField',
     label: '合并字段',

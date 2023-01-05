@@ -41,7 +41,7 @@ CREATE TABLE `article_spider` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83525 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `dept` */
 
@@ -147,7 +147,7 @@ CREATE TABLE `user` (
   KEY `idx_user_code` (`user_code`),
   KEY `idx_user_create_time` (`create_time`),
   KEY `idx_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `user_dept` */
 
@@ -222,8 +222,8 @@ CREATE TABLE `website_field` (
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
   `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
-  `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
-  `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
+  `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默多个用【分割'', "默认使用xpath,如//div[contains(@class,''content'')]',
+  `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '多个用【分割，顺序与抽取规则对应，默认xpath，目前可用有xpath, css, regex, self',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
   `repeated` tinyint(1) DEFAULT '0' COMMENT '定义该field抽取到的内容是否是有多项, 默认false,赋值为true的话, 无论该field是否真的是有多项, 抽取到的结果都是数组结构，''selector'' => "//*[@id=''zh-single-question-page'']//a[contains(@class,''zm-item-tag'')]",',
   `source_type` varchar(50) DEFAULT NULL COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
@@ -231,13 +231,13 @@ CREATE TABLE `website_field` (
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
   `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
   `join_field_split` varchar(50) DEFAULT NULL COMMENT '合并字段分割符，如果值直接连接不用分割则是|no|空格用|space|',
-  `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
-  `filter_type` varchar(50) DEFAULT NULL COMMENT 'replace regex xpath css',
+  `filter` varchar(100) DEFAULT NULL COMMENT '多个用【分割'', ''输入符合过滤类型的过滤规则或过滤内容，并选择对应的过滤类型',
+  `filter_type` varchar(50) DEFAULT NULL COMMENT '多个用【分割，顺序要和过滤项相对应，目前可用有replace, xpath, regex, css, self',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

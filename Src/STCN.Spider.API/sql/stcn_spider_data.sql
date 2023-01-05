@@ -16,6 +16,35 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`stcn_spider` /*!40100 DEFAULT CHARACTER
 
 USE `stcn_spider`;
 
+/*Table structure for table `article_spider` */
+
+DROP TABLE IF EXISTS `article_spider`;
+
+CREATE TABLE `article_spider` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `source_name` varchar(100) DEFAULT NULL COMMENT '来源',
+  `pub_source_name` varchar(100) DEFAULT NULL,
+  `pub_media_name` varchar(100) DEFAULT NULL,
+  `pub_product_name` varchar(100) DEFAULT NULL,
+  `pub_platform_name` varchar(50) DEFAULT NULL,
+  `pub_channel_name` varchar(100) DEFAULT NULL,
+  `source_title` varchar(300) DEFAULT NULL,
+  `source_content` blob,
+  `source_author` varchar(100) DEFAULT NULL,
+  `source_url` varchar(300) DEFAULT NULL,
+  `source_pub_time` datetime DEFAULT NULL,
+  `source_media_name` varchar(100) DEFAULT NULL COMMENT '媒体',
+  `source_product_name` varchar(100) DEFAULT NULL COMMENT '子媒',
+  `source_platform_name` varchar(50) DEFAULT NULL COMMENT '平台',
+  `source_channel_name` varchar(100) DEFAULT NULL COMMENT '频道栏目',
+  `status` int(11) DEFAULT '1',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `article_spider` */
+
 /*Table structure for table `dept` */
 
 DROP TABLE IF EXISTS `dept`;
@@ -242,12 +271,12 @@ CREATE TABLE `user` (
   KEY `idx_user_code` (`user_code`),
   KEY `idx_user_create_time` (`create_time`),
   KEY `idx_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2023-01-04 07:35:17','2042-10-19 00:00:00','2022-08-23 16:39:30','2023-01-04 19:35:18');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2023-01-05 05:11:27','2042-10-19 00:00:00','2022-08-23 16:39:30','2023-01-05 17:11:28');
 
 /*Table structure for table `user_dept` */
 
@@ -326,12 +355,12 @@ CREATE TABLE `website` (
 /*Data for the table `website` */
 
 insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`channel`,`name`,`domains`,`scan_urls`,`list_urls`,`content_urls`,`input_encoding`,`output_encoding`,`tasknum`,`multiserver`,`serverid`,`save_running_state`,`interval`,`timeout`,`max_try`,`max_depth`,`max_fields`,`user_agent`,`client_ip`,`proxy`,`callback_method`,`callback_script`,`status`,`create_time`,`update_time`) values 
-(10,NULL,'证券时报','证券时报网','网站','要闻','stcn','stcn.com【www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html【http://www.stcn.com/article/list/kx.html【http://www.stcn.com/article/list/company.html【http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,NULL,'on_start【on_extract_field','function on_start_stcn($spider)\n{\n    //log::add(\"on_start_stcn\",\"script\");\n    // 把列表页重新加入增量更新抓取，这样不会排重url\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_stcn($fieldname, $data, $page)\n{\n    //log::add(\"on_extract_field_stcn\".$data,\"script\");\n\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    } elseif ($fieldname == \'source_content\') {\n        $data = selector::remove($data, \"//div[contains(@class,\'social-bar\')]\");\n    }\n\n    return $data;\n}',1,'2022-12-10 23:53:02','2023-01-04 19:39:21'),
-(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock','news.cnstock.com【www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/【https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/\\S+-\\d+-\\d+.htm',NULL,NULL,3,1,1,1,1,5,5,0,0,'','','','on_start【on_extract_field','function on_start_cnstock($spider)\n{\n    // log::add(\"on_start_cnstock\",\"script\");\n    // 把列表页重新加入增量更新抓取，这样不会排重url\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_cnstock($fieldname, $data, $page)\n{\n    // log::add(\"on_extract_field_cnstock\".$data,\"script\");\n\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    }\n\n    return $data;\n}',1,'2022-12-11 00:46:22','2023-01-04 19:40:03'),
-(12,NULL,'新京报','新京报网','网站','财经 时事  政事儿 国际','bjnews','bjnews.com.cn【www.bjnews.com.cn','https://www.bjnews.com.cn/news/【https://www.bjnews.com.cn/financial/【https://www.bjnews.com.cn/zhengshi/【https://www.bjnews.com.cn/guoji/','https://www.bjnews.com.cn/news/【https://www.bjnews.com.cn/financial/【https://www.bjnews.com.cn/zhengshi/【https://www.bjnews.com.cn/guoji/','https://www.bjnews.com.cn/detail/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-19 15:53:08','2023-01-04 19:40:33'),
-(13,NULL,'北京日报','北京日报网','网站','新闻 财经','bjdcom','www.bjd.com.cn【bjd.com.cn','https://www.bjd.com.cn/jbw/news/【https://www.bjd.com.cn/jbw/finance/','https://www.bjd.com.cn/jbw/news/【https://www.bjd.com.cn/jbw/finance/','https://news.bjd.com.cn//\\d+/\\d+/\\d+/\\d+.shtml',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-22 10:56:52','2023-01-04 19:40:28'),
-(14,NULL,'北青网','北青网','网站','新闻 财经 金融','ynet','www.ynet.com【ynet.com【finance.ynet.com【news.ynet.com【financial.ynet.com','http://news.ynet.com/【http://finance.ynet.com/index.html【http://financial.ynet.com/','http://news.ynet.com/【http://finance.ynet.com/index.html【http://financial.ynet.com/','http://news.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html【http://finance.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html【http://financial.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-22 11:22:49','2023-01-04 19:40:23'),
-(15,NULL,'北京商报','北京商报','网站','国际 政经 基金','bbtnews','bbtnews.com.cn【www.bbtnews.com.cn','https://www.bbtnews.com.cn/chuizhipd/yaowenzx/guojipd/【https://www.bbtnews.com.cn/chuizhipd/yaowenzx/zhengjingpd/【https://www.bbtnews.com.cn/chuizhipd/caijingxinwenzx/jijinjigoupd/','https://www.bbtnews.com.cn/chuizhipd/yaowenzx/guojipd/【https://www.bbtnews.com.cn/chuizhipd/yaowenzx/zhengjingpd/【https://www.bbtnews.com.cn/chuizhipd/caijingxinwenzx/jijinjigoupd/','https://www.bbtnews.com.cn/\\d+/\\d+/\\d+.shtml',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-03 10:48:07','2023-01-04 19:40:19'),
+(10,NULL,'证券时报','证券时报网','网站','要闻','stcn','stcn.com【www.stcn.com','http://www.stcn.com/','http://www.stcn.com/article/list/yw.html【http://www.stcn.com/article/list/kx.html【http://www.stcn.com/article/list/company.html【http://www.stcn.com/article/list/gsxw.html','http://www.stcn.com/article/detail/\\d+.html',NULL,NULL,3,1,1,1,1,5,5,0,0,NULL,NULL,NULL,'on_start【on_extract_field','function on_start_stcn($spider)\n{\n    //log::add(\"on_start_stcn\",\"script\");\n    // 把列表页重新加入增量更新抓取，这样不会排重url\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_stcn($fieldname, $data, $page)\n{\n    //log::add(\"on_extract_field_stcn\".$data,\"script\");\n\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    } elseif ($fieldname == \'source_content\') {\n        $data = selector::remove($data, \"//div[contains(@class,\'social-bar\')]\");\n    }\n\n    return $data;\n}',0,'2022-12-10 23:53:02','2023-01-05 17:31:05'),
+(11,NULL,'上海证券报','中国证券网','网站','要闻','cnstock','news.cnstock.com【www.news.cnstock.com','https://news.cnstock.com/','https://news.cnstock.com/【https://news.cnstock.com/news/sns_jg/index.html','https://news.cnstock.com/\\S+-\\d+-\\d+.htm',NULL,NULL,3,1,1,1,1,5,5,0,0,'','','','on_start【on_extract_field','function on_start_cnstock($spider)\n{\n    // log::add(\"on_start_cnstock\",\"script\");\n    // 把列表页重新加入增量更新抓取，这样不会排重url\n    foreach ($spider::$configs[\'list_url_regexes\'] as $url) {\n        $spider->add_scan_url($url);\n    }\n}\n\nfunction on_extract_field_cnstock($fieldname, $data, $page)\n{\n    // log::add(\"on_extract_field_cnstock\".$data,\"script\");\n\n    if ($fieldname == \'source_author\') {\n        $data = str_replace(\"作者：\", \"\", $data);\n    } elseif ($fieldname == \'source_name\') {\n        $data = str_replace(\"来源：\", \"\", $data);\n    }\n\n    return $data;\n}',0,'2022-12-11 00:46:22','2023-01-05 17:31:10'),
+(12,NULL,'新京报','新京报网','网站','财经 时事  政事儿 国际','bjnews','bjnews.com.cn【www.bjnews.com.cn','https://www.bjnews.com.cn/','https://www.bjnews.com.cn/news/【https://www.bjnews.com.cn/financial/【https://www.bjnews.com.cn/zhengshi/【https://www.bjnews.com.cn/guoji/','https://www.bjnews.com.cn/detail/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-19 15:53:08','2023-01-05 18:07:07'),
+(13,NULL,'北京日报','北京日报网','网站','新闻 财经','bjdcom','www.bjd.com.cn【bjd.com.cn','https://www.bjd.com.cn/jbw/news/【https://www.bjd.com.cn/jbw/finance/','https://www.bjd.com.cn/jbw/news/【https://www.bjd.com.cn/jbw/finance/','https://news.bjd.com.cn//\\d+/\\d+/\\d+/\\d+.shtml',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-22 10:56:52','2023-01-05 17:42:09'),
+(14,NULL,'北青网','北青网','网站','新闻 财经 金融','ynet','www.ynet.com【ynet.com【finance.ynet.com【news.ynet.com【financial.ynet.com','http://news.ynet.com/【http://finance.ynet.com/index.html【http://financial.ynet.com/','http://news.ynet.com/【http://finance.ynet.com/index.html【http://financial.ynet.com/','http://news.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html【http://finance.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html【http://financial.ynet.com/\\d+/\\d+/\\d+/\\d+t\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2022-12-22 11:22:49','2023-01-05 17:42:04'),
+(15,NULL,'北京商报','北京商报','网站','国际 政经 基金','bbtnews','bbtnews.com.cn【www.bbtnews.com.cn','https://www.bbtnews.com.cn/chuizhipd/yaowenzx/guojipd/【https://www.bbtnews.com.cn/chuizhipd/yaowenzx/zhengjingpd/【https://www.bbtnews.com.cn/chuizhipd/caijingxinwenzx/jijinjigoupd/','https://www.bbtnews.com.cn/chuizhipd/yaowenzx/guojipd/【https://www.bbtnews.com.cn/chuizhipd/yaowenzx/zhengjingpd/【https://www.bbtnews.com.cn/chuizhipd/caijingxinwenzx/jijinjigoupd/','https://www.bbtnews.com.cn/\\d+/\\d+/\\d+.shtml',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-03 10:48:07','2023-01-05 17:42:00'),
 (16,NULL,'长城网','长城网','网站','新闻资讯','thegreatwall','www.thegreatwall.cn【thegreatwall.cn','http://www.thegreatwall.cn/xinwen/','http://www.thegreatwall.cn/xinwen/','http://www.thegreatwall.cn/xinwen/\\d+/\\d+/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-03 11:14:21','2023-01-04 19:40:14'),
 (17,NULL,'河工新闻网','河工新闻网','网站','国内 国际 产经','hbgrb','www.hbgrb.net【hbgrb.net','http://www.hbgrb.net/gn/【http://www.hbgrb.net/gj/【http://www.hbgrb.net/cj/','http://www.hbgrb.net/gn/【http://www.hbgrb.net/gj/【http://www.hbgrb.net/cj/','http://www.hbgrb.net/gn/\\d+/t\\d+_\\d+.html【http://www.hbgrb.net/gj/\\d+/t\\d+_\\d+.html【http://www.hbgrb.net/cj/\\d+/t\\d+_\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-03 14:57:15','2023-01-04 19:40:09');
 
@@ -344,8 +373,8 @@ CREATE TABLE `website_field` (
   `parent_id` int(11) DEFAULT NULL,
   `website_id` int(11) DEFAULT NULL COMMENT '网站id',
   `name` varchar(50) DEFAULT NULL COMMENT '要与入库时表的字段对应',
-  `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默认使用xpath,如''selector'' => "//*[@id=''single-next-link'']"',
-  `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '抽取规则的类型,默认xpath，目前可用xpath, jsonpath, regex',
+  `selector` varchar(200) DEFAULT NULL COMMENT '定义抽取规则, 默多个用【分割'', "默认使用xpath,如//div[contains(@class,''content'')]',
+  `selector_type` varchar(50) DEFAULT 'xpath' COMMENT '多个用【分割，顺序与抽取规则对应，默认xpath，目前可用有xpath, css, regex, self',
   `required` tinyint(1) DEFAULT '0' COMMENT '定义该field的值是否必须, 默认false，true的话, 如果该field没有抽取到内容, 该field对应的整条数据都将被丢弃',
   `repeated` tinyint(1) DEFAULT '0' COMMENT '定义该field抽取到的内容是否是有多项, 默认false,赋值为true的话, 无论该field是否真的是有多项, 抽取到的结果都是数组结构，''selector'' => "//*[@id=''zh-single-question-page'']//a[contains(@class,''zm-item-tag'')]",',
   `source_type` varchar(50) DEFAULT NULL COMMENT '该field的数据源, 默认从当前的网页中抽取数据,选择attached_url可以发起一个新的请求, 然后从请求返回的数据中抽取,选择url_context可以从当前网页的url附加数据',
@@ -353,13 +382,13 @@ CREATE TABLE `website_field` (
   `is_write_db` tinyint(1) DEFAULT '1' COMMENT '是否入库',
   `join_field` varchar(50) DEFAULT NULL COMMENT '合并字段,用什么符号分割就用什么符号连接内容',
   `join_field_split` varchar(50) DEFAULT NULL COMMENT '合并字段分割符，如果值直接连接不用分割则是|no|空格用|space|',
-  `filter` varchar(100) DEFAULT NULL COMMENT '过滤移除正则表达式',
-  `filter_type` varchar(50) DEFAULT NULL COMMENT 'replace regex xpath css',
+  `filter` varchar(100) DEFAULT NULL COMMENT '多个用【分割'', ''输入符合过滤类型的过滤规则或过滤内容，并选择对应的过滤类型',
+  `filter_type` varchar(50) DEFAULT NULL COMMENT '多个用【分割，顺序要和过滤项相对应，目前可用有replace, xpath, regex, css, self',
   `status` int(11) DEFAULT '1' COMMENT '0禁用 1启用 2出错',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
 
@@ -367,7 +396,7 @@ insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`se
 (11,NULL,10,'source_title','//div[contains(@class,\'detail-title\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-11 00:04:02','2022-12-18 16:28:40'),
 (12,NULL,10,'source_author','//div[contains(@class,\'detail-info\')]//span[2]','xpath',0,0,NULL,NULL,1,'','','作者：','replace',1,'2022-12-11 00:14:20','2022-12-19 14:36:13'),
 (13,NULL,10,'source_name','//div[contains(@class,\'detail-info\')]//span[1]','xpath',0,0,NULL,NULL,1,NULL,NULL,'来源：','replace',1,'2022-12-11 00:15:40','2022-12-18 15:14:57'),
-(14,NULL,10,'source_pub_time','//div[contains(@class,\'detail-info\')]//span[3]//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-11 00:17:15','2023-01-04 10:11:11'),
+(14,NULL,10,'source_pub_time','//div[contains(@class,\'detail-info\')]//span[last()]//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-11 00:17:15','2023-01-05 09:42:15'),
 (15,NULL,10,'source_content','//div[@class=\'detail-content\']','xpath',1,0,NULL,NULL,1,NULL,NULL,'//div[contains(@class,\'social-bar\')]','xpath',1,'2022-12-11 00:21:00','2023-01-04 11:34:00'),
 (19,NULL,11,'source_title','//h1[@class=\'title\']','xpath',1,0,NULL,NULL,1,'','',NULL,NULL,1,'2022-12-11 00:47:12','2023-01-04 17:09:08'),
 (20,NULL,11,'source_author','//span[contains(@class,\'author\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,'作者：','replace',1,'2022-12-11 00:47:34','2023-01-04 17:09:46'),
@@ -377,7 +406,7 @@ insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`se
 (26,NULL,12,'source_title','//div[contains(@class,\'content\')]//h1','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-19 15:58:45','2022-12-19 15:58:45'),
 (27,NULL,12,'source_content','//div[contains(@class,\'articleCenter\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-19 15:59:04','2022-12-19 15:59:04'),
 (28,NULL,12,'source_name','','self',0,0,NULL,NULL,1,'pub_source_name','|no|',NULL,NULL,1,'2022-12-19 15:59:27','2022-12-19 16:49:09'),
-(29,NULL,12,'source_author','//span[contains(@class,\'reporter\')]//em','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-19 15:59:48','2022-12-19 16:43:50'),
+(29,NULL,12,'source_author','//span[contains(@class,\'reporter\')]//em','xpath',0,0,NULL,NULL,1,NULL,NULL,'记者：【编辑：【原作者：','replace【replace【replace',1,'2022-12-19 15:59:48','2023-01-05 17:36:05'),
 (30,NULL,12,'source_pub_time','//span[contains(@class,\'timer\')]//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-19 16:00:07','2023-01-03 16:48:56'),
 (31,NULL,12,'pub_channel_name','//i[contains(@class,\'twoTit\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-19 16:00:27','2022-12-19 16:17:23'),
 (32,NULL,13,'pub_channel_name','//p[contains(@class,\'mianbaoxie\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-22 11:02:48','2022-12-22 11:02:48'),
@@ -388,10 +417,10 @@ insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`se
 (37,NULL,14,'source_title','//div[contains(@class,\'articleTitle\')]//h1','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-22 11:24:50','2022-12-22 14:54:43'),
 (38,NULL,14,'source_content','//div[@id=\'articleAll\']','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-22 11:32:06','2022-12-22 11:32:06'),
 (39,NULL,14,'source_name','//span[contains(@class,\'sourceMsg\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-22 11:35:15','2022-12-22 11:35:15'),
-(40,NULL,14,'source_author','//span[contains(@class,\'authorMsg\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2022-12-22 11:36:20','2022-12-22 11:36:20'),
-(41,NULL,14,'yearMsg','//span[contains(@class,\'yearMsg\')]','xpath',0,0,NULL,NULL,0,'','',NULL,NULL,1,'2022-12-22 11:38:33','2022-12-22 15:33:16'),
+(40,NULL,14,'source_author','//span[contains(@class,\'authorMsg\')]','xpath',0,0,NULL,NULL,1,'source_author|space|editor','|space|',NULL,NULL,1,'2022-12-22 11:36:20','2023-01-05 17:23:46'),
+(41,NULL,14,'yearMsg','//span[@class=\'yearMsg\']//text()','xpath',1,0,NULL,NULL,0,'','',NULL,NULL,1,'2022-12-22 11:38:33','2023-01-05 17:38:57'),
 (42,NULL,14,'pub_channel_name','//dl[contains(@class,\'cfix fLeft\')]//dd//a[2]','xpath',0,0,NULL,NULL,1,'','',NULL,NULL,1,'2022-12-22 11:40:46','2022-12-22 14:58:47'),
-(43,NULL,14,'timeMsg','//span[contains(@class,\'timeMsg\')]','xpath',0,0,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2022-12-22 11:43:49','2022-12-22 15:00:05'),
+(43,NULL,14,'timeMsg','//span[@class=\'timeMsg\']//text()','xpath',1,0,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2022-12-22 11:43:49','2023-01-05 17:39:30'),
 (44,NULL,14,'source_pub_time','','self',0,0,NULL,NULL,1,'yearMsg|space|timeMsg','|space|',NULL,NULL,1,'2022-12-22 11:45:04','2023-01-03 13:08:49'),
 (45,NULL,15,'source_title','//div[contains(@class,\'article-hd\')]//h3','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 10:55:42','2023-01-03 13:10:54'),
 (46,NULL,15,'source_content','//div[@id=\'pageContent\']','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 10:59:51','2023-01-03 10:59:51'),
@@ -403,14 +432,18 @@ insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`se
 (52,NULL,16,'source_content','//div[contains(@class,\'article bb_gray\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 11:17:44','2023-01-03 17:26:40'),
 (53,NULL,16,'source_pub_time','//div[contains(@class,\'after_title mb25\')]//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 11:22:12','2023-01-03 13:03:36'),
 (54,NULL,16,'pub_channel_name','//div[contains(@class,\'bread_nav clearfix mb20\')]//a[2]','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 11:25:06','2023-01-03 17:27:56'),
-(55,NULL,17,'source_title','//div[contains(@class,\'contentbox\')]//h1//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 14:58:48','2023-01-03 14:58:48'),
+(55,NULL,17,'source_title','//div[contains(@class,\'contentbox\')]//h1//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 14:58:48','2023-01-05 15:17:51'),
 (56,NULL,17,'source_content','//div[contains(@class,\'TRS_Editor\')]','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-03 15:00:16','2023-01-03 15:00:16'),
 (57,NULL,17,'source_pub_time','//div[contains(@class,\'datefrom\')]//p//span[1]//text()','xpath',1,0,NULL,NULL,1,NULL,NULL,'发布时间：','replace',1,'2023-01-03 15:03:20','2023-01-03 15:03:20'),
 (58,NULL,17,'source_name','//div[contains(@class,\'datefrom\')]//p//span[2]','xpath',0,0,NULL,NULL,1,NULL,NULL,'来源：','replace',1,'2023-01-03 15:04:38','2023-01-03 15:04:38'),
 (59,NULL,17,'source_author','//div[contains(@class,\'news_info\')]','xpath',0,0,NULL,NULL,1,NULL,NULL,'',NULL,1,'2023-01-03 15:05:47','2023-01-03 15:05:47'),
 (60,NULL,17,'pub_channel_name','//div[contains(@class,\'CurrentLocation\')]//p//a[2]//text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'',NULL,1,'2023-01-03 15:07:35','2023-01-03 17:30:27'),
 (61,NULL,10,'pub_channel_name','//div[contains(@class,\'breadcrumb\')]//a[2]//text()','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-04 11:01:58','2023-01-04 11:01:58'),
-(62,NULL,11,'pub_channel_name','//div[contains(@class,\'container\')]//a[2]//text()','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-04 17:14:29','2023-01-04 17:14:29');
+(62,NULL,11,'pub_channel_name','//div[contains(@class,\'container\')]//a[2]//text()','xpath',0,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-01-04 17:14:29','2023-01-04 17:14:29'),
+(73,70,17,'tge','d【ee','xpath【css',0,0,NULL,NULL,1,NULL,NULL,'作者：【编辑：','replace【xpath',1,'2023-01-05 15:42:05','2023-01-05 15:48:02'),
+(74,66,17,'tge','d【ee','xpath【css',0,0,NULL,NULL,1,NULL,NULL,'作者：【编辑：','replace【xpath',1,'2023-01-05 15:42:20','2023-01-05 15:42:20'),
+(75,68,17,'tge','d【ee','xpath【css',0,0,NULL,NULL,1,NULL,NULL,'作者：【编辑：','replace【xpath',1,'2023-01-05 15:42:28','2023-01-05 15:42:28'),
+(76,NULL,14,'editor','//span[@class=\'authors\']','xpath',0,0,NULL,NULL,0,NULL,NULL,'责任编辑：','replace',1,'2023-01-05 17:22:32','2023-01-05 17:22:32');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

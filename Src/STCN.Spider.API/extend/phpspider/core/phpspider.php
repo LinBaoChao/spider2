@@ -70,6 +70,8 @@ class phpspider
     const AGENT_IOS     = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1';
     const AGENT_ANDROID = 'Mozilla/5.0 (Linux; U; Android 6.0.1;zh_cn; Le X820 Build/FEXCNFN5801507014S) AppleWebKit/537.36 (KHTML, like Gecko)Version/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 EUI Browser/5.8.015S';
 
+    const SEPARATOR = "【";
+
     /**
      * pid文件的路径及名称
      * @var string
@@ -1831,7 +1833,7 @@ class phpspider
                 // lbc 是否入库，只有入库的才保留、合并fields
                 foreach (self::$configs['fields'] as $config) {
                     // 合并字段处理
-                    if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] === true && isset($config['join_field']) && !empty($config['join_field'])) {
+                    if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] == true && isset($config['join_field']) && !empty($config['join_field'])) {
                         $split = $config['join_field_split'];
                         $joinFields = explode($split, $config['join_field']); 
                         $joinval = "";
@@ -1845,11 +1847,12 @@ class phpspider
                             }
                         }
                         if ($split != "|no|") {
-                            $joinval = substr($joinval, 1); // 去掉开始的$split
+                            $len = Strlen($split);
+                            $joinval = substr($joinval, $len); // 去掉开始的$split
                         }
                         $fields[$config['name']] = $joinval;
 
-                        // log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}", 'fields');
+                        log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}", 'joinfields');
                     }
 
                     // 不入库则移除
@@ -1962,17 +1965,36 @@ class phpspider
                     }
                 }
 
-                // 没有设置抽取规则的类型 或者 设置为 xpath
-                if (!isset($conf['selector_type']) || $conf['selector_type'] == 'xpath') {
-                    // 如果找不到，返回的是false
-                    $values = $this->get_fields_xpath($html, $conf['selector'], $conf['name']);
-                } elseif ($conf['selector_type'] == 'css') {
-                    $values = $this->get_fields_css($html, $conf['selector'], $conf['name']);
-                } elseif ($conf['selector_type'] == 'regex') {
-                    $values = $this->get_fields_regex($html, $conf['selector'], $conf['name']);
-                } elseif ($conf['selector_type'] == 'self') { // 本身内容 lbc
-                    $values = $conf['selector'];
+                // 抽取内容
+                $selectors = explode(self::SEPARATOR, $conf['selector']);
+                $selectortypes = explode(self::SEPARATOR, $conf['selector_type']);
+                $count = count($selectors);
+                $selectvalue = $html;
+                for ($i = 0; $i < $count; $i++) {
+                    $selector = $selectors[$i];
+
+                    if (isset($selectortypes[$i]) && !empty($selectortypes[$i])) {
+                        $selectortype = $selectortypes[$i];
+
+                        // 没有设置抽取规则的类型 或者 设置为 xpath
+                        if ($selectortype == 'xpath') {
+                            // 如果找不到，返回的是false
+                            $selectvalue = $this->get_fields_xpath($selectvalue, $selector, $conf['name']);
+                        } elseif ($selectortype == 'css') {
+                            $selectvalue = $this->get_fields_css($selectvalue, $selector, $conf['name']);
+                        } elseif ($selectortype == 'regex') {
+                            $selectvalue = $this->get_fields_regex($selectvalue, $selector, $conf['name']);
+                        } elseif ($selectortype == 'self') { // 本身内容 lbc
+                            $selectvalue = $conf['selector'];
+                        }
+                    } else {
+                        // 如果找不到，返回的是false
+                        $selectvalue = $this->get_fields_xpath($selectvalue, $selector, $conf['name']);
+                    }
                 }
+                $values = $selectvalue;
+                unset($count);                
+                unset($selectvalue);
 
                 // field不为空而且存在子配置
                 if (isset($values) && !empty($conf['children'])) {
@@ -2023,39 +2045,49 @@ class phpspider
                 // 过滤项 lbc
                 if (isset($conf['filter']) && !empty($conf['filter']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
                     $filter_values = $fields[$conf['name']];
-                    $filterstr = $conf['filter'];
+                    
+                    $filters = explode(self::SEPARATOR, $conf['filter']);
+                    $filtertypes = explode(self::SEPARATOR, $conf['filter_type']);
+                    $count = count($filters);
+                    for ($i = 0; $i < $count; $i++) {
+                        $filterstr = $filters[$i];
 
-                    if (isset($conf['filter_type']) && !empty($conf['filter_type'])) {
-                        switch ($conf['filter_type']) {
-                            case 'replace':
-                                $filter_values = str_replace($filterstr, "", $filter_values);
-                                break;
-                            case 'regex':
-                                if (@preg_match_all($filterstr, $filter_values, $out) === false) {
-                                } else {
-                                    $filterval = preg_replace($filterstr, "", $filter_values);
-                                    if (!empty($filterval)) {
-                                        $filter_values = $filterval;
+                        if (isset($filtertypes[$i]) && !empty($filtertypes[$i])) {
+                            $filtertype = $filtertypes[$i];
+                            switch ($filtertype) {
+                                case 'replace':
+                                    $filter_values = str_replace($filterstr, "", $filter_values);
+                                    break;
+                                case 'regex':
+                                    if (@preg_match_all($filterstr, $filter_values, $out) === false) {
+                                    } else {
+                                        $filterval = preg_replace($filterstr, "", $filter_values);
+                                        if (!empty($filterval)) {
+                                            $filter_values = $filterval;
+                                        }
                                     }
-                                }
-                                break;
-                            case 'xpath':
-                            case 'css':
-                                try {
-                                    $filterval = selector::remove($filter_values, $filterstr, $conf['filter_type']);
-                                    if (!empty($filterval)) {
-                                        $filter_values = $filterval;
+                                    break;
+                                case 'xpath':
+                                case 'css':
+                                    try {
+                                        $filterval = selector::remove($filter_values, $filterstr, $filtertype);
+                                        if (!empty($filterval)) {
+                                            $filter_values = $filterval;
+                                        }
+                                    } catch (Exception $ex) {
+                                        log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
                                     }
-                                } catch (Exception $ex) {
-                                    log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
-                                }
-                                break;
-                            default:
-                                $filter_values = str_replace($filterstr, "", $filter_values);
-                                break;
+                                    break;
+                                case 'self':
+                                    $filter_values = $filterstr;
+                                    break;
+                                default:
+                                    $filter_values = str_replace($filterstr, "", $filter_values);
+                                    break;
+                            }
+                        } else {
+                            $filter_values = str_replace($filterstr, "", $filter_values);
                         }
-                    } else {
-                        $filter_values = str_replace($filterstr, "", $filter_values);
                     }
 
                     $fields[$conf['name']] = $filter_values;
