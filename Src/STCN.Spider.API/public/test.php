@@ -57,35 +57,42 @@ use phpspider\core\log;
 use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "http://www.hbgrb.net/cj/202301/t20230102_128873.html";
+$url = "http://finance.ynet.com/index.html";
 $data = website::httpRequest($url);
 var_dump($data);
 $data = selector::select($data, "//div[contains(@class,'CurrentLocation')]//p//a[2]//text()");
 var_dump($data);
 
-$a = '["replace", "regex", "xpath"]';
-$a = json_decode($a, true);
-var_dump(implode(",", $a));
-$b = '["a", "b", "c"]';
-$b = json_decode($b, true);
-for ($i = 0; $i < count($a);$i++){
-    var_dump($a[$i] . "," . $b[$i]);
-}
+$parse_url = parse_url($url);
+var_dump($parse_url);
+//$data = mb_substr($data, 0, 10, 'UTF-8') . "...";
+$status = null;
+var_dump(empty($status));
+echo strip_tags("Hello <b>world!</b>");
 
-var_dump(is_null(json_decode('["replace", "regex", "xpath"]')));
-var_dump(json_encode('[""]'));
+// $a = '["replace", "regex", "xpath"]';
+// $a = json_decode($a, true);
+// var_dump(implode(",", $a));
+// $b = '["a", "b", "c"]';
+// $b = json_decode($b, true);
+// for ($i = 0; $i < count($a);$i++){
+//     var_dump($a[$i] . "," . $b[$i]);
+// }
 
-var_dump(explode("【", ""));
-var_dump(json_decode(""));
-var_dump(Strlen(",f"));
-$len = Strlen(",$");
-$joinval = substr("123456789", $len);
-var_dump($joinval);
+// var_dump(is_null(json_decode('["replace", "regex", "xpath"]')));
+// var_dump(json_encode('[""]'));
+
+// var_dump(explode("【", ""));
+// var_dump(json_decode(""));
+// var_dump(Strlen(",f"));
+// $len = Strlen(",$");
+// $joinval = substr("123456789", $len);
+// var_dump($joinval);
 // var_dump($config['is_run_spider']);
 
-// $r = website::getWebsiteConfig();
-// // var_dump($r['result'][0]['domains']);
-// // var_dump($r);
+// $r = website::getWebsiteConfig('',0);
+// //var_dump($r['result'][0]['domains']);
+// var_dump($r);
 // $configs = $r['result'];
 // foreach ($configs as $config) {
 //     if (isset($config['callback_script']) && !empty($config['callback_script'])) {

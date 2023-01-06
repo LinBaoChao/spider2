@@ -10,9 +10,11 @@ class website
 
     /**
      * 获取所有网站配置信息
-     * @return array
+     * @param string $mediaId
+     * @param int $status
+     * @return mixed
      */
-    public static function getWebsiteConfig()
+    public static function getWebsiteConfig(string $mediaId = '', int $status = -9999)
     {
         $spiderConfig = util::get_spider_config();
         $urlconfig = isset($spiderConfig['api_url']) ? $spiderConfig['api_url'] : self::URL;
@@ -23,10 +25,18 @@ class website
             'result' => null
         ];
 
+        $params = ['mediaId'=> $mediaId,'status'=> $status];
+        // if(!empty($mediaId)){
+        //     $params[] = ['mediaId' => $mediaId];
+        // }
+        // if ($status != null) {
+        //     $params[] = ['status' => $status];
+        // }
+        
         $url = $urlconfig . "website/getWebsiteConfig";
 
         try {
-            $retval = json_decode(self::httpRequest($url), true);
+            $retval = json_decode(self::httpRequest($url, 'post', $params), true);
             return $retval;
         } catch (\Exception $ex) {
             $retval['code'] = 'error';

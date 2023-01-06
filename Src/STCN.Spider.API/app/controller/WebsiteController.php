@@ -271,11 +271,13 @@ class WebsiteController extends BaseController
      *   tags={"网站管理"},
      *   summary="获取网站所有配置信息",
      *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
+     *   @OA\Parameter(name="mediaId", in="query", description="媒体标识", @OA\Schema(type="any")),
+     *   @OA\Parameter(name="status", in="query", description="状态", @OA\Schema(type="any")),
      *   @OA\Response(response="200", description="Website")
      * )
      */
-    public function getWebsiteConfig()
+    public function getWebsiteConfig(string $mediaId = '', int $status = -9999)
     {
-        return json(WebsiteService::getWebsiteConfig());
+        return json(WebsiteService::getWebsiteConfig($mediaId, $status));
     }
 }

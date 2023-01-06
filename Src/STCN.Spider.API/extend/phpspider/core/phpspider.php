@@ -1841,18 +1841,23 @@ class phpspider
                             if ($split == "|no|") { // 没有连接符号则直接连接值，否用符号连接各值
                                 $joinval .= $fieldscopy[$joinField];
                             }elseif($split == "|space|"){ // 空格
-                                $joinval = " " . $fieldscopy[$joinField]; // 空格连接
+                                $joinval .= " " . $fieldscopy[$joinField]; // 空格连接
                             }else{
-                                $joinval = $split . $fieldscopy[$joinField];
+                                $joinval .= $split . $fieldscopy[$joinField];
                             }
                         }
+                        // 去掉开始的$split
                         if ($split != "|no|") {
-                            $len = Strlen($split);
-                            $joinval = substr($joinval, $len); // 去掉开始的$split
+                            if ($split == "|space|") {
+                                $joinval = substr($joinval, 1);
+                            } else {
+                                $len = Strlen($split);
+                                $joinval = substr($joinval, $len);
+                            }                            
                         }
                         $fields[$config['name']] = $joinval;
 
-                        log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}", 'joinfields');
+                        log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}, url: {$url}", 'joinfields');
                     }
 
                     // 不入库则移除

@@ -163,9 +163,11 @@ class WebsiteService
 
     /**
      * 获取所有网站配置信息
+     * @param string $mediaId
+     * @param int $status
      * @return Result
      */
-    public static function getWebsiteConfig()
+    public static function getWebsiteConfig(string $mediaId = '', int $status = -9999)
     {
         $retval = new Result();
         $retval->code = ResultCode::SUCCESS;
@@ -174,9 +176,47 @@ class WebsiteService
         $data = [];
 
         try {
-            $websites = Website::where('status!=0')->order('create_time', 'desc')->select(); // 获取所有有效的网站配置数据
-            $websiteFields = WebsiteField::where('status!=0')->whereNull('parent_id')->select(); // 所有字段
-            // 所有子字段
+            // 获取所有有效的网站配置数据
+            $websites = Website::where(function ($query) use ($mediaId, $status) {
+                if ($mediaId !== '') {
+                    $query->where('name', $mediaId);
+                }
+
+                if ($status !== -9999) {
+                    $query->where('status', $status);
+                } else {
+                    $query->where('status!=0');
+                }
+            })->order('create_time', 'desc')->select(); // 获取
+            //$websites = Website::where('status!=0')->order('create_time', 'desc')->select(); 
+
+            // 所有字段
+            // $websiteFields = WebsiteField::where(function ($query) use ($status) {
+            //     $query->whereNull('parent_id');
+
+            //     if ($status !== null) {
+            //         $query->where('status', $status);
+            //     } else {
+            //         $query->where('status!=0');
+            //     }
+            // })->select();
+            $websiteFields = WebsiteField::where('status!=0')->whereNull('parent_id')->select();
+
+            // 所有字段的子字段
+            // $websiteFields2 = WebsiteField::where(function ($query) use ($status) {
+            //     $query->whereNull('f.parent_id');
+
+            //     if ($status !== null) {
+            //         $query->where('f.status', $status);
+            //         $query->where('f2.status', $status);
+            //     } else {
+            //         $query->where('f.status!=0');
+            //         $query->where('f2.status!=0');
+            //     }
+            // })->alias('f')
+            //     ->field('f2.*')
+            //     ->join('website_field f2', 'f2.parent_id=f.id')
+            //     ->select();
             $websiteFields2 = WebsiteField::where('f.status!=0')->whereNull('f.parent_id')->where('f2.status!=0')
                 ->alias('f')
                 ->field('f2.*')
@@ -199,7 +239,7 @@ class WebsiteService
                                                 'name' => $field2->name,
                                                 'selector' => $field2->selector,
                                                 'selector_type' => $field2->selectorType,
-                                                'required' => (bool)$field2->required,
+                                                'required' => (bool) $field2->required,
                                                 // 'repeated' => (bool)$field2->repeated,
                                                 // 'source_type' => $field2->sourceType,
                                                 // 'attached_url' => $field2->attachedUrl,
@@ -208,7 +248,7 @@ class WebsiteService
                                                 // 'filter' => $field2->filter,
                                             ];
                                             if (!empty($field2->repeated)) {
-                                                $fc2['repeated'] = (bool)$field2->repeated;
+                                                $fc2['repeated'] = (bool) $field2->repeated;
                                             }
                                             if (!empty($field2->sourceType)) {
                                                 $fc2['source_type'] = $field2->sourceType;
@@ -217,7 +257,7 @@ class WebsiteService
                                                 $fc2['attached_url'] = $field2->attachedUrl;
                                             }
                                             if (!empty($field2->isWriteDb)) {
-                                                $fc2['is_write_db'] = (bool)$field2->isWriteDb;
+                                                $fc2['is_write_db'] = (bool) $field2->isWriteDb;
                                             }
                                             if (!empty($field2->joinField)) {
                                                 $fc2['join_field'] = $field2->joinField;
@@ -241,7 +281,7 @@ class WebsiteService
                                     'name' => $field->name,
                                     'selector' => $field->selector,
                                     'selector_type' => $field->selectorType,
-                                    'required' => (bool)$field->required,
+                                    'required' => (bool) $field->required,
                                     // 'repeated' => (bool)$field->repeated,
                                     // 'source_type' => $field->sourceType,
                                     // 'attached_url' => $field->attachedUrl,
@@ -250,7 +290,7 @@ class WebsiteService
                                     // 'filter' => $field->filter,
                                 ];
                                 if (!empty($field->repeated)) {
-                                    $fc['repeated'] = (bool)$field->repeated;
+                                    $fc['repeated'] = (bool) $field->repeated;
                                 }
                                 if (!empty($field->sourceType)) {
                                     $fc['source_type'] = $field->sourceType;
@@ -259,7 +299,7 @@ class WebsiteService
                                     $fc['attached_url'] = $field->attachedUrl;
                                 }
                                 if (!empty($field->isWriteDb)) {
-                                    $fc['is_write_db'] = (bool)$field->isWriteDb;
+                                    $fc['is_write_db'] = (bool) $field->isWriteDb;
                                 }
                                 if (!empty($field->joinField)) {
                                     $fc['join_field'] = $field->joinField;
