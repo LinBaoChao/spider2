@@ -388,12 +388,28 @@ class phpspider
     public $on_extract_field = null;
 
     /**
+     * 特殊性处理统一回调，返回false则此内容不入库
+     *
+     * @var mixed
+     * @access public
+     */
+    public $on_extract_field_extend = null;
+
+    /**
      * 在一个网页的所有field抽取完成之后, 可能需要对field进一步处理, 以发布到自己的网站 
      * 
      * @var mixed
      * @access public
      */
     public $on_extract_page = null;
+
+    /**
+     * 统一回调处理，在一个网页的所有field抽取完成之后
+     *
+     * @var mixed
+     * @access public
+     */
+    public $on_extract_page_extend = null;
 
     /**
      * 如果抓取的页面是一个附件文件, 比如图片、视频、二进制文件、apk、ipad、exe 
@@ -1808,24 +1824,44 @@ class phpspider
                     exit(0);
                 }
 
-                // 打包网站属性关联字段
-                if (!isset($fields['pub_source_name']) || empty($fields['pub_source_name'])) {
-                    $fields['pub_source_name'] = self::$configs['product_name'];
-                }                
-                if (!isset($fields['pub_media_name']) || empty($fields['pub_media_name'])) {
-                    $fields['pub_media_name'] = self::$configs['media_name'];
-                }                
-                if (!isset($fields['pub_product_name']) || empty($fields['pub_product_name'])) {
-                    $fields['pub_product_name'] = self::$configs['product_name'];
-                }                
-                if (!isset($fields['pub_platform_name']) || empty($fields['pub_platform_name'])) {
-                    $fields['pub_platform_name'] = self::$configs['platform'];
-                }                
-                if (!isset($fields['pub_channel_name']) || empty($fields['pub_channel_name'])) {
-                    $fields['pub_channel_name'] = self::$configs['channel'];
+                // 回调统一处理，为了不破坏整体架构的适用性，一些特殊非配置性字段，可通过回调加入
+                if ($this->on_extract_page_extend) {
+                    $return = call_user_func($this->on_extract_page_extend, $page, $fields, $url, self::$configs);
+                    if (!isset($return)) {
+                        log::warn("on_extract_page_extend return value can't be empty");
+                    }
+                    // 返回false，跳过当前页面，内容不入库
+                    elseif ($return === false) {
+                        return false;
+                    } elseif (!is_array($return)) {
+                        log::warn('on_extract_page_extend return value must be an array');
+                    } else {
+                        $fields = $return;
+                    }
                 }
-                // 原文url
-                $fields['source_url'] = $url;
+                // 打包网站属性关联字段 ,以下字段通过回调加入，不应在此加入
+                // if (!isset($fields['pub_source_name']) || empty($fields['pub_source_name'])) {
+                //     $fields['pub_source_name'] = self::$configs['product_name'];
+                // }                
+                // if (!isset($fields['pub_media_name']) || empty($fields['pub_media_name'])) {
+                //     $fields['pub_media_name'] = self::$configs['media_name'];
+                // }                
+                // if (!isset($fields['pub_product_name']) || empty($fields['pub_product_name'])) {
+                //     $fields['pub_product_name'] = self::$configs['product_name'];
+                // }                
+                // if (!isset($fields['pub_platform_name']) || empty($fields['pub_platform_name'])) {
+                //     $fields['pub_platform_name'] = self::$configs['platform'];
+                // }                
+                // // if (!isset($fields['pub_channel_name']) || empty($fields['pub_channel_name'])) {
+                // //     $fields['pub_channel_name'] = self::$configs['channel'];
+                // // }
+                // // 原文url
+                // $fields['source_url'] = $url;
+                // // 如果来源为空则为发布源 lbc
+                // if (!isset($fields['source_name']) || empty($fields['source_name'])) {
+                //     $fields['source_name'] = $fields['pub_source_name'];
+                // }
+                // -----------------------
 
                 // log::add(var_export($fields, true), 'fields');
 
@@ -1871,11 +1907,6 @@ class phpspider
                     }                                       
                 }
                 unset($fieldscopy);
-
-                // 如果来源为空则为发布源 lbc
-                if(!isset($fields['source_name']) || empty($fields['source_name'])){
-                    $fields['source_name'] = $fields['pub_source_name'];
-                }
 
                 // log::add("filter after:" . var_export($fields, true), 'fields');
 
@@ -2122,6 +2153,20 @@ class phpspider
                         log::warn("on_extract_field return value can't be empty\n");
                     } else {
                         // 有数据才会执行 on_extract_field 方法, 所以这里不要被替换没了
+                        $fields[$fieldname] = $return;
+                    }
+                }
+
+                // 特殊回调统一处理 lbc todo
+                if ($this->on_extract_field_extend) {
+                    $return = call_user_func($this->on_extract_field_extend, $fieldname, $data, $page, $url, self::$configs);
+                    if (!isset($return)) {
+                        log::warn("on_extract_field_extend return value can't be empty\n");
+                    } elseif ($return === false) { // 如果返回false则此内容放弃不入库
+                        $fields = array();
+                        break;
+                    } else {
+                        // 有数据才会执行 on_extract_field_extend 方法, 所以这里不要被替换没了
                         $fields[$fieldname] = $return;
                     }
                 }

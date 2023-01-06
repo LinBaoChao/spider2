@@ -204,6 +204,7 @@ export const formSchema: FormSchema[] = [
     field: 'channel',
     label: '栏目',
     component: 'Input',
+    helpMessage: ['全部栏目可为空或*'],
   },
   {
     field: 'domains',

@@ -68,8 +68,10 @@ var_dump($parse_url);
 //$data = mb_substr($data, 0, 10, 'UTF-8') . "...";
 $status = null;
 var_dump(empty($status));
-echo strip_tags("Hello <b>world!</b>");
+var_dump(strip_tags("Hello <b>world!</b>"));
 
+var_dump( strpos("You love php, I love php too!", "php"));
+var_dump( strpos(" " . "财经 时事  政事儿e 国际 政事儿" . " ", " "."政事儿"." "));
 // $a = '["replace", "regex", "xpath"]';
 // $a = json_decode($a, true);
 // var_dump(implode(",", $a));

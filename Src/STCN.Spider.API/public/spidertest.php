@@ -212,10 +212,10 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . $configs['channel'] . " ", " " . $data . " ") === false) { // 不是需要的栏目则不需要则返回false
-                log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
+                log::add("栏目 {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             }else{
-                log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
+                log::add("栏目 {$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
     }
@@ -250,3 +250,41 @@ function on_extract_page_extend($page, $fields, $url, $configs)
     return $fields;
 }
 //----统一回调扩展 begin----//
+
+// function on_start_stcn($spider)
+// {
+//     foreach ($spider::$configs['list_url_regexes'] as $url) {
+//         $spider->add_scan_url($url);
+//     }
+// }
+
+// function on_extract_field_stcn($fieldname, $data, $page)
+// {
+//     if ($fieldname == 'source_author') {
+//         $data = str_replace("作者：", "", $data);
+//     } elseif ($fieldname == 'source_name') {
+//         $data = str_replace("来源：", "", $data);
+//     } elseif ($fieldname == 'source_content') {
+//         $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
+//     }
+
+//     return $data;
+// }
+
+// function on_start_cnstock($spider)
+// {
+//     foreach ($spider::$configs['list_url_regexes'] as $url) {
+//         $spider->add_scan_url($url);
+//     }
+// }
+
+// function on_extract_field_cnstock($fieldname, $data, $page)
+// {
+//     if ($fieldname == 'source_author') {
+//         $data = str_replace("作者：", "", $data);
+//     } elseif ($fieldname == 'source_name') {
+//         $data = str_replace("来源：", "", $data);
+//     }
+
+//     return $data;
+// }
