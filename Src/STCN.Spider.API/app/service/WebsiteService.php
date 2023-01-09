@@ -339,6 +339,10 @@ class WebsiteService
                             'list_url_regexes' => explode('【', $website->listUrls ?? ''),
                             'content_url_regexes' => explode('【', $website->contentUrls ?? ''),
 
+                            // 不包括的配置 todo
+                            // content_url_regexes_remove 要排除的内容页 todo
+                            // list_url_regexes_remove 
+
                             'fields' => $fieldConfig,
                         ];
 

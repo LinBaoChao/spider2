@@ -14,8 +14,8 @@ class WebsiteValidate extends Validate
         'mediaName'  => 'require|max:50',
         'domains'  => 'require|max:200',
         'scanUrls'  => 'require|max:200',
-        'listUrls'  => 'require|max:500',
-        'contentUrls'  => 'require|max:500',
+        'listUrls'  => 'max:500',
+        'contentUrls'  => 'max:500',
     ];
 
     protected $message  =   [
@@ -24,8 +24,8 @@ class WebsiteValidate extends Validate
         'mediaName.require' => '媒体名称不能为空',
         'domains.require' => '域名不能为空',
         'scanUrls.require' => '入口页Url不能为空',
-        'listUrls.require' => '列表页Url不能为空',
-        'contentUrls.require' => '内容页Url不能为空',
+        //'listUrls.require' => '列表页Url不能为空',
+        //'contentUrls.require' => '内容页Url不能为空',
 
         'name.max' => '媒体名称长度不能大于50',
         'mediaName.max' => '媒体名称长度不能大于50',

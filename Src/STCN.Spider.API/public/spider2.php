@@ -111,7 +111,7 @@ do {
         'fields' => array(
             array(
                 'name' => "source_title",
-                'selector' => "//div[contains(@class,'content')]//h1",
+                'selector' => "//h1[@id='content']//text()",
                 'required' => true,
             ),
             array(
@@ -124,6 +124,7 @@ do {
                 'selector' => "//span[contains(@class,'timer')]",
                 'required' => true,
             ),
+
             array(
                 'name' => "source_author",
                 'selector' => "//span[contains(@class,'reporter')]//em",
@@ -371,3 +372,36 @@ function on_extract_field_cnstock($fieldname, $data, $page)
 // $data = selector::select($html, "//div[contains(@class,'detail-content')]");
 // $d = str_replace($data, "", $html);
 // print_r($data);
+
+// 列表页中配置附加数据，如栏目
+// $configs = array(
+//     // configs的其他成员
+//     ...
+//     'fields' => array(
+//         array(
+//             'name' => "question_view_count",
+//             // 在内容页中通过XPath提取浏览次数(或阅读量)
+//             'selector' => "//a[contains(@class,'page-view')]",
+//             'required' => true,
+//         ),
+//     ),
+// );
+
+// $spider->on_list_page = function($page, $content, $phpspider) 
+// {
+//     // 在列表页中通过XPath提取到内容页URL
+//     $content_url = selector::select($content, "//a[contains(@class,'s xst')]/@href");
+//     // 在列表页中通过XPath提取到浏览次数(或阅读量)
+//     $page_views = selector::select($content, "//td[contains(@class,'num')]/em");
+//     // 拼出包含浏览次数(或阅读量)的HTML代码
+//     $page_views = '<div><a class="page-view">' . $page_views + '</a></div>';
+
+//     $options = array(
+//         'method' => 'get',
+//         'context_data' => $page_views,
+//     );
+
+//     $phpspider->add_url($content_url, $options);
+//     // 返回true继续提取其他列表页URL
+//     return true;
+// };

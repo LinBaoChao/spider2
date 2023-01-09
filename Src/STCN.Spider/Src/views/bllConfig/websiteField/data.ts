@@ -191,7 +191,7 @@ export const formSchema: FormSchema[] = [
         { label: '否', value: 0 },
       ],
     },
-    defaultValue: 0,
+    defaultValue: 1,
     colProps: { span: 12 },
   },
   {

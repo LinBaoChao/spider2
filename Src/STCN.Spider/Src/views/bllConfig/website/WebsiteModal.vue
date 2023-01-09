@@ -55,6 +55,7 @@
           setModalProps({ confirmLoading: true });
           if (!unref(isUpdate)) {
             await websiteCreated(values);
+            closeModal();
           } else {
             await websiteUpdated({ ...values, id: rowId.value });
             closeModal();

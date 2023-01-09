@@ -41,7 +41,7 @@ function runSpider()
                         $spider->on_start = 'on_start';
                         $spider->on_extract_field = 'on_extract_field';
                         // 回调扩展
-                        $spider->on_extract_field_extend = 'on_extract_field_extend'; 
+                        $spider->on_extract_field_extend = 'on_extract_field_extend';
                         $spider->on_extract_page_extend = 'on_extract_page_extend'; // 加入非配置的特殊字段处理
 
                         // 绑定回调函数 从业务配置中是否有回调函数，及动态脚本，可以把脚本存入某个文件里，然后上面引入这个文件，即可回调到这个函数
@@ -119,7 +119,7 @@ function runSpider()
 
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'],'runtimes');
+                        log::add($config['name'], 'runtimes');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
                         log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr');
@@ -206,16 +206,17 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调处理 end----//
 
 //----统一回调扩展 begin----//
-function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
+function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
+{
     // 如果不是需要的栏目则不要 则返回false
-    if($fieldname == "pub_channel_name"){
+    if ($fieldname == "pub_channel_name") {
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . $configs['channel'] . " ", " " . $data . " ") === false) { // 不是需要的栏目则不需要则返回false
-                log::add("栏目 {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
+                log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
-            }else{
-                log::add("栏目 {$data} 在 {$configs['channel']}\r\n", 'channel');
+            } else {
+                // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
     }
@@ -246,45 +247,7 @@ function on_extract_page_extend($page, $fields, $url, $configs)
     if (!isset($fields['source_name']) || empty($fields['source_name'])) {
         $fields['source_name'] = $fields['pub_source_name'];
     }
-     
+
     return $fields;
 }
 //----统一回调扩展 begin----//
-
-// function on_start_stcn($spider)
-// {
-//     foreach ($spider::$configs['list_url_regexes'] as $url) {
-//         $spider->add_scan_url($url);
-//     }
-// }
-
-// function on_extract_field_stcn($fieldname, $data, $page)
-// {
-//     if ($fieldname == 'source_author') {
-//         $data = str_replace("作者：", "", $data);
-//     } elseif ($fieldname == 'source_name') {
-//         $data = str_replace("来源：", "", $data);
-//     } elseif ($fieldname == 'source_content') {
-//         $data = selector::remove($data, "//div[contains(@class,'social-bar')]");
-//     }
-
-//     return $data;
-// }
-
-// function on_start_cnstock($spider)
-// {
-//     foreach ($spider::$configs['list_url_regexes'] as $url) {
-//         $spider->add_scan_url($url);
-//     }
-// }
-
-// function on_extract_field_cnstock($fieldname, $data, $page)
-// {
-//     if ($fieldname == 'source_author') {
-//         $data = str_replace("作者：", "", $data);
-//     } elseif ($fieldname == 'source_name') {
-//         $data = str_replace("来源：", "", $data);
-//     }
-
-//     return $data;
-// }

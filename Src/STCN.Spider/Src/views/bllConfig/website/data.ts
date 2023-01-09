@@ -224,15 +224,21 @@ export const formSchema: FormSchema[] = [
     field: 'listUrls',
     label: '列表urls',
     component: 'InputTextArea',
-    required: true,
-    helpMessage: ['多个用【分割', '可带正则规则的列表页url'],
+    // required: true,
+    helpMessage: [
+      '多个用【分割, 可带正则规则的列表页url',
+      '*表示泛列表页，即所有页面都是列表页，只抓取链接，不抓取内容；空或x表示无列表页选项，即所有页面都要抓取内容，包含列表页',
+    ],
   },
   {
     field: 'contentUrls',
     label: '内容urls',
     component: 'InputTextArea',
-    required: true,
-    helpMessage: ['多个用【分割', '可带正则规则的内容页url'],
+    // required: true,
+    helpMessage: [
+      '多个用【分割，带正则规则的内容页url',
+      '空或*表示所有页面都提取内容；x表示所有页面不提取内容',
+    ],
   },
   {
     field: 'status',
@@ -245,7 +251,7 @@ export const formSchema: FormSchema[] = [
         { label: '禁用', value: 0 },
       ],
     },
-    defaultValue: 1,
+    defaultValue: 0,
     colProps: { span: 12 },
   },
   {

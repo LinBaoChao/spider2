@@ -20,18 +20,18 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 // // var_dump(GUID());
 
-$config = array(
-    'host' => '10.254.15.57',
-    'port' => '8123',
-    'username' => 'linbaocao',
-    'password' => '345556',
-    'dbname' => 'sentiment_db',
-    'table' => 'sentiment_tmp',
-    'auth_method' => 1, // On of HTTP::AUTH_METHODS_LIST
-);
+// $config = array(
+//     'host' => '10.254.15.57',
+//     'port' => '8123',
+//     'username' => 'linbaocao',
+//     'password' => '345556',
+//     'dbname' => 'sentiment_db',
+//     'table' => 'sentiment_tmp',
+//     'auth_method' => 1, // On of HTTP::AUTH_METHODS_LIST
+// );
 
-$db = new Client($config);
-$db->database('sentiment_db');
+// $db = new Client($config);
+// $db->database('sentiment_db');
 
 //var_dump($db);
 // $stat = $db->insert(
@@ -46,7 +46,7 @@ $db->database('sentiment_db');
 
 //$db->verbose();
 //$db->settings()->readonly(false);
-var_dump($db->showTables());
+//var_dump($db->showTables());
 
 // $result = $db->select("SELECT * FROM sentiment_tmp LIMIT 100");
 // print_r($result->fetchOne());
@@ -57,14 +57,18 @@ use phpspider\core\log;
 use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "http://finance.ynet.com/index.html";
+$url = "http://www.bohaitoday.cn/h-nd-64069.html#_jcp=4_12";
 $data = website::httpRequest($url);
 var_dump($data);
-$data = selector::select($data, "//div[contains(@class,'CurrentLocation')]//p//a[2]//text()");
+$data = selector::select($data, "//div[@class='leftInfo']//span[@class='newsInfo']//text()");
 var_dump($data);
 
-var_dump(pack("C3", 80, 72, 80));
-var_dump(date('Ymd'));
+$regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
+$url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
+var_dump(preg_match("#{$regex}#i", $url));
+
+// var_dump(pack("C3", 80, 72, 80));
+// var_dump(date('Ymd'));
 
 // $parse_url = parse_url($url);
 // var_dump($parse_url);

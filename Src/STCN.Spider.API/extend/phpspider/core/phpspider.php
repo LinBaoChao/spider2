@@ -455,7 +455,7 @@ class phpspider
         $configs['max_sub_num']       = isset($configs['max_sub_num']) ? $configs['max_sub_num'] : self::$max_sub_num;
         $configs['max_stand_by_time'] = isset($configs['max_stand_by_time']) ? $configs['max_stand_by_time'] : self::$max_stand_by_time;
         $configs['max_task_per_host'] = isset($configs['max_task_per_host']) ? $configs['max_task_per_host'] : self::$max_task_per_host;
-        //启用 host并发上限时，队列参数强制为随机
+        //启用 host并发上限时，队列参数强制为随机 lbc todo
         if ($configs['max_task_per_host'] > 0) {
             $configs['queue_order'] = 'rand';
         } else {
@@ -533,6 +533,7 @@ class phpspider
         $link['url_type'] = 'scan_page';
         $link             = $this->link_uncompress($link);
 
+        // lbc todo
         if ($this->is_content_page($url)) {
             $link['url_type'] = 'content_page';
             $status           = $this->queue_lpush($link, $allowed_repeat);
@@ -644,8 +645,8 @@ class phpspider
             return false;
         }
 
-        //增加 要排除的列表页特征正则 BY KEN <a-site@foxmail.com>
-        if (!empty(self::$configs['list_url_regexes_remove'])) { // lbc todo
+        //增加 要排除的列表页特征正则 // lbc todo
+        if (!empty(self::$configs['list_url_regexes_remove'])) {
             foreach (self::$configs['list_url_regexes_remove'] as $regex) {
                 if (preg_match("#{$regex}#i", $url)) {
                     return false;
@@ -690,7 +691,7 @@ class phpspider
             return false;
         }
 
-        //增加 要排除的内容页特征正则 BY KEN <a-site@foxmail.com>
+        //增加 要排除的内容页特征正则 lbc todo
         if (!empty(self::$configs['content_url_regexes_remove'])) {
             foreach (self::$configs['content_url_regexes_remove'] as $regex) {
                 if (preg_match("#{$regex}#i", $url)) {
@@ -703,7 +704,7 @@ class phpspider
         if (empty(self::$configs['content_url_regexes']) or self::$configs['content_url_regexes'][0] == '*') {
             return true;
         }
-        //无内容，泛列表模式，即所有页面都不提取内容
+        //无内容，泛列表模式，即所有页面都不提取内容 lbc todo
         if (self::$configs['content_url_regexes'][0] == 'x') {
             return false;
         }
@@ -1260,7 +1261,7 @@ class phpspider
         if (!$html) {
             return false;
         }
-        // 当前正在爬取的网页页面的对象 // lbc todo 可在这加入name给回调里判断是哪个网站，然后做逻辑处理
+        // 当前正在爬取的网页页面的对象
         $page = array(
             'url'     => $url,
             'raw'     => $html,
@@ -1274,7 +1275,6 @@ class phpspider
                 'max_try'      => $link['max_try'],
                 'depth'        => $link['depth'],
                 'taskid'       => self::$taskid,
-                //'name'        => $link['name'], // lbc todo 
             ),
         );
         //printf("memory usage: %.2f M\n", memory_get_usage() / 1024 / 1024 ); 
