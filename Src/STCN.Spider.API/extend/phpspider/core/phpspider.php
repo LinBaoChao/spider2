@@ -35,7 +35,6 @@ use phpspider\core\clickhouse;
 util::path_exists(PATH_DATA);
 util::path_exists(PATH_DATA . '/lock');
 util::path_exists(PATH_DATA . '/log');
-util::path_exists(PATH_DATA . '/log/spider');
 util::path_exists(PATH_DATA . '/cache');
 util::path_exists(PATH_DATA . '/status');
 

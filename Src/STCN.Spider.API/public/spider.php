@@ -215,7 +215,7 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
                 log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             }else{
-                log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
+                // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
     }

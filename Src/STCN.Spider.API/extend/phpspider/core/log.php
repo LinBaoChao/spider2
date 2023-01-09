@@ -22,6 +22,7 @@ class log
     public static $log_show = false;
     public static $log_type = false;
     public static $log_file = "data/phpspider.log";
+    public static $file_path = "/log/";
     public static $out_sta = "";
     public static $out_end = "";
 
@@ -92,7 +93,10 @@ class log
         {
             echo $msg;
         }
-        file_put_contents(PATH_DATA . "/log/spider/" . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
+
+        $path = PATH_DATA . self::$file_path . date('Ymd') . '/';
+        util::path_exists($path);
+        file_put_contents($path . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
         //file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX); // lbc todo add to db and trace
     }
 
@@ -112,8 +116,10 @@ class log
         {
             echo $msg;
         }
-        file_put_contents(PATH_DATA."/log/".strtolower($log_type).".log", $msg, FILE_APPEND | LOCK_EX);
+
+        $path = PATH_DATA . self::$file_path . date('Ymd') . '/';
+        util::path_exists($path);
+        file_put_contents($path . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
     }
 
 }
-
