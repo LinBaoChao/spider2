@@ -55,7 +55,7 @@ return [
         'username' => 'linbaocao',
         'password' => '345556',
         'dbname' => 'sentiment_db',
-        'table' => 'sentiment_t', // 'sentiment_tmp sentiment_t',
+        'table' => 'sentiment_tmp', // 'sentiment_tmp sentiment_t',
     ),
 
     // 反爬

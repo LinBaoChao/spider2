@@ -2094,14 +2094,15 @@ class phpspider
                                     $filter_values = str_replace($filterstr, "", $filter_values);
                                     break;
                                 case 'regex':
-                                    if (@preg_match_all($filterstr, $filter_values, $out) === false) {
-                                    } else {
-                                        $filterval = preg_replace($filterstr, "", $filter_values);
-                                        if (!empty($filterval)) {
-                                            $filter_values = $filterval;
-                                        }
-                                    }
-                                    break;
+                                    // 等效于selector::remove,所以直接用下面的remove
+                                    // if (@preg_match_all($filterstr, $filter_values, $out) === false) {
+                                    // } else {
+                                    //     $filterval = preg_replace($filterstr, "", $filter_values);
+                                    //     if (!empty($filterval)) {
+                                    //         $filter_values = $filterval;
+                                    //     }
+                                    // }
+                                    // break;
                                 case 'xpath':
                                 case 'css':
                                     try {
@@ -2112,6 +2113,9 @@ class phpspider
                                     } catch (Exception $ex) {
                                         log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
                                     }
+                                    break;
+                                case 'strip_tags':
+                                    $filter_values = strip_tags($filter_values, explode(',', $filterstr));
                                     break;
                                 case 'self':
                                     $filter_values = $filterstr;

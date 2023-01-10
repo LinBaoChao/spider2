@@ -211,7 +211,7 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
     if($fieldname == "pub_channel_name"){
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
-            if (strpos(" " . $configs['channel'] . " ", " " . $data . " ") === false) { // 不是需要的栏目则不需要则返回false
+            if (strpos(" " . $configs['channel'] . " ", " " . trim($data) . " ") === false) { // 不是需要的栏目则不需要则返回false
                 log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             }else{

@@ -75,7 +75,9 @@ class selector
         {
             $remove_html =  self::_css_select($html, $selector, true);
         }
-        $html = str_replace($remove_html, "", $html);
+        if (!empty($remove_html)) {
+            $html = str_replace($remove_html, "", $html);
+        }
         return $html;
     }
 

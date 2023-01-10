@@ -57,15 +57,37 @@ use phpspider\core\log;
 use phpspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "http://www.bohaitoday.cn/h-nd-64069.html#_jcp=4_12";
+$url = "http://www.zjknews.com/news/shizheng/2023/01/383786.html";
 $data = website::httpRequest($url);
-var_dump($data);
-$data = selector::select($data, "//div[@class='leftInfo']//span[@class='newsInfo']//text()");
-var_dump($data);
+//var_dump($data);
+$data = selector::select($data, "//h1[@class='w1 hot_h1']");
+$a = explode(',', '<br>');
+var_dump(strip_tags($data, $a));
+// $data = selector::select("e责任编辑：林保最喜爱的3e字体：", "/责任编辑：(.+)字体/","regex");
+// var_dump($data);
+// $data = selector::remove("e责任编辑：林保最喜爱的3e字体：", "/责任编辑：(.+)字体/", "regex");
+// var_dump($data);
+// var_dump(@preg_match_all("/责任编辑：(.+)字体/", "
+// 2023-01-10 10:47:06   
+// 责任编辑：   
+// 字体：",$dataa));
+// var_dump($dataa);
+// $filterval = preg_replace("/责任编辑：(.+)字体/", "", "
+// 2023-01-10 10:47:06   
+// 责任编辑：   
+// 字体：");
+// var_dump($filterval);
+// $data = selector::remove("
+// 2023-01-10 10:47:06   
+// 责任编辑：  ew 
+// 字体：", "/(\r\n.+\r\n责任编辑：).+(\r\n字体.+)/", "regex");
+// var_dump($data);
 
-$regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
-$url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
-var_dump(preg_match("#{$regex}#i", $url));
+// str_replace("", "","fdsaf rewqr");
+
+// $regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
+// $url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
+// var_dump(preg_match("#{$regex}#i", $url));
 
 // var_dump(pack("C3", 80, 72, 80));
 // var_dump(date('Ymd'));
