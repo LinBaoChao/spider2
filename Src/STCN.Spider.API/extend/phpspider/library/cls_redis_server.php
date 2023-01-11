@@ -4,11 +4,6 @@ ini_set("memory_limit", "128M");
  * redis 服务端 
  * 多进程阻塞式
  * redis-benchmark -h 127.0.0.1 -p 11211 -t set -n 80000 -q
- * 
- * @version 2.7.0
- * @copyright 1997-2018 The PHP Group
- * @author seatle <seatle@foxmail.com> 
- * @created time :2018-01-03
  */
 class cls_redis_server
 {

@@ -25,8 +25,6 @@ class cls_query
      * 
      * @param mixed $xpath
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2015-08-08 15:52
      */
     private static function get_nodes($query)
     {
@@ -140,8 +138,6 @@ class cls_query
      * @param mixed $node
      * @param mixed $content
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2015-08-08 15:52
      */
     private static function get_node_datas($node, $content, $attr = "html", $is_last = false)
     {

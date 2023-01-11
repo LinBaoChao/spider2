@@ -2,11 +2,6 @@
 /**
  * redis 客户端 
  * redis的协议可参考这个文章http://redis.cn/topics/protocol.html
- * 
- * @version 2.7.0
- * @copyright 1997-2018 The PHP Group
- * @author seatle <seatle@foxmail.com> 
- * @created time :2018-01-03
  */
 class cls_redis_client 
 {
