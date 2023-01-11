@@ -1172,7 +1172,7 @@ class phpspider
 
         $url = $link['url'];
 
-        //限制单域名最大url数量 20180213
+        //限制单域名最大url数量 
         if (isset(self::$configs['max_pages']) and self::$configs['max_pages'] > 0) {
             $domain_pages_num = $this->incr_pages_num($url);
             if ($domain_pages_num > self::$configs['max_pages']) {
@@ -1181,7 +1181,7 @@ class phpspider
             }
         }
 
-        //限制单域名最大花费时长 20180213
+        //限制单域名最大花费时长 
         if (isset(self::$configs['max_duration']) and self::$configs['max_duration'] > 0) {
             $domain_duration = $this->get_duration_num($url);
             if ($domain_duration > self::$configs['max_duration']) {
@@ -1219,7 +1219,7 @@ class phpspider
         requests::$input_encoding = null;
         $html = $this->request_url($url, $link);
 
-        //记录速度较慢域名花费抓取时间 20180213
+        //记录速度较慢域名花费抓取时间 
         $time_run = round(microtime(true) - $page_time_start);
         if ($time_run > 1) {
             $this->incr_duration_num($url, $time_run);
@@ -1513,7 +1513,7 @@ class phpspider
 
             $val = $this->fill_url($url, $collect_url);
 
-            //限制单域名最大url数量 20180213
+            //限制单域名最大url数量 
             if ($val and isset(self::$configs['max_pages']) and self::$configs['max_pages'] > 0) {
                 $domain_pages_num = $this->incr_pages_num($val);
                 if ($domain_pages_num > self::$configs['max_pages']) {
@@ -2012,7 +2012,8 @@ class phpspider
             if (!isset($values)) {
                 // 如果值为空而且值设置为必须项并且没有合并项, 跳出foreach循环
                 if ($required && empty($joinfield)) { // lbc to do trace
-                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url}");
+                    $mediaId = self::$configs['name'];
+                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url} mediaId：{$mediaId}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();
                     break;
