@@ -3,7 +3,7 @@
 // 公共入口文件
 //----------------------------------
 
-//namespace phpspider\core;
+//namespace topspider\core;
 
 // Display errors.
 ini_set('display_errors', 'on');

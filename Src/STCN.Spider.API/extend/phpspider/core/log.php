@@ -3,7 +3,7 @@
 // 日志类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 // 引入PATH_DATA
 require_once __DIR__ . '/constants.php';
 
@@ -11,7 +11,7 @@ class log
 {
     public static $log_show = false;
     public static $log_type = false;
-    public static $log_file = "data/phpspider.log";
+    public static $log_file = "data/topspider.log";
     public static $file_path = "/log/";
     public static $out_sta = "";
     public static $out_end = "";

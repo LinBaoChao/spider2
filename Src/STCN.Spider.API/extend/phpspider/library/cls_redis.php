@@ -20,7 +20,7 @@ class cls_redis
     /**
      *  默认redis前缀
      */
-    public static $prefix  = "phpspider";
+    public static $prefix  = "topspider";
 
     public static $error  = "";
 

@@ -11,7 +11,7 @@ return [
     // logo
     'log_show' => true, // 是否开启
     'log_type' => 'error,debug,warn', // 'error,debug,info,warn' 默认空为所有
-    'log_file' => '', // '/../data/log/phpspider.log', // 存放文件路径
+    'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
     'interval' => 300, // 爬取间隔（毫秒），此值不配默认为100毫秒
@@ -31,7 +31,7 @@ return [
         'port'      => 6379,
         'pass'      => '',
         'db'        => 5,
-        'prefix'    => 'phpspider',
+        'prefix'    => 'topspider',
         'timeout'   => 30,
         // 'queue_order' => 'rand', 此项先不配，默认为列表采集
     ),

@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+require_once __DIR__ . '/../extend/topspider/autoloader.php';
 //require_once __DIR__ . '/../vendor/autoload.php';
 
-use phpspider\core\phpspider;
-use phpspider\core\selector;
+use topspider\core\topspider;
+use topspider\core\selector;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -23,10 +23,10 @@ do {
     // 'max_fields' => 100, // 爬虫爬取内容网页最大条数 抓取到一定的字段后退出 默认值为0，即不限制
 
     // 随机浏览器类型，用于破解防采集
-    // phpspider::AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
-    // phpspider::AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器
-    // phpspider::AGENT_PC, 表示爬虫爬取网页时, 使用PC浏览器
-    // phpspider::AGENT_MOBILE, 表示爬虫爬取网页时, 使用移动设备浏览器
+    // topspider::AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
+    // topspider::AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器
+    // topspider::AGENT_PC, 表示爬虫爬取网页时, 使用PC浏览器
+    // topspider::AGENT_MOBILE, 表示爬虫爬取网页时, 使用移动设备浏览器
     // 'user_agent' => array(
     //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
     //     "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
@@ -57,7 +57,7 @@ do {
     //),
     $configs = array(
         'name' => 'bjnews',
-        'log_show' => true, // 查看日志tail -f data/phpspider.log
+        'log_show' => true, // 查看日志tail -f data/topspider.log
         //'log_type' => 'error,debug',
         'multiserver' => true,
         'serverid' => 1,
@@ -70,7 +70,7 @@ do {
             'port'      => 6379,
             'pass'      => '',
             'db'        => 5,
-            'prefix'    => 'phpspider',
+            'prefix'    => 'topspider',
             'timeout'   => 30,
         ),
         'export' => array(
@@ -143,14 +143,14 @@ do {
         ),
     );
 
-    $spider = new phpspider($configs);
+    $spider = new topspider($configs);
 
-    $spider->on_start = function ($phpspider) {
+    $spider->on_start = function ($topspider) {
         // add_sacn_url 没有URL去重机制，可用作增量更新
-        $phpspider->add_scan_url("http://www.stcn.com/article/list/yw.html");
-        $phpspider->add_scan_url("http://www.stcn.com/article/list/kx.html");
-        $phpspider->add_scan_url("http://www.stcn.com/article/list/company.html");
-        $phpspider->add_scan_url("http://www.stcn.com/article/list/gsxw.html");
+        $topspider->add_scan_url("http://www.stcn.com/article/list/yw.html");
+        $topspider->add_scan_url("http://www.stcn.com/article/list/kx.html");
+        $topspider->add_scan_url("http://www.stcn.com/article/list/company.html");
+        $topspider->add_scan_url("http://www.stcn.com/article/list/gsxw.html");
     };
 
     $spider->on_extract_field = function ($fieldname, $data, $page) {
@@ -178,7 +178,7 @@ do {
 
     $configs = array(
         'name' => 'cnstock.com',
-        'log_show' => true, // 查看日志tail -f data/phpspider.log
+        'log_show' => true, // 查看日志tail -f data/topspider.log
         //'log_type' => 'error,debug',
         'multiserver' => true,
         'serverid' => 1,
@@ -190,7 +190,7 @@ do {
             'port'      => 6379,
             'pass'      => '',
             'db'        => 5,
-            'prefix'    => 'phpspider',
+            'prefix'    => 'topspider',
             'timeout'   => 30,
         ),
         'max_try' => 5, // 爬虫爬取每个网页失败后尝试次数
@@ -268,10 +268,10 @@ do {
             ),
         ),
     );
-    $spider = new phpspider($configs);
-    $spider->on_start = function ($phpspider) {
+    $spider = new topspider($configs);
+    $spider->on_start = function ($topspider) {
         // add_sacn_url 没有URL去重机制，可用作增量更新
-        $phpspider->add_scan_url("https://news.cnstock.com/news/sns_jg/index.html");
+        $topspider->add_scan_url("https://news.cnstock.com/news/sns_jg/index.html");
     };
     $spider->on_extract_field = function (
         $fieldname,
@@ -387,7 +387,7 @@ function on_extract_field_cnstock($fieldname, $data, $page)
 //     ),
 // );
 
-// $spider->on_list_page = function($page, $content, $phpspider) 
+// $spider->on_list_page = function($page, $content, $topspider) 
 // {
 //     // 在列表页中通过XPath提取到内容页URL
 //     $content_url = selector::select($content, "//a[contains(@class,'s xst')]/@href");
@@ -401,7 +401,7 @@ function on_extract_field_cnstock($fieldname, $data, $page)
 //         'context_data' => $page_views,
 //     );
 
-//     $phpspider->add_url($content_url, $options);
+//     $topspider->add_url($content_url, $options);
 //     // 返回true继续提取其他列表页URL
 //     return true;
 // };

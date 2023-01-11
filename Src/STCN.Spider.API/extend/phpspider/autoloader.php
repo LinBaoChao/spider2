@@ -1,6 +1,6 @@
 <?php
 
-namespace phpspider;
+namespace topspider;
 
 /**
  * autoloader.
@@ -35,9 +35,9 @@ class autoloader
     {
         $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $name);
 
-        if (strpos($name, 'phpspider\\') === 0) 
+        if (strpos($name, 'topspider\\') === 0) 
         {
-            $class_file = __DIR__ . substr($class_path, strlen('phpspider')) . '.php';
+            $class_file = __DIR__ . substr($class_path, strlen('topspider')) . '.php';
         }
         else 
         {
@@ -63,4 +63,4 @@ class autoloader
     }
 }
 
-spl_autoload_register('\phpspider\autoloader::load_by_namespace', true, true);
+spl_autoload_register('\topspider\autoloader::load_by_namespace', true, true);

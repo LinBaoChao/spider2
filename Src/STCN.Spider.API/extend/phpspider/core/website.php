@@ -1,9 +1,9 @@
 <?php
 // [ A PHP Framework For Crawler ]
 
-namespace phpspider\core;
+namespace topspider\core;
 
-use phpspider\core\util;
+use topspider\core\util;
 
 class website
 {

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../autoloader.php';
-use phpspider\core\phpspider;
-use phpspider\core\requests;
+use topspider\core\topspider;
+use topspider\core\requests;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -51,14 +51,14 @@ $configs = array(
     ),
 );
 
-$spider = new phpspider($configs);
+$spider = new topspider($configs);
 
-$spider->on_start = function($phpspider) 
+$spider->on_start = function($topspider) 
 {
     requests::set_header('Referer','http://www.mafengwo.cn/mdd/citylist/21536.html');
 };
 
-$spider->on_scan_page = function($page, $content, $phpspider) 
+$spider->on_scan_page = function($page, $content, $topspider) 
 {
     //for ($i = 0; $i < 298; $i++) 
     //测试的时候先采集一个国家，要不然等的时间太长
@@ -73,11 +73,11 @@ $spider->on_scan_page = function($page, $content, $phpspider)
                 'page'=>$i,
             )
         );
-        $phpspider->add_url($url, $options);
+        $topspider->add_url($url, $options);
     }
 };
 
-$spider->on_list_page = function($page, $content, $phpspider) 
+$spider->on_list_page = function($page, $content, $topspider) 
 {
     // 如果是城市列表页
     if (preg_match("#pagedata_citylist#", $page['request']['url']))
@@ -103,7 +103,7 @@ $spider->on_list_page = function($page, $content, $phpspider)
                         'page'=>1,
                     )
                 );
-                $phpspider->add_url($url, $options);
+                $topspider->add_url($url, $options);
             }
         }
     }
@@ -136,7 +136,7 @@ $spider->on_list_page = function($page, $content, $phpspider)
                             'page'=>$i,
                         )
                     );
-                    $phpspider->add_url($url, $options);
+                    $topspider->add_url($url, $options);
                 }
             }
         }
@@ -148,7 +148,7 @@ $spider->on_list_page = function($page, $content, $phpspider)
             foreach ($out[1] as $v) 
             {
                 $url = "http://www.mafengwo.cn/i/{$v}.html";
-                $phpspider->add_url($url);
+                $topspider->add_url($url);
             }
         }
 

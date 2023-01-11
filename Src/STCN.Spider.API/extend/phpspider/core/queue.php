@@ -3,7 +3,7 @@
 // Redis操作类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 
 use Exception;
 use Redis;
@@ -25,7 +25,7 @@ class queue
     /**
      *  默认redis前缀
      */
-    public static $prefix = 'phpspider';
+    public static $prefix = 'topspider';
 
     public static $error = '';
 

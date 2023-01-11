@@ -1,5 +1,5 @@
 <?php
-use phpspider\core\selector;
+use topspider\core\selector;
 use think\helper\Str;
 //var_dump(__DIR__);
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -51,10 +51,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // $result = $db->select("SELECT * FROM sentiment_tmp LIMIT 100");
 // print_r($result->fetchOne());
 
-require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+require_once __DIR__ . '/../extend/topspider/autoloader.php';
 
-use phpspider\core\log;
-use phpspider\core\website;
+use topspider\core\log;
+use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
 $url = "https://www.bjnews.com.cn/detail/1673266755169216.html";

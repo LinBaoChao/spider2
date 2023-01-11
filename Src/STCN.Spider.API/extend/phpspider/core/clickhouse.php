@@ -1,13 +1,13 @@
 <?php
 
-namespace phpspider\core;
+namespace topspider\core;
 
 require_once __DIR__ . '../../../phpclickhouse/include.php';
 //require_once __DIR__ . '/../vendor/autoload.php';
 
 use ClickHouseDB\Client;
-use phpspider\core\log;
-use phpspider\core\util;
+use topspider\core\log;
+use topspider\core\util;
 
 class clickhouse
 {

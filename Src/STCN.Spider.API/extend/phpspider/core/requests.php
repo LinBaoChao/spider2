@@ -20,7 +20,7 @@
 // | file_get_contents('php://input')
 // +----------------------------------------------------------------------
 // | POST 文件上传
-// | $data = array('file1'=>''./data/phpspider.log'');
+// | $data = array('file1'=>''./data/topspider.log'');
 // | requests::post('http://www.test.com', null, $data);
 // | SERVER
 // | $_FILES
@@ -34,7 +34,7 @@
 // 请求类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 
 if (!function_exists('curl_file_create')) 
 {
@@ -514,7 +514,7 @@ class requests
             self::$ch = curl_init ();
             curl_setopt( self::$ch, CURLOPT_RETURNTRANSFER, true );
             curl_setopt( self::$ch, CURLOPT_HEADER, false );
-            curl_setopt( self::$ch, CURLOPT_USERAGENT, "phpspider-requests/".self::VERSION );
+            curl_setopt( self::$ch, CURLOPT_USERAGENT, "topspider-requests/".self::VERSION );
             // 如果设置了两个时间，就分开设置
             if (is_array(self::$timeout)) 
             {

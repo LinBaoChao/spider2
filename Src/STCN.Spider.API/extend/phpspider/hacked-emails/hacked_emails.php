@@ -1,8 +1,8 @@
 <?php
 ini_set("memory_limit", "10240M");
 require_once __DIR__ . '/../autoloader.php';
-use phpspider\core\requests;
-use phpspider\core\selector;
+use topspider\core\requests;
+use topspider\core\selector;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */

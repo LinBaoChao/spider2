@@ -21,10 +21,10 @@ class WebsiteService
     // 'max_fields' => 100, // 爬虫爬取内容网页最大条数 抓取到一定的字段后退出 默认值为0，即不限制
 
     // 随机浏览器类型，用于破解防采集
-    // phpspider::AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
-    // phpspider::AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器
-    // phpspider::AGENT_PC, 表示爬虫爬取网页时, 使用PC浏览器
-    // phpspider::AGENT_MOBILE, 表示爬虫爬取网页时, 使用移动设备浏览器
+    // topspider::AGENT_ANDROID, 表示爬虫爬取网页时, 使用安卓手机浏览器
+    // topspider::AGENT_IOS, 表示爬虫爬取网页时, 使用苹果手机浏览器
+    // topspider::AGENT_PC, 表示爬虫爬取网页时, 使用PC浏览器
+    // topspider::AGENT_MOBILE, 表示爬虫爬取网页时, 使用移动设备浏览器
     // 'user_agent' => array(
     //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
     //     "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
@@ -56,7 +56,7 @@ class WebsiteService
 
     // $configs = array(
     //         'name' => 'stcn.com',
-    //         'log_show' => true, // 查看日志tail -f data/phpspider.log
+    //         'log_show' => true, // 查看日志tail -f data/topspider.log
     //         'log_file' => 'data/qiushibaike.log',
     //         'log_type' => 'error,debug,info,warn',
     //         'input_encoding' => 'GB2312',
@@ -71,7 +71,7 @@ class WebsiteService
     //             'port'      => 6379,
     //             'pass'      => '',
     //             'db'        => 5,
-    //             'prefix'    => 'phpspider',
+    //             'prefix'    => 'topspider',
     //             'timeout'   => 30,
     //         ),
     //         'proxy' => array('http://user:pass@host:port'),

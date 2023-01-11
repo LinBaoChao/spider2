@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+require_once __DIR__ . '/../extend/topspider/autoloader.php';
 //require_once __DIR__ . '/../vendor/autoload.php';
 
-use phpspider\core\phpspider;
-use phpspider\core\selector;
-use phpspider\core\website;
-use phpspider\core\log;
-use phpspider\core\util;
+use topspider\core\topspider;
+use topspider\core\selector;
+use topspider\core\website;
+use topspider\core\log;
+use topspider\core\util;
 
 ignore_user_abort();
 set_time_limit(0);
@@ -45,8 +45,8 @@ function runSpider()
                     try {
                         // test
                         $config['click_house'] = $clickhouse;
-                        
-                        $spider = new phpspider($config);
+
+                        $spider = new topspider($config);
 
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
                         $spider->on_status_code = 'on_status_code'; // 总处理反爬
@@ -115,12 +115,12 @@ function runSpider()
 
                             $head = <<<STR
                             <?php
-                            require_once __DIR__ . '/../extend/phpspider/autoloader.php';
-                            use phpspider\core\phpspider;
-                            use phpspider\core\selector;
-                            use phpspider\core\website;
-                            use phpspider\core\log;
-                            use phpspider\core\util;
+                            require_once __DIR__ . '/../extend/topspider/autoloader.php';
+                            use topspider\core\topspider;
+                            use topspider\core\selector;
+                            use topspider\core\website;
+                            use topspider\core\log;
+                            use topspider\core\util;
 
                             STR;
 
@@ -157,15 +157,15 @@ runSpider();
  * @param mixed $status_code
  * @param mixed $url
  * @param mixed $content
- * @param mixed $phpspider
+ * @param mixed $topspider
  * @return mixed
  */
-function on_status_code($status_code, $url, $content, $phpspider)
+function on_status_code($status_code, $url, $content, $topspider)
 {
     // 如果状态码为429，说明对方网站设置了不让同一个客户端同时请求太多次
     if ($status_code == '429') {
         // 将url插入待爬的队列中,等待再次爬取
-        $phpspider->add_url($url);
+        $topspider->add_url($url);
         // 当前页先不处理了
         return false;
     }
@@ -177,15 +177,15 @@ function on_status_code($status_code, $url, $content, $phpspider)
  * Summary of is_anti_spider
  * @param mixed $url
  * @param mixed $content
- * @param mixed $phpspider
+ * @param mixed $topspider
  * @return bool
  */
-function is_anti_spider($url, $content, $phpspider)
+function is_anti_spider($url, $content, $topspider)
 {
     // $content中包含"404页面不存在"字符串
     if (strpos($content, "404页面不存在") !== false) {
         // 如果使用了代理IP，IP切换需要时间，这里可以添加到队列等下次换了IP再抓取
-        $phpspider->add_url($url);
+        $topspider->add_url($url);
         return true; // 告诉框架网页被反爬虫了，不要继续处理它
     }
     // 当前页面没有被反爬虫，可以继续处理

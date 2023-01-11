@@ -3,7 +3,7 @@
 // 数据库类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 
 class db
 {

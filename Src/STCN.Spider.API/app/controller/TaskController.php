@@ -4,11 +4,11 @@
 
 namespace app\controller;
 
-//require_once '/extend/phpspider/autoloader.php';
+//require_once '/extend/topspider/autoloader.php';
 
 use app\BaseController;
-use phpspider\core\phpspider;
-use phpspider\core\selector;
+use topspider\core\topspider;
+use topspider\core\selector;
 
 class TaskController extends BaseController
 {
@@ -23,7 +23,7 @@ class TaskController extends BaseController
         do {
             $configs = array(
                 'name' => 'stcn.com',
-                'log_show' => true, // 查看日志tail -f data/phpspider.log
+                'log_show' => true, // 查看日志tail -f data/topspider.log
                 //'log_type' => 'error,debug',
                 'multiserver' => true,
                 'serverid' => 1,
@@ -36,7 +36,7 @@ class TaskController extends BaseController
                     'port'      => 6379,
                     'pass'      => '',
                     'db'        => 5,
-                    'prefix'    => 'phpspider',
+                    'prefix'    => 'topspider',
                     'timeout'   => 30,
                 ),
                 'export' => array(
@@ -115,14 +115,14 @@ class TaskController extends BaseController
                 ),
             );
 
-            $spider = new phpspider($configs);
+            $spider = new topspider($configs);
 
-            $spider->on_start = function ($phpspider) {
+            $spider->on_start = function ($topspider) {
                 // add_sacn_url 没有URL去重机制，可用作增量更新
-                $phpspider->add_scan_url("http://www.stcn.com/article/list/yw.html");
-                $phpspider->add_scan_url("http://www.stcn.com/article/list/kx.html");
-                $phpspider->add_scan_url("http://www.stcn.com/article/list/company.html");
-                $phpspider->add_scan_url("http://www.stcn.com/article/list/gsxw.html");
+                $topspider->add_scan_url("http://www.stcn.com/article/list/yw.html");
+                $topspider->add_scan_url("http://www.stcn.com/article/list/kx.html");
+                $topspider->add_scan_url("http://www.stcn.com/article/list/company.html");
+                $topspider->add_scan_url("http://www.stcn.com/article/list/gsxw.html");
             };
 
             $spider->on_extract_field = function ($fieldname, $data, $page) {
@@ -150,7 +150,7 @@ class TaskController extends BaseController
 
             $configs = array(
                 'name' => 'cnstock.com',
-                'log_show' => true, // 查看日志tail -f data/phpspider.log
+                'log_show' => true, // 查看日志tail -f data/topspider.log
                 //'log_type' => 'error,debug',
                 'multiserver' => true,
                 'serverid' => 1,
@@ -162,7 +162,7 @@ class TaskController extends BaseController
                     'port'      => 6379,
                     'pass'      => '',
                     'db'        => 5,
-                    'prefix'    => 'phpspider',
+                    'prefix'    => 'topspider',
                     'timeout'   => 30,
                 ),
                 'max_try' => 5, // 爬虫爬取每个网页失败后尝试次数
@@ -238,10 +238,10 @@ class TaskController extends BaseController
                     ),
                 ),
             );
-            $spider = new phpspider($configs);
-            $spider->on_start = function ($phpspider) {
+            $spider = new topspider($configs);
+            $spider->on_start = function ($topspider) {
                 // add_sacn_url 没有URL去重机制，可用作增量更新
-                $phpspider->add_scan_url("https://news.cnstock.com/news/sns_jg/index.html");
+                $topspider->add_scan_url("https://news.cnstock.com/news/sns_jg/index.html");
             };
             $spider->on_extract_field = function (
                 $fieldname,

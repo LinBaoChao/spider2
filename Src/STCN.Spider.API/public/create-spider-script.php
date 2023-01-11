@@ -1,11 +1,11 @@
 <?php
-require_once __DIR__ . '/../extend/phpspider/autoloader.php';
+require_once __DIR__ . '/../extend/topspider/autoloader.php';
 
-use phpspider\core\phpspider;
-use phpspider\core\selector;
-use phpspider\core\website;
-use phpspider\core\log;
-use phpspider\core\util;
+use topspider\core\topspider;
+use topspider\core\selector;
+use topspider\core\website;
+use topspider\core\log;
+use topspider\core\util;
 
 ignore_user_abort();
 set_time_limit(0);
@@ -29,12 +29,12 @@ if (!empty($configs) && $configs['code'] == 'success') {
 
                 $head = <<<STR
                 <?php
-                require_once __DIR__ . '/../extend/phpspider/autoloader.php';
-                use phpspider\core\phpspider;
-                use phpspider\core\selector;
-                use phpspider\core\website;
-                use phpspider\core\log;
-                use phpspider\core\util;
+                require_once __DIR__ . '/../extend/topspider/autoloader.php';
+                use topspider\core\topspider;
+                use topspider\core\selector;
+                use topspider\core\website;
+                use topspider\core\log;
+                use topspider\core\util;
 
                 STR;
 

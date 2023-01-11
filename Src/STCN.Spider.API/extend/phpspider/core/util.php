@@ -3,7 +3,7 @@
 // 实用函数集合类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 // 引入PATH_DATA
 require_once __DIR__ . '/constants.php';
 

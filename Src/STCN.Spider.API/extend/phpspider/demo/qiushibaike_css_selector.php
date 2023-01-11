@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../autoloader.php';
-use phpspider\core\phpspider;
+use topspider\core\topspider;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -78,7 +78,7 @@ $configs = array(
     ),
 );
 
-$spider = new phpspider($configs);
+$spider = new topspider($configs);
 
 $spider->on_handle_img = function($fieldname, $img) 
 {

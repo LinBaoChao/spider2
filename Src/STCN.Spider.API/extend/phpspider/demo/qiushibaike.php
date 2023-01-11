@@ -7,7 +7,7 @@
 
 // GitHub下载方式
 require_once __DIR__ . '/../autoloader.php';
-use phpspider\core\phpspider;
+use topspider\core\topspider;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -59,7 +59,7 @@ $configs = array(
         'port'      => 6379,
         'pass'      => 'foobared',
         'db'        => 5,
-        'prefix'    => 'phpspider',
+        'prefix'    => 'topspider',
         'timeout'   => 30,
     ),
     'fields' => array(
@@ -96,7 +96,7 @@ $configs = array(
     ),
 );
 
-$spider = new phpspider($configs);
+$spider = new topspider($configs);
 
 $spider->on_handle_img = function($fieldname, $img) 
 {

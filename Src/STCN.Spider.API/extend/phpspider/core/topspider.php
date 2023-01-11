@@ -1,17 +1,17 @@
 <?php
 
-namespace phpspider\core;
+namespace topspider\core;
 
 require_once __DIR__ . '/constants.php';
 
 use Exception;
-use phpspider\core\db;
-use phpspider\core\log;
-use phpspider\core\queue;
-use phpspider\core\requests;
-use phpspider\core\selector;
-use phpspider\core\util;
-use phpspider\core\clickhouse;
+use topspider\core\db;
+use topspider\core\log;
+use topspider\core\queue;
+use topspider\core\requests;
+use topspider\core\selector;
+use topspider\core\util;
+use topspider\core\clickhouse;
 
 // 启动的时候生成data目录
 util::path_exists(PATH_DATA);
@@ -20,7 +20,7 @@ util::path_exists(PATH_DATA . '/log');
 util::path_exists(PATH_DATA . '/cache');
 util::path_exists(PATH_DATA . '/status');
 
-class phpspider
+class topspider
 {
     /**
      * 版本号
@@ -408,7 +408,7 @@ class phpspider
 
         // 先打开以显示验证报错内容
         log::$log_show = true;
-        log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_DATA . '/phpspider.log';
+        log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_DATA . '/topspider.log';
         log::$log_type = isset($configs['log_type']) ? $configs['log_type'] : false;
 
         // 彩蛋 lbc
@@ -421,7 +421,7 @@ class phpspider
         //     exit;
         // }
 
-        $configs['name']        = isset($configs['name'])        ? $configs['name']        : 'phpspider';
+        $configs['name']        = isset($configs['name'])        ? $configs['name']        : 'topspider';
         $configs['proxy']       = isset($configs['proxy'])       ? $configs['proxy']       : false;
         $configs['user_agent']  = isset($configs['user_agent'])  ? $configs['user_agent']  : self::AGENT_PC;
         $configs['client_ip']   = isset($configs['client_ip'])   ? $configs['client_ip']   : array();
@@ -714,7 +714,7 @@ class phpspider
 
         // 根据命令做相应处理
         switch ($command) {
-                // 启动 phpspider
+                // 启动 topspider
             case 'start':
                 if ($command2 === '-d') {
                     self::$daemonize = true;
@@ -723,10 +723,10 @@ class phpspider
             case 'stop':
                 exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}'", $info);
                 if (count($info) <= 1) {
-                    echo "PHPSpider[$start_file] not run\n";
+                    echo "TOPSpider[$start_file] not run\n";
                 } else {
-                    //echo "PHPSpider[$start_file] is stoping ...\n";
-                    echo "PHPSpider[$start_file] stop success";
+                    //echo "TOPSpider[$start_file] is stoping ...\n";
+                    echo "TOPSpider[$start_file] stop success";
                     exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}' |xargs kill -SIGINT", $info);
                 }
                 exit;
@@ -734,7 +734,7 @@ class phpspider
             case 'kill':
                 exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}' |xargs kill -SIGKILL");
                 break;
-                // 显示 phpspider 运行状态
+                // 显示 topspider 运行状态
             case 'status':
                 exit(0);
                 // 未知命令
@@ -968,8 +968,7 @@ class phpspider
             }
 
             $header .= "\n[ " . self::$configs['name'] . " Spider ] is started...\n\n";
-            $header .= '  * PHPSpider Version: ' . self::VERSION . "\n";
-            //$header .= "  * Documentation: https://doc.phpspider.org\n"; // lbc
+            $header .= '  * TOPSpider Version: ' . self::VERSION . "\n";
             $header .= '  * Task Number: ' . self::$tasknum . "\n\n";
             $header .= "Input \"php $start_file stop\" to quit. Start success.\n";
             if (!util::is_win()) {
@@ -2887,10 +2886,10 @@ class phpspider
         foreach ($loadavg as $k => $v) {
             $loadavg[$k] = round($v, 2);
         }
-        $display_str = "\033[1A\n\033[K-----------------------------\033[47;30m PHPSPIDER \033[0m-----------------------------\n\033[0m";
-        //$display_str = "-----------------------------\033[47;30m PHPSPIDER \033[0m-----------------------------\n\033[0m";
+        $display_str = "\033[1A\n\033[K-----------------------------\033[47;30m TOPSPIDER \033[0m-----------------------------\n\033[0m";
+        //$display_str = "-----------------------------\033[47;30m TOPSPIDER \033[0m-----------------------------\n\033[0m";
         $run_time_str = util::time2second(time() - self::$time_start, false);
-        $display_str .= 'PHPSpider version:' . self::VERSION . '          PHP version:' . PHP_VERSION . "\n";
+        $display_str .= 'TOPSPIDER version:' . self::VERSION . '          PHP version:' . PHP_VERSION . "\n";
         $display_str .= 'start time:' . date('Y-m-d H:i:s', self::$time_start) . '   run ' . $run_time_str . " \n";
 
         $display_str .= 'spider name: ' . self::$configs['name'] . "\n";
@@ -2899,7 +2898,6 @@ class phpspider
         }
         $display_str .= 'task number: ' . self::$tasknum . "\n";
         $display_str .= 'load average: ' . implode(', ', $loadavg) . "\n";
-        //$display_str .= "document: https://doc.phpspider.org\n";
 
         $display_str .= $this->display_task_ui();
 

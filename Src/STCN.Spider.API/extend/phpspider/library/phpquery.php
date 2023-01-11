@@ -12,7 +12,7 @@
  * @package phpQuery
  */
 
-namespace phpspider\library;
+namespace topspider\library;
 use DOMDocument;
 use DOMXpath;
 use Exception;

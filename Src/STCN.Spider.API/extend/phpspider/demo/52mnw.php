@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../autoloader.php';
-use phpspider\core\phpspider;
+use topspider\core\topspider;
 
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
@@ -61,14 +61,14 @@ $configs = array(
     ),
 );
 
-$spider = new phpspider($configs);
+$spider = new topspider($configs);
 
-$spider->on_start = function($phpspider)
+$spider->on_start = function($topspider)
 {
     for ($i = 2; $i <= 932; $i++) 
     {
         $url = "http://m.52mnw.cn/ikaimi/morepic.php?classid=6,7,8,10,11,15&line=10&order=newstime&page={$i}";
-        $phpspider->add_scan_url($url);
+        $topspider->add_scan_url($url);
     }
 };
 

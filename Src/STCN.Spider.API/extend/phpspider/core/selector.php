@@ -3,9 +3,9 @@
 // 选择器类文件
 //----------------------------------
 
-namespace phpspider\core;
+namespace topspider\core;
 
-use phpspider\library\phpquery;
+use topspider\library\phpquery;
 use DOMDocument;
 use DOMXpath;
 use Exception;
