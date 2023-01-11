@@ -1862,7 +1862,7 @@ class topspider
                         }
                     }                                       
                 }
-                unset($fieldscopy);
+                unset($fieldscopy); 
 
                 // log::add("filter after:" . var_export($fields, true), 'fields');
 

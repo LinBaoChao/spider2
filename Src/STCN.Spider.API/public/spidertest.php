@@ -116,7 +116,7 @@ function runSpider()
                             $head = <<<STR
                             <?php
                             require_once __DIR__ . '/../extend/topspider/autoloader.php';
-                            use topspider\core\topspider;
+                            use topspider\core\\topspider;
                             use topspider\core\selector;
                             use topspider\core\website;
                             use topspider\core\log;
