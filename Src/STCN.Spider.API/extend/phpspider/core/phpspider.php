@@ -1,22 +1,4 @@
 <?php
-// +----------------------------------------------------------------------
-// | PHPSpider [ A PHP Framework For Crawler ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 https://doc.phpspider.org All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: Seatle Yang <seatle@foxmail.com>
-// +----------------------------------------------------------------------
-
-//----------------------------------
-// PHPSpider核心类文件
-// ***********
-// 泛域名抓取优化版 BY KEN a-site@foxmail.com
-// ***********
-// * 泛域名设置：domain = array('*')
-// * 增加子域名数量限制 $max_sub_num = 100
-//----------------------------------
 
 namespace phpspider\core;
 
@@ -203,43 +185,43 @@ class phpspider
     public static $fields_num = 0;
 
     /**
-     * 【KEN】提取到的页面数按域名计数容器 结构为 domain => number
+     * 提取到的页面数按域名计数容器 结构为 domain => number
      */
     public static $pages_num = array();
 
     /**
-     * 【KEN】单域名允许抓取的最大页面数,0为不限制
+     * 单域名允许抓取的最大页面数,0为不限制
      */
     public static $max_pages = 0;
 
     /**
-     * 【KEN】花费的抓取时长计数容器 结构为 domain => number
+     * 花费的抓取时长计数容器 结构为 domain => number
      */
     public static $duration = array();
 
     /**
-     * 【KEN】单域名允许抓取的最大时长，单位秒,0为不限制
+     * 单域名允许抓取的最大时长，单位秒,0为不限制
      */
     public static $max_duration = 0;
 
     /**
-     * 【KEN】单域名最大子域名发现数量 防止掉进蜘蛛池，推荐值：3000（多数大型网站上限）
+     * 单域名最大子域名发现数量 防止掉进蜘蛛池，推荐值：3000（多数大型网站上限）
      */
     public static $max_sub_num = 3000; //建议值 3000
 
     /**
-     * 【KEN】子进程未获取任务，超时退出前，等待计时器
+     * 子进程未获取任务，超时退出前，等待计时器
      */
 
     public static $stand_by_time = 0;
 
     /**
-     * 【KEN】子进程未获取任务，超时退出前，最大等待时长/秒，全部任务束后，子进程将会等待的时间，以便有缓冲时间，获得新的任务
+     * 子进程未获取任务，超时退出前，最大等待时长/秒，全部任务束后，子进程将会等待的时间，以便有缓冲时间，获得新的任务
      */
     public static $max_stand_by_time = 60; //建议值 60
 
     /**
-     * 【KEN】每个主机并发上限，降低对方网站流量压力和减少被阻挡概率，建议值 6 ，须与 queue_order = rand 一起使用
+     * 每个主机并发上限，降低对方网站流量压力和减少被阻挡概率，建议值 6 ，须与 queue_order = rand 一起使用
      */
     public static $max_task_per_host     = 0; //0值和非0值会使用不同类型的队列缓存库，从0改为非0值或从非0值改为0需清空队列缓存库再运行，否则任务无法添加
     public static $task_per_host_counter = array(); //计数容器
@@ -449,7 +431,7 @@ class phpspider
         $configs['max_depth']   = isset($configs['max_depth'])   ? $configs['max_depth']   : 0;
         $configs['max_fields']  = isset($configs['max_fields'])  ? $configs['max_fields']  : 0;
         $configs['export']      = isset($configs['export'])      ? $configs['export']      : array();
-        //新增参数 BY KEN <a-site@foxmail.com>
+        //新增参数
         $configs['max_pages']         = isset($configs['max_pages']) ? $configs['max_pages'] : self::$max_pages;
         $configs['max_duration']      = isset($configs['max_duration']) ? $configs['max_duration'] : self::$max_duration;
         $configs['max_sub_num']       = isset($configs['max_sub_num']) ? $configs['max_sub_num'] : self::$max_sub_num;
@@ -564,8 +546,6 @@ class phpspider
      * @param mixed $url
      * @param mixed $options
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function add_url($url, $options = array(), $depth = 0)
     {
@@ -612,8 +592,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-12 19:06
      */
     public function is_scan_page($url)
     {
@@ -634,8 +612,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-12 19:06
      */
     public function is_list_page($url)
     {
@@ -680,8 +656,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-12 19:06
      */
     public function is_content_page($url)
     {
@@ -845,8 +819,6 @@ class phpspider
      * 检查是否终止当前进程
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function check_terminate()
     {
@@ -1165,8 +1137,6 @@ class phpspider
      * 
      * @param mixed $collect_url    要抓取的链接
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function collect_page()
     {
@@ -1373,8 +1343,6 @@ class phpspider
      * @param mixed $url
      * @param mixed $link
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function request_url($url, $link = array())
     {
@@ -1423,7 +1391,7 @@ class phpspider
 
         $http_code = requests::$status_code;
 
-        // 请求完成 host 的并发计数减 1 2018-5 BY KEN <a-site@foxmail.com>
+        // 请求完成 host 的并发计数减 1
         if (self::$configs['max_task_per_host'] > 0) {
             $this->incr_task_per_host($url, 'decr');
         }
@@ -1492,8 +1460,6 @@ class phpspider
      * @param mixed $html           HTML内容
      * @param mixed $collect_url    抓取的URL, 用来拼凑完整页面的URL
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function get_urls($html, $collect_url, $depth = 0)
     {
@@ -1597,8 +1563,6 @@ class phpspider
      * @param mixed $url            要检查的URL
      * @param mixed $collect_url    从那个URL页面得到上面的URL
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function fill_url($url, $collect_url)
     {
@@ -1718,8 +1682,6 @@ class phpspider
      * 连接对象压缩
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-05 18:58
      */
     public function link_compress($link)
     {
@@ -1768,8 +1730,6 @@ class phpspider
      * 
      * @param mixed $link
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-05 18:58
      */
     public function link_uncompress($link)
     {
@@ -1794,8 +1754,6 @@ class phpspider
      * 
      * @param mixed $html
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function get_html_fields($html, $url, $page)
     {
@@ -1953,8 +1911,6 @@ class phpspider
      * @param mixed $html
      * @param mixed $page
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function get_fields($confs, $html, $url, $page)
     {
@@ -2183,8 +2139,6 @@ class phpspider
      * 验证导出
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-02 23:37
      */
     public function check_export()
     {
@@ -2285,8 +2239,6 @@ class phpspider
      * 设置任务状态, 主进程和子进程每成功采集一个页面后调用
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-30 23:56
      */
     public function set_task_status()
     {
@@ -2316,8 +2268,6 @@ class phpspider
      * 删除任务状态
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function del_task_status($serverid, $taskid)
     {
@@ -2332,8 +2282,6 @@ class phpspider
      * 获得任务状态, 主进程才会调用
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-30 23:56
      */
     public function get_task_status($serverid, $taskid)
     {
@@ -2350,8 +2298,6 @@ class phpspider
      * 获得任务状态, 主进程才会调用
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-30 23:56
      */
     public function get_task_status_list($serverid = 1, $tasknum)
     {
@@ -2371,8 +2317,6 @@ class phpspider
      * 添加当前服务器信息到服务器列表
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function add_server_list($serverid, $tasknum)
     {
@@ -2405,8 +2349,6 @@ class phpspider
      * 从服务器列表中删除当前服务器信息
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function del_server_list($serverid)
     {
@@ -2435,8 +2377,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function get_collect_url_num()
     {
@@ -2453,8 +2393,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function get_collected_url_num()
     {
@@ -2471,8 +2409,6 @@ class phpspider
      * 
      * @param mixed $url
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function incr_collected_url_num($url)
     {
@@ -2487,8 +2423,6 @@ class phpspider
      * 从队列左边插入
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function queue_lpush($link = array(), $allowed_repeat = false)
     {
@@ -2543,8 +2477,6 @@ class phpspider
      * 从队列右边插入
      *
      * @return void
-     * @author seatle <seatle@foxmail.com>
-     * @created time :2016-09-23 17:13
      */
     public function queue_rpush($link = array(), $allowed_repeat = false)
     {
@@ -2569,7 +2501,7 @@ class phpspider
                     queue::set($key, time());
                     // 入队列
                     $link = json_encode($link);
-                    //根据采集设置为顺序采集还是随机采集，使用列表或集合对象 2018-5 BY KEN <a-site@foxmail.com>
+                    //根据采集设置为顺序采集还是随机采集，使用列表或集合对象
                     if (self::$configs['queue_order'] == 'rand') {
                         queue::sadd('collect_queue', $link); //无序集合
                     } else {
@@ -2598,8 +2530,6 @@ class phpspider
      * 从队列右边取出
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function queue_rpop()
     {
@@ -2621,8 +2551,6 @@ class phpspider
      * 队列长度
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function queue_lsize()
     {
@@ -2643,8 +2571,6 @@ class phpspider
      * 采集深度加一
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function incr_depth_num($depth)
     {
@@ -2669,8 +2595,6 @@ class phpspider
      * 获得采集深度
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function get_depth_num()
     {
@@ -2686,8 +2610,6 @@ class phpspider
      * 提取到的field数目加一
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function incr_fields_num()
     {
@@ -2704,8 +2626,6 @@ class phpspider
      * 提取到的field数目
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     public function get_fields_num()
     {
@@ -2721,8 +2641,6 @@ class phpspider
      * 提取到的pages数目加一，用于限制单域名采集页数上限
      *
      * @return void
-     * @author KEN <a-site@foxmail.com>
-     * @created time :2018-05
      */
     public function incr_pages_num($url = '')
     {
@@ -2749,8 +2667,6 @@ class phpspider
      * 超过1秒的慢速采集时间计数，用于限制单域名总采集时间上限
      *
      * @return void
-     * @author KEN <a-site@foxmail.com>
-     * @created time :2018-05
      */
     public function incr_duration_num($url = '', $time_run = 1)
     {
@@ -2777,8 +2693,6 @@ class phpspider
      * 读取单域名总慢速采集（响应超过1秒）的时间
      *
      * @return void
-     * @author KEN <a-site@foxmail.com>
-     * @created time :2018-04
      */
     public function get_duration_num($url = '')
     {
@@ -2799,8 +2713,6 @@ class phpspider
     /**
      * 单 host 当前并发计数
      * @return int
-     * @author KEN <a-site@foxmail.com>
-     * @created time :2018-05-28 16:40
      */
     public function incr_task_per_host($url = '', $type = 'incr')
     {
@@ -2833,7 +2745,7 @@ class phpspider
         return $task_per_host_counter[$domain];
     }
 
-    //获取url所属 host 当前并发数量 KEN <a-site@foxmail.com>
+    //获取url所属 host 当前并发数量
     public function get_task_per_host_num($url)
     {
         if (empty($url)) {
@@ -2857,8 +2769,6 @@ class phpspider
      * @param mixed $html
      * @param mixed $selector
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function get_fields_xpath($html, $selector, $fieldname)
     {
@@ -2875,8 +2785,6 @@ class phpspider
      * @param mixed $html
      * @param mixed $selector
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function get_fields_regex($html, $selector, $fieldname)
     {
@@ -2894,8 +2802,6 @@ class phpspider
      * @param mixed $selector
      * @param mixed $fieldname
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public function get_fields_css($html, $selector, $fieldname)
     {
@@ -2910,8 +2816,6 @@ class phpspider
      * 清空shell输出内容
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function clear_echo()
     {
@@ -2928,8 +2832,6 @@ class phpspider
      * @param mixed $message
      * @param mixed $force_clear_lines
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-11-16 11:06
      */
     public function replace_echo($message, $force_clear_lines = NULL)
     {
@@ -3122,8 +3024,6 @@ class phpspider
      * 判断是否附件文件
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-23 17:13
      */
     //public function is_attachment_file($url)
     //{

@@ -1,4 +1,5 @@
 <?php
+// [ A PHP Framework For Crawler ]
 
 namespace phpspider\core;
 

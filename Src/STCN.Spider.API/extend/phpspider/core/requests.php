@@ -1,15 +1,5 @@
 <?php
 // +----------------------------------------------------------------------
-// | PHPSpider [ A PHP Framework For Crawler ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 https://doc.phpspider.org All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: Seatle Yang <seatle@foxmail.com>
-// +----------------------------------------------------------------------
-
-// +----------------------------------------------------------------------
 // | GET请求
 // | requests::get('http://www.test.com');
 // | SERVER
@@ -41,7 +31,7 @@
 // +----------------------------------------------------------------------
 
 //----------------------------------
-// PHPSpider请求类文件
+// 请求类文件
 //----------------------------------
 
 namespace phpspider\core;
@@ -110,8 +100,6 @@ class requests
      *    'socks5://user2:pass2@host:port'
      *)
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-09-18 10:17
      */
     public static function set_proxy($proxy)
     {
@@ -123,8 +111,6 @@ class requests
      * 因为每个链接信息里面都有代理信息，有的链接需要，有的不需要，所以必须提供一个删除功能
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2018-07-16 17:59
      */
     public static function del_proxy()
     {
@@ -173,8 +159,6 @@ class requests
      * @param mixed $cookies
      * @param string $domain
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function set_cookies($cookies, $domain = '')
     {
@@ -208,8 +192,6 @@ class requests
      * @param mixed $name    cookie名称
      * @param string $domain 不传则取全局cookie，就是手动set_cookie的cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function get_cookie($name, $domain = '')
     {
@@ -226,8 +208,6 @@ class requests
      * 
      * @param string $domain 不传则取全局cookie，就是手动set_cookie的cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function get_cookies($domain = '')
     {
@@ -243,8 +223,6 @@ class requests
      * 
      * @param string $domain  不传则删除全局Cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function del_cookie($key, $domain = '')
     {
@@ -280,8 +258,6 @@ class requests
      * 
      * @param string $domain  不传则删除全局Cookie
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function del_cookies($domain = '')
     {
@@ -338,8 +314,6 @@ class requests
      * 删除伪造IP
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2018-07-16 17:59
      */
     public static function del_client_ip()
     {
@@ -376,8 +350,6 @@ class requests
      * body用来判断编码，得到编码前和编码后的内容
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function split_header_body()
     {
@@ -430,8 +402,6 @@ class requests
      * @param mixed $header
      * @param mixed $domain
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function get_response_cookies($header, $domain)
     {
@@ -473,8 +443,6 @@ class requests
      * 
      * @param mixed $header
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function get_response_headers($header)
     {
@@ -639,8 +607,6 @@ class requests
      * @param array $files      上传文件
      * @param mixed $cert       CA证书
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function request($url, $method = 'GET', $fields = array(), $files = array(), $allow_redirects = true, $cert = NULL)
     {
@@ -876,8 +842,6 @@ class requests
      * @param mixed $post_fields
      * @param mixed $file_fields
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2017-08-03 18:06
      */
     public static function get_postfile_form($post_fields, $file_fields)
     {

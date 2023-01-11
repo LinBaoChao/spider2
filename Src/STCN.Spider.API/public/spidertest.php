@@ -24,15 +24,28 @@ function runSpider()
     $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
 
     // 轮询间隔 秒
-    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 60 * 2;
+    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 30;
+
+    // test db
+    $clickhouse = array(
+        'host' => '10.254.15.57',
+        'port' => '8123',
+        'username' => 'linbaocao',
+        'password' => '345556',
+        'dbname' => 'sentiment_db',
+        'table' => 'sentiment_tmp', // 'sentiment_tmp sentiment_t',
+    );
 
     do {
         try {
-            $configs = website::getWebsiteConfig('cznews', 0);
+            $configs = website::getWebsiteConfig('zjknews', 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
+                        // test
+                        $config['click_house'] = $clickhouse;
+                        
                         $spider = new phpspider($config);
 
                         // 统一处理，如果设置了个性处理，下面会替换成设置的

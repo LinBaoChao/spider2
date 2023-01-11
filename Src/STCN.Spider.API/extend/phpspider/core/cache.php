@@ -1,16 +1,7 @@
 <?php
-// +----------------------------------------------------------------------
-// | PHPSpider [ A PHP Framework For Crawler ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 https://doc.phpspider.org All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: Seatle Yang <seatle@foxmail.com>
-// +----------------------------------------------------------------------
 
 //----------------------------------
-// PHPSpider缓存类文件
+// 缓存类文件
 //----------------------------------
 
 class cache
@@ -21,8 +12,6 @@ class cache
      * 获取实例
      * 
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-04-10 22:55
      */
     public static function init()
     {

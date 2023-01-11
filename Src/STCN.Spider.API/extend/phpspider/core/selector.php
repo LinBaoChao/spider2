@@ -1,16 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | PHPSpider [ A PHP Framework For Crawler ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 https://doc.phpspider.org All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: Seatle Yang <seatle@foxmail.com>
-// +----------------------------------------------------------------------
-
 //----------------------------------
-// PHPSpider选择器类文件
+// 选择器类文件
 //----------------------------------
 
 namespace phpspider\core;
@@ -87,8 +77,6 @@ class selector
      * @param mixed $html
      * @param mixed $selector
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-26 12:53
      */
     private static function _xpath_select($html, $selector, $remove = false)
     {
@@ -175,8 +163,6 @@ class selector
      * @param mixed $html
      * @param mixed $selector
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-26 12:53
      */
     private static function _css_select($html, $selector, $remove = false)
     {
@@ -206,8 +192,6 @@ class selector
      * @param mixed $html
      * @param mixed $selector
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-10-26 12:53
      */
     private static function _regex_select($html, $selector, $remove = false)
     {

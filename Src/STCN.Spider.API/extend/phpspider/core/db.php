@@ -1,16 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | PHPSpider [ A PHP Framework For Crawler ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 https://doc.phpspider.org All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: Seatle Yang <seatle@foxmail.com>
-// +----------------------------------------------------------------------
-
 //----------------------------------
-// PHPSpider数据库类文件
+// 数据库类文件
 //----------------------------------
 
 namespace phpspider\core;
@@ -76,8 +66,6 @@ class db
      * 
      * @param array $config
      * @return void
-     * @author seatle <seatle@foxmail.com> 
-     * @created time :2016-03-29 00:51
      */
     public static function clear_link()
     {

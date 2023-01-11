@@ -55,7 +55,7 @@ return [
         'username' => 'linbaocao',
         'password' => '345556',
         'dbname' => 'sentiment_db',
-        'table' => 'sentiment_tmp', // 'sentiment_tmp sentiment_t',
+        'table' => 'sentiment_t', // 'sentiment_tmp sentiment_t',
     ),
 
     // 反爬
@@ -68,5 +68,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 60 * 2, // 单位秒，爬虫轮询周期，一般2小时
+    'sleep_seconds' => 60 * 30, // 单位秒，爬虫轮询周期，一般半小时
 ];
