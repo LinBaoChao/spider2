@@ -4,15 +4,15 @@
 //----------------------------------
 
 namespace topspider\core;
-// 引入PATH_DATA
+// 引入PATH_LOG
 require_once __DIR__ . '/constants.php';
 
 class log
 {
     public static $log_show = false;
     public static $log_type = false;
-    public static $log_file = "data/topspider.log";
-    public static $file_path = "/log/";
+    public static $log_file = PATH_LOG . "/topspider.log";
+    public static $file_path = PATH_LOG . "/spider/";
     public static $out_sta = "";
     public static $out_end = "";
 
@@ -84,7 +84,7 @@ class log
             echo $msg;
         }
 
-        $path = PATH_DATA . self::$file_path . date('Ymd') . '/';
+        $path = self::$file_path . date('Ymd') . '/';
         util::path_exists($path);
         file_put_contents($path . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
         //file_put_contents(self::$log_file, $msg, FILE_APPEND | LOCK_EX); // lbc todo add to db and trace
@@ -107,7 +107,7 @@ class log
             echo $msg;
         }
 
-        $path = PATH_DATA . self::$file_path . date('Ymd') . '/';
+        $path = self::$file_path . date('Ymd') . '/';
         util::path_exists($path);
         file_put_contents($path . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
     }

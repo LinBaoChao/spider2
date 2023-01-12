@@ -19,3 +19,4 @@ stcn@2022
 外网ip:cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com 用于DBeaver客户端查看数据
 普通账号：stcn_influence_dev
 密码：NC95XPRyzodLuvB
+写入阿里云clickhouse的生产库的程序先暂停，改成sentiment_dbd数据库 sentiment_t_distributed为正式生产表。后面数据都写入这个正式生产表。

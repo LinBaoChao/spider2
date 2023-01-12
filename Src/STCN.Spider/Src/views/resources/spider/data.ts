@@ -37,7 +37,7 @@ export const columns: BasicColumn[] = [
   {
     title: '媒体',
     dataIndex: 'pubMediaName',
-    width: 80,
+    width: 100,
   },
   {
     title: '子媒',

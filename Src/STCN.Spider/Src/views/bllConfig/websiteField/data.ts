@@ -155,7 +155,7 @@ export const formSchema: FormSchema[] = [
     defaultValue: 'xpath',
     helpMessage: [
       '多个用【分割，顺序与抽取规则对应',
-      '默认xpath，目前可用有xpath, css, regex, self',
+      '默认xpath，目前可用有xpath, css, regex, jsonpath, self',
     ],
   },
   // {

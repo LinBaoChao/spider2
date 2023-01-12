@@ -16,7 +16,7 @@ use topspider\core\clickhouse;
 // 启动的时候生成data目录
 util::path_exists(PATH_DATA);
 util::path_exists(PATH_DATA . '/lock');
-util::path_exists(PATH_DATA . '/log');
+util::path_exists(PATH_LOG);
 util::path_exists(PATH_DATA . '/cache');
 util::path_exists(PATH_DATA . '/status');
 
@@ -26,7 +26,7 @@ class topspider
      * 版本号
      * @var string
      */
-    const VERSION = '2.1.5';
+    const VERSION = '1.0.0';
 
     /**
      * 爬虫爬取每个网页的时间间隔,0表示不延时, 单位: 毫秒
@@ -408,7 +408,7 @@ class topspider
 
         // 先打开以显示验证报错内容
         log::$log_show = true;
-        log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_DATA . '/topspider.log';
+        log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_LOG . '/topspider.log';
         log::$log_type = isset($configs['log_type']) ? $configs['log_type'] : false;
 
         // 彩蛋 lbc
@@ -2053,19 +2053,13 @@ class topspider
                                     // 等效于selector::remove,所以直接用下面的remove
                                     // if (@preg_match_all($filterstr, $filter_values, $out) === false) {
                                     // } else {
-                                    //     $filterval = preg_replace($filterstr, "", $filter_values);
-                                    //     if (!empty($filterval)) {
-                                    //         $filter_values = $filterval;
-                                    //     }
+                                    //     $filter_values = preg_replace($filterstr, "", $filter_values);
                                     // }
                                     // break;
                                 case 'xpath':
                                 case 'css':
                                     try {
-                                        $filterval = selector::remove($filter_values, $filterstr, $filtertype);
-                                        if (!empty($filterval)) {
-                                            $filter_values = $filterval;
-                                        }
+                                        $filter_values = selector::remove($filter_values, $filterstr, $filtertype);
                                     } catch (Exception $ex) {
                                         log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
                                     }

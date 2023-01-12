@@ -111,7 +111,7 @@ do {
         'fields' => array(
             array(
                 'name' => "source_title",
-                'selector' => "//h1[@id='content']//text()",
+                'selector' => "//div[@id='content']//text()",
                 'required' => true,
             ),
             array(
@@ -124,7 +124,11 @@ do {
                 'selector' => "//span[contains(@class,'timer')]",
                 'required' => true,
             ),
-
+            array(
+                'name' => "pub_channel_name",
+                'selector' => "//div[contains(@class,'breadcrumb')]//a[2]//text()",
+                'required' => true,
+            ),
             array(
                 'name' => "source_author",
                 'selector' => "//span[contains(@class,'reporter')]//em",
@@ -133,11 +137,6 @@ do {
             array(
                 'name' => "source_name",
                 'selector' => "//div[contains(@class,'detail-info')]//span[1]",
-                'required' => false,
-            ),
-            array(
-                'name' => "pub_channel_name",
-                'selector' => "//div[contains(@class,'breadcrumb')]//a[2]//text()",
                 'required' => false,
             ),
         ),
@@ -405,3 +404,36 @@ function on_extract_field_cnstock($fieldname, $data, $page)
 //     // 返回true继续提取其他列表页URL
 //     return true;
 // };
+
+// 举个栗子:
+// 当爬取的网页中某些内容需要异步加载请求时，就需要使用attached_url，比如，抓取知乎回答中的评论部分，就是通过AJAX异步请求的数据
+
+// array(
+//     'name' => "comment_id",
+//     'selector' => "//div/@data-aid",
+// ),
+// array(
+//     'name' => "comments",
+//     'source_type' => 'attached_url',
+//     // "comments"是从发送"attached_url"这个异步请求返回的数据中抽取的
+//     // "attachedUrl"支持引用上下文中的抓取到的"field", 这里就引用了上面抓取的"comment_id"
+//     'attached_url' => "https://www.zhihu.com/r/answers/{comment_id}/comments",
+//     'selector_type' => 'jsonpath'
+//     'selector' => "$.data",
+//     'repeated => true,
+//     'children' => array(
+//         ...
+//     )
+// }
+
+// XPATH的几个常用函数
+
+// 1.contains ()： //div[contains(@id, 'in')] ,表示选择id中包含有’in’的div节点
+
+// 2.text()：由于一个节点的文本值不属于属性，比如<a class=”baidu“ href=”http://www.baidu.com“>baidu</a>,所以，用text()函数来匹配节点：//a[text()='baidu']
+
+// 3.last()：//div[contains(@id, 'in')][las()]，表示选择id中包含有'in'的div节点的最后一个节点
+
+// 4.starts-with()： //div[starts-with(@id, 'in')] ，表示选择以’in’开头的id属性的div节点
+
+// 5.not()函数，表示否定，//input[@name=‘identity’ and not(contains(@class,‘a’))] ，表示匹配出name为identity并且class的值中不包含a的input节点。 not()函数通常与返回值为true or false的函数组合起来用，比如contains(),starts-with()等，但有一种特别情况请注意一下：我们要匹配出input节点含有id属性的，写法如下：//input[@id]，如果我们要匹配出input节点不含用id属性的，则为：//input[not(@id)]

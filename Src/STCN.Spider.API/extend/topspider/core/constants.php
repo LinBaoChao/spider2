@@ -35,6 +35,7 @@ define('CORE', dirname(__FILE__));
 define('PATH_ROOT', CORE."/../");
 define('PATH_DATA', CORE."/../data");
 define('PATH_LIBRARY', CORE."/../library");
+define('PATH_LOG', CORE . "/../../../runtime/log");
 
 //系统配置
 //if( file_exists( PATH_ROOT."/config/inc_config.php" ) )

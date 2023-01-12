@@ -1,4 +1,5 @@
 <?php
+use topspider\core\requests;
 use topspider\core\selector;
 use think\helper\Str;
 //var_dump(__DIR__);
@@ -57,15 +58,32 @@ use topspider\core\log;
 use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "https://www.bjnews.com.cn/detail/1673266755169216.html";
+$url = "https://www.hbynet.net/html/heqing/daohang/hebeixinwen/1613416671031275522.html";
 $data = website::httpRequest($url);
+// $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//div[@class='bodyTitle']//div[@class='content']//h1");
+//$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
+$data = selector::select($data, "//div[@class='current-position']/a[2]/text()");
 var_dump($data);
-// $a = explode(',', '<br>');
+$data = selector::remove($data, "/(<p>.*<\/p>)/", "regex");
+$data = str_replace("时间：", "", $data);
+var_dump(strip_tags(trim($data)));
+
+if (@preg_match_all("/(<p>.*<\/p>)/", $data, $out) === false) {
+    var_dump(false);
+}
+var_dump($out);
+// $a = explode('【', '/(.*来源：)/【');
+// var_dump($a);
 // var_dump(strip_tags($data, $a));
-$data = selector::remove($data, "/(.*来源：)/","regex");
-var_dump(strip_tags($data));
+// $data = selector::remove($data, "/(.*来源：)/","regex");
+// var_dump(strip_tags($data));
+
+// if (@preg_match_all("/(.*来源：)/", "2023-01-11 14:55:11  来源：", $out) === false) {
+//     var_dump(false);
+// }
+// var_dump($out);
+
 // $data = selector::remove("e责任编辑：林保最喜爱的3e字体：", "/责任编辑：(.+)字体/", "regex");
 // var_dump($data);
 // var_dump(@preg_match_all("/责任编辑：(.+)字体/", "
@@ -84,7 +102,45 @@ var_dump(strip_tags($data));
 // 字体：", "/(\r\n.+\r\n责任编辑：).+(\r\n字体.+)/", "regex");
 // var_dump($data);
 
-// str_replace("", "","fdsaf rewqr");
+// $aa = null;
+// var_dump(str_replace($aa, "","fdsaf rewqr"));
+
+$jsstr = <<<STR
+    {
+        "store": {
+            "book": [{
+                    "category": "reference",
+                    "author": "Nigel Rees",
+                    "title": "Sayings of the Century",
+                    "price": 8.95
+                }, {
+                    "category": "fiction",
+                    "author": "Evelyn Waugh",
+                    "title": "Sword of Honour",
+                    "price": 12.99
+                }, {
+                    "category": "fiction",
+                    "author": "Herman Melville",
+                    "title": "Moby Dick",
+                    "isbn": "0-553-21311-3",
+                    "price": 8.99
+                }, {
+                    "category": "fiction",
+                    "author": "J. R. R. Tolkien",
+                    "title": "The Lord of the Rings",
+                    "isbn": "0-395-19395-8",
+                    "price": 22.99
+                }
+            ],
+            "bicycle": {
+                "color": "red",
+                "price": 19.95
+            }
+        }
+    }
+STR;
+// $data = selector::select($jsstr, "//store//book//author");
+// var_dump($data);
 
 // $regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
 // $url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";

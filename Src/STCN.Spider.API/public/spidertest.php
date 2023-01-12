@@ -38,13 +38,13 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('zjknews', 1);
+            $configs = website::getWebsiteConfig('hbynetnet', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
                         // test
-                        $config['click_house'] = $clickhouse;
+                        $config['click_house'] = null;// $clickhouse;
 
                         $spider = new topspider($config);
 
