@@ -50,12 +50,12 @@ return [
     ),
     // clickHouse db
     'click_house' => array(
-        'host' => '10.254.15.57',
+        'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
         'port' => '8123',
-        'username' => 'linbaocao',
-        'password' => '345556',
-        'dbname' => 'sentiment_db',
-        'table' => 'sentiment_t', // 'sentiment_tmp sentiment_t',
+        'username' => 'stcn_influence_dev', // 'linbaocao',
+        'password' => 'NC95XPRyzodLuvB', // '345556',
+        'dbname' => 'sentiment_dbd', // 'sentiment_db',
+        'table' => 'sentiment_t_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed',
     ),
 
     // 反爬

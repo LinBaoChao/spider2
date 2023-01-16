@@ -58,21 +58,25 @@ use topspider\core\log;
 use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "https://www.hbynet.net/html/heqing/daohang/hebeixinwen/1613416671031275522.html";
+$url = "http://news.sxrb.com/GB/314064/9953440.html";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//div[@class='current-position']/a[2]/text()");
+$data = selector::select($data, "//div[@class='left1']");
 var_dump($data);
-$data = selector::remove($data, "/(<p>.*<\/p>)/", "regex");
-$data = str_replace("时间：", "", $data);
+$data = selector::select($data, "/来源：([\d\D]*)';/", "regex");
+$data = str_replace("\n", "", $data);
 var_dump(strip_tags(trim($data)));
 
-if (@preg_match_all("/(<p>.*<\/p>)/", $data, $out) === false) {
+if (@preg_match_all("/(来源：[\d\D]*)';/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
+$data = '2023-01-13 07:21';
+if(date('Y-m-d H:i',strtotime($data))==$data){
+    var_dump(1);
+}
 // $a = explode('【', '/(.*来源：)/【');
 // var_dump($a);
 // var_dump(strip_tags($data, $a));

@@ -361,7 +361,7 @@ class topspider
     public $on_handle_img = null;
 
     /**
-     * 当一个field的内容被抽取到后进行的回调, 在此回调中可以对网页中抽取的内容作进一步处理 
+     * 当一个field的内容被抽取到后进行的回调, 在此回调中可以对网页中抽取的内容作进一步处理 ,丢弃则返回false
      * 
      * @var mixed
      * @access public
@@ -2104,9 +2104,13 @@ class topspider
                     $return = call_user_func($this->on_extract_field, $fieldname, $data, $page);
                     if (!isset($return)) {
                         log::warn("on_extract_field return value can't be empty\n");
+                    } elseif ($return === false) { // 如果返回false则此内容放弃不入库
+                        $fields = array();
+                        break;
                     } else {
                         // 有数据才会执行 on_extract_field 方法, 所以这里不要被替换没了
                         $fields[$fieldname] = $return;
+                        $data = $return;
                     }
                 }
 

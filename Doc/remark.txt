@@ -7,6 +7,12 @@ http://localhost:9001/index.php
 admin
 stcn@2022
 
+主机：10.254.15.57
+端口：8123
+linbaocao/345556
+db:sentiment_db
+table:sentiment_tmp sentiment_t
+
 阿里云服务器 
 【注意】：仅为影响力项目使用，其他项目任务切勿在该服务器上运行。
 主机：39.108.148.16
