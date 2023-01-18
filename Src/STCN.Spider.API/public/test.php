@@ -58,15 +58,26 @@ use topspider\core\log;
 use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$url = "http://news.sxrb.com/GB/314064/9953440.html";
+$str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
+$isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
+var_dump($isMatched, $matches);
+
+$url = "http://www.jcnews.com.cn/xw/jcxw/202102/t20210209_962319.html";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//div[@class='left1']");
+$data = selector::select($data, "//span[@class='editor']/text()");
 var_dump($data);
-$data = selector::select($data, "/来源：([\d\D]*)';/", "regex");
+
+//var_dump(strtotime('2023/3/3     22:33:33'));
+
+$data = selector::select($data, "/\[[\w\W]*责任编辑:([\d\D]*)[\w\W]*\]/", "regex");
+var_dump($data);
+$data = selector::remove($data, "/(\s*)/", "regex");
+var_dump($data);
 $data = str_replace("\n", "", $data);
+var_dump($data);
 var_dump(strip_tags(trim($data)));
 
 if (@preg_match_all("/(来源：[\d\D]*)';/", $data, $out) === false) {

@@ -218,6 +218,15 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
                 // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
+    } elseif ($fieldname == 'source_pub_time') { // 日期不正确则丢弃
+        $data = str_replace("年", "-", $data);
+        $data = str_replace("月", "-", $data);
+        $data = str_replace("日", " ", $data);
+
+        if (strtotime($data) === false) {
+            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            return false;
+        }
     }
 
     return $data;

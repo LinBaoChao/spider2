@@ -38,7 +38,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('hbynetnet', 0);
+            $configs = website::getWebsiteConfig('jcnewscom', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
@@ -231,6 +231,15 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
             } else {
                 // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
             }
+        }
+    } elseif ($fieldname == 'source_pub_time') { // 日期不正确则丢弃
+        $data = str_replace("年", "-", $data);
+        $data = str_replace("月", "-", $data);
+        $data = str_replace("日", " ", $data);
+
+        if (strtotime($data) === false) {
+            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            return false;
         }
     }
 

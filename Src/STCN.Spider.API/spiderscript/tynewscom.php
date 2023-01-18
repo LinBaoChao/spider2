@@ -5,7 +5,7 @@ use topspider\core\selector;
 use topspider\core\website;
 use topspider\core\log;
 use topspider\core\util;
-function on_extract_field_newssxrb($fieldname, $data, $page)
+function on_extract_field_tynewscom($fieldname, $data, $page)
 {
     if ($fieldname == 'source_pub_time') {
        // log::add("on_extract_field_newssxrb." . $fieldname . ":" . $data, "script");
