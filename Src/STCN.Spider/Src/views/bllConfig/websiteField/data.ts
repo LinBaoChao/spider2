@@ -247,7 +247,7 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
     helpMessage: [
       '多个用【分割，顺序要和过滤项相对应',
-      '目前可用有replace, xpath, regex, css, self(过滤项本身), strip_tags(过滤项保留多个标签时用,分割)',
+      '目前可用有replace, xpath, regex, css, self(过滤项本身), strip_tags(过滤项保留多个标签时用,分割), substr(过滤项设置为0,3的形式,当不限制长度时可设为空或0), trim(过滤项设置：空或|no|则无参数，|space|则为空格)',
     ],
   },
   // {

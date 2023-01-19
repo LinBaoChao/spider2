@@ -2034,7 +2034,7 @@ class topspider
                 //$fields[$conf['name']] = $repeated ? $values : $values[0];
 
                 // 过滤项 lbc
-                if (isset($conf['filter']) && !empty($conf['filter']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
+                if (isset($conf['filter_type']) && !empty($conf['filter_type']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
                     $filter_values = $fields[$conf['name']];
                     
                     $filters = explode(self::SEPARATOR, $conf['filter']);
@@ -2066,6 +2066,25 @@ class topspider
                                     break;
                                 case 'strip_tags':
                                     $filter_values = strip_tags($filter_values, explode(',', $filterstr));
+                                    break;
+                                case 'substr':
+                                    $fls = explode(',', $filterstr);
+                                    $start = $fls[0];
+                                    $len = $fls[1];
+                                    if(empty($len) || $len == 0){
+                                        $filter_values = substr($filter_values, $start);
+                                    }else{
+                                        $filter_values = substr($filter_values, $start, $len);
+                                    }                                    
+                                    break;
+                                case 'trim':
+                                    if(empty($filterstr) || $filterstr == "|no|"){ // 缺省无参数
+                                        $filter_values = trim($filter_values);
+                                    } elseif ($filterstr == "|space|") { // 去空格
+                                        $filter_values = trim($filter_values, ' ');
+                                    } else {
+                                        $filter_values = trim($filter_values, $filterstr);
+                                    }                                   
                                     break;
                                 case 'self':
                                     $filter_values = $filterstr;

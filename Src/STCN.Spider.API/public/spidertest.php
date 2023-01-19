@@ -38,7 +38,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('jcnewscom', 0);
+            $configs = website::getWebsiteConfig('sxycrbcom', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
