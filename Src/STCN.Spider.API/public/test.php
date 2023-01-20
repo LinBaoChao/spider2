@@ -58,36 +58,37 @@ use topspider\core\log;
 use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
 
-$str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
-$isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
-var_dump($isMatched, $matches);
+// $str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
+// $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
+// var_dump($isMatched, $matches);
 
-$url = "http://www.sxycrb.com/2023-01/19/content_282335.html";
+$url = "http://www.lfxww.com/linfen/shizheng/2708887.html";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//dl[@class='clearfix']/dd/text()");
+$data = selector::select($data, "//h3[@class='h4 text-center xb-h4']");
 var_dump($data);
+// var_dump(substr($data, 0, 19));
 //var_dump(explode('【', ''));
 //var_dump(strtotime('2023/3/3     22:33:33'));
 
-$data = selector::select($data, "/\[[\w\W]*责任编辑:([\d\D]*)[\w\W]*\]/", "regex");
+$data = selector::select($data, "/来源：(.*)浏览次数/", "regex");
 var_dump($data);
-$data = selector::remove($data, "/(\s*)/", "regex");
+$data = selector::remove($data, "/(　　 )/", "regex");
 var_dump($data);
-$data = str_replace("\n", "", $data);
+$data = str_replace("　　 ", "", $data);
 var_dump($data);
 var_dump(strip_tags(trim($data)));
 
-if (@preg_match_all("/(来源：[\d\D]*)';/", $data, $out) === false) {
+if (@preg_match_all("/来源：(.*)浏览次数/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
-$data = '2023-01-13 07:21';
-if(date('Y-m-d H:i',strtotime($data))==$data){
-    var_dump(1);
-}
+// $data = '2023-01-13 07:21';
+// if(date('Y-m-d H:i',strtotime($data))==$data){
+//     var_dump(1);
+// }
 // $fls = explode(',', '0,');
 // var_dump($fls[1]);
 // $a = explode('【', '/(.*来源：)/【');
