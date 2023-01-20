@@ -37,17 +37,17 @@ return [
     ),
 
     // db
-    'export' => array(
-        'type' => 'db', // csv、sql、db、clickhouse
-        'table' => 'article_spider',
-    ),
-    'db_config' => array(
-        'host'  => '127.0.0.1',
-        'port'  => 3306,
-        'user'  => 'root',
-        'pass'  => '123456',
-        'name'  => 'stcn_spider',
-    ),
+    // 'export' => array(
+    //     'type' => 'db', // csv、sql、db、clickhouse
+    //     'table' => 'article_spider',
+    // ),
+    // 'db_config' => array(
+    //     'host'  => '127.0.0.1',
+    //     'port'  => 3306,
+    //     'user'  => 'root',
+    //     'pass'  => '123456',
+    //     'name'  => 'stcn_spider',
+    // ),
     // clickHouse db
     'click_house' => array(
         'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'

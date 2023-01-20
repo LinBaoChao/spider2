@@ -2178,24 +2178,25 @@ class topspider
                     exit;
                 }
 
-                if (empty(self::$db_config)) {
-                    log::error('Export data to a database need Mysql support, you have not set a config array for connect.');
-                    exit;
-                }
+                // if (empty(self::$db_config)) {
+                //     log::error('Export data to a database need Mysql support, you have not set a config array for connect.');
+                //     exit;
+                // }
+                if (!empty(self::$db_config)) {
+                    $config = self::$db_config;
+                    @mysqli_connect($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
+                    if (mysqli_connect_errno()) {
+                        log::error('Export data to a database need Mysql support, ' . mysqli_connect_error());
+                        exit;
+                    }
 
-                $config = self::$db_config;
-                @mysqli_connect($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
-                if (mysqli_connect_errno()) {
-                    log::error('Export data to a database need Mysql support, ' . mysqli_connect_error());
-                    exit;
-                }
+                    db::set_connect('default', $config);
+                    db::_init();
 
-                db::set_connect('default', $config);
-                db::_init();
-
-                if (!db::table_exists(self::$export_table)) {
-                    log::error('Table ' . self::$export_table . ' does not exist');
-                    exit;
+                    if (!db::table_exists(self::$export_table)) {
+                        log::error('Table ' . self::$export_table . ' does not exist');
+                        exit;
+                    }
                 }
 
                 // lbc todo check click house
