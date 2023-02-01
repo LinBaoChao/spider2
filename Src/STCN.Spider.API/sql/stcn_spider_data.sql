@@ -276,7 +276,7 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`user_code`,`username`,`real_name`,`nickname`,`password`,`salt`,`gender`,`avatar`,`birthday`,`desc`,`wechat_id`,`email`,`mobile`,`job`,`order_no`,`status`,`login_time`,`effective_time`,`create_time`,`update_time`) values 
-(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2023-01-31 04:29:28','2042-10-19 00:00:00','2022-08-23 16:39:30','2023-01-31 16:29:28');
+(1,'1001','admin','超级管理员','超管','f92f247c7719f46ef7e24c88d1d537eb','123','男','user-avatar/logo.png','2022-08-25 16:39:30','这是个介绍','abc','admin@stcn.com','13813813888','IT',1,1,'2023-02-01 04:48:38','2042-10-19 00:00:00','2022-08-23 16:39:30','2023-02-01 16:48:38');
 
 /*Table structure for table `user_dept` */
 
@@ -350,7 +350,7 @@ CREATE TABLE `website` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website` */
 
@@ -383,7 +383,10 @@ insert  into `website`(`id`,`parent_id`,`media_name`,`product_name`,`platform`,`
 (37,NULL,'晋城新闻网','晋城新闻网','网站','财经 山西新闻  社会新闻 晋城新闻 国内新闻','jcnewscom','www.jcnews.com.cn','http://www.jcnews.com.cn/【http://www.jcnews.com.cn/xw/','http://www.jcnews.com.cn/【http://www.jcnews.com.cn/lm/cj/【http://www.jcnews.com.cn/xw/gnxw/【http://www.jcnews.com.cn/xw/jcxw/【http://www.jcnews.com.cn/xw/shxw/【http://www.jcnews.com.cn/xw/sxxw/','http://www.jcnews.com.cn/lm/cj/\\d+/t\\d+_\\d+.html【http://www.jcnews.com.cn/xw/sxxw/\\d+/t\\d+_\\d+.html【http://www.jcnews.com.cn/xw/shxw/\\d+/t\\d+_\\d+.html【http://www.jcnews.com.cn/xw/gnxw/\\d+/t\\d+_\\d+.html【http://www.jcnews.com.cn/xw/jcxw/\\d+/t\\d+_\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-18 14:36:59','2023-01-19 11:18:23'),
 (38,NULL,'运城新闻网','运城新闻网','网站','焦点新闻 要闻 经济 国内  国际','sxycrbcom','www.sxycrb.com','http://www.sxycrb.com/','http://www.sxycrb.com/node_8.html【http://www.sxycrb.com/node_5.html【http://www.sxycrb.com/node_7.html【http://www.sxycrb.com/node_30.html【http://www.sxycrb.com/node_31.html','http://www.sxycrb.com/\\d+-\\d+/\\d+/content_\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-19 14:32:32','2023-01-19 15:19:13'),
 (39,NULL,'临汾新闻网','临汾新闻网','网站','时政要闻','lfxwwcom','www.lfxww.com','http://www.lfxww.com/linfen/shizheng/','http://www.lfxww.com/linfen/shizheng/','http://www.lfxww.com/linfen/shizheng/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-20 14:26:21','2023-01-20 15:16:10'),
-(40,NULL,'朔州新闻网','朔州新闻网','网站','要闻 财经 时政','shuozhounews','www.shuozhounews.cn','http://www.shuozhounews.cn/folder2074/folder2075/folder2077/【http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/【http://www.shuozhounews.cn/folder2074/folder2076/folder2095/folder2259/','http://www.shuozhounews.cn/folder2074/folder2075/folder2077/【http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/【http://www.shuozhounews.cn/folder2074/folder2076/folder2095/folder2259/','http://www.shuozhounews.cn/folder\\d+/folder\\d+/folder\\d+/\\d+-\\d+-\\d+/\\d+.html【http://www.shuozhounews.cn/folder\\d+/folder\\d+/folder\\d+/folder\\d+/\\d+-\\d+-\\d+/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'2023-01-31 16:29:17','2023-01-31 16:29:17');
+(40,NULL,'朔州新闻网','朔州新闻网','网站','要闻 财经 时政','shuozhounews','www.shuozhounews.cn','http://www.shuozhounews.cn/folder2074/folder2075/folder2077/【http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/【http://www.shuozhounews.cn/folder2074/folder2076/folder2095/folder2259/','http://www.shuozhounews.cn/folder2074/folder2075/folder2077/【http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/【http://www.shuozhounews.cn/folder2074/folder2076/folder2095/folder2259/','http://www.shuozhounews.cn/folder\\d+/folder\\d+/folder\\d+/\\d+-\\d+-\\d+/\\d+.html【http://www.shuozhounews.cn/folder\\d+/folder\\d+/folder\\d+/folder\\d+/\\d+-\\d+-\\d+/\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-31 16:29:17','2023-01-31 16:57:48'),
+(41,NULL,'忻州网','忻州网','网站','省政府要闻 忻州要闻','sxxzgovcn','www.sxxz.gov.cn','https://www.sxxz.gov.cn/zwyw/','【https://www.sxxz.gov.cn/zwyw/szfyw/【https://www.sxxz.gov.cn/zwyw/xzyw/','https://www.sxxz.gov.cn/zwyw/szfyw/\\d+/t\\d+_\\d+.shtml【https://www.sxxz.gov.cn/zwyw/xzyw/\\d+/t\\d+_\\d+.shtml【',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-01-31 17:41:55','2023-02-01 14:38:28'),
+(42,NULL,'吕梁新闻网','吕梁新闻网','网站','时事资讯  要闻 吕梁新闻','sxllnewscn','www.sxllnews.cn','http://www.sxllnews.cn/','https://www.sxllnews.cn/2.html【https://www.sxllnews.cn/3.html【https://www.sxllnews.cn/13.html','https://www.sxllnews.cn/\\d+-\\d+/\\d+/\\d+_\\d+.html',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-02-01 14:49:32','2023-02-01 15:08:15'),
+(43,NULL,'内蒙古新闻网','内蒙古新闻网','网站','时政新闻 综合新闻 经济新闻','nmgnews','inews.nmgnews.com.cn【www.nmgnews.com.cn','http://inews.nmgnews.com.cn/nmgxw/','http://inews.nmgnews.com.cn/nmgxw/szxw/【http://inews.nmgnews.com.cn/nmgxw/syxw/【http://inews.nmgnews.com.cn/nmgxw/jjxw/','http://inews.nmgnews.com.cn/system/\\d+/\\d+/\\d+/\\d+.shtml',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2023-02-01 16:32:54','2023-02-01 17:11:38');
 
 /*Table structure for table `website_field` */
 
@@ -409,7 +412,7 @@ CREATE TABLE `website_field` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `website_field` */
 
@@ -559,7 +562,24 @@ insert  into `website_field`(`id`,`parent_id`,`website_id`,`name`,`selector`,`se
 (168,NULL,40,'source_pub_time','//span[@class=\'time\']/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,'发布时间：','replace',1,'2023-01-31 16:36:27','2023-01-31 16:36:27'),
 (169,NULL,40,'pub_channel_name','//div[@class=\'cur_place_wrap\']/a[3]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,'','',1,'2023-01-31 16:38:06','2023-01-31 16:38:06'),
 (170,NULL,40,'source_name','//span[@class=\'origin mr20\']/text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'来源：','replace',1,'2023-01-31 16:39:43','2023-01-31 16:39:43'),
-(171,NULL,40,'source_author','//span[@class=\'author\']/text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'作者：','replace',1,'2023-01-31 16:41:06','2023-01-31 16:41:06');
+(171,NULL,40,'source_author','//span[@class=\'author\']/text()','xpath',0,0,NULL,NULL,1,'source_author|space|editor','|space|','作者：','replace',1,'2023-01-31 16:41:06','2023-01-31 16:54:07'),
+(172,NULL,40,'editor','//div[@class=\'editor mt30\']/text()','xpath',0,0,NULL,NULL,0,NULL,NULL,'编辑：','replace',1,'2023-01-31 16:52:42','2023-01-31 16:52:42'),
+(173,NULL,41,'source_title','//h3[@class=\'article-title\']/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 11:18:59','2023-02-01 11:18:59'),
+(174,NULL,41,'source_content','//div[@class=\'TRS_Editor\']','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,'strip_tags',1,'2023-02-01 11:24:49','2023-02-01 11:24:49'),
+(175,NULL,41,'source_pub_time','//div[@class=\'article-filed\']/span[2]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,'',1,'2023-02-01 11:26:51','2023-02-01 11:26:51'),
+(176,NULL,41,'pub_channel_name','//div[@class=\'breadcrumb mt10\']/a[last()]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,'',1,'2023-02-01 11:30:07','2023-02-01 11:30:07'),
+(177,NULL,41,'source_name','//div[@class=\'article-filed\']/span[last()]/text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'来源：','replace',1,'2023-02-01 11:31:09','2023-02-01 11:31:09'),
+(178,NULL,42,'source_title','//div[@class=\'text\']/h1/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 14:57:53','2023-02-01 14:57:53'),
+(179,NULL,42,'source_content','//div[@class=\'content-main\']','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 14:58:37','2023-02-01 14:58:37'),
+(180,NULL,42,'source_pub_time','//div[@class=\'text\']/div/i[1]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 15:00:27','2023-02-01 15:00:27'),
+(181,NULL,42,'source_author','//div[@class=\'text\']/div/i[2]/text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'编辑：','replace',1,'2023-02-01 15:01:06','2023-02-01 15:01:06'),
+(182,NULL,42,'pub_channel_name','//div[@class=\'list-left\']/span/a[last()]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,'','',1,'2023-02-01 15:02:52','2023-02-01 15:02:52'),
+(183,NULL,43,'source_title','//ul[@class=\'title black26\']/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 16:34:21','2023-02-01 16:34:21'),
+(184,NULL,43,'source_content','//ul[@class=\'black18 wz\']','xpath',1,0,NULL,NULL,1,NULL,NULL,NULL,NULL,1,'2023-02-01 16:35:40','2023-02-01 16:35:40'),
+(185,NULL,43,'source_pub_time','//ul[@class=\'source\']/text()【/(.*)\\|.*/','xpath【regex',1,0,NULL,NULL,1,NULL,NULL,'','trim',1,'2023-02-01 16:43:18','2023-02-01 16:43:18'),
+(186,NULL,43,'source_name','//ul[@class=\'source\']/text()【/来源：(.*)/','xpath【regex',0,0,NULL,NULL,1,NULL,NULL,'','',1,'2023-02-01 16:45:02','2023-02-01 16:45:02'),
+(187,NULL,43,'pub_channel_name','//ul[@class=\'black18\']/a[last()]/text()','xpath',1,0,NULL,NULL,1,NULL,NULL,'','',1,'2023-02-01 16:46:37','2023-02-01 16:46:37'),
+(188,NULL,43,'source_author','//li[@class=\'bj\']/text()','xpath',0,0,NULL,NULL,1,NULL,NULL,'编辑：','replace',1,'2023-02-01 16:48:07','2023-02-01 16:48:07');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

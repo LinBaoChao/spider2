@@ -52,7 +52,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('shuozhounews', 0);
+            $configs = website::getWebsiteConfig('nmgnews', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {

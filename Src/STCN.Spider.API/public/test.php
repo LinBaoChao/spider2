@@ -62,18 +62,18 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/2023-01-31/518235.html";
+$url = "http://inews.nmgnews.com.cn/system/2022/12/03/013380281.shtml";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//div[@class='editor mt30']/text()");
+$data = selector::select($data, "//li[@class='bj']/text()");
 var_dump($data);
 // var_dump(substr($data, 0, 19));
 //var_dump(explode('【', ''));
 //var_dump(strtotime('2023/3/3     22:33:33'));
 
-$data = selector::select($data, "/来源：(.*)浏览次数/", "regex");
+$data = selector::select($data, "/编辑：(.*)/", "regex");
 var_dump($data);
 $data = selector::remove($data, "/(　　 )/", "regex");
 var_dump($data);
@@ -81,7 +81,7 @@ $data = str_replace("发布时间：", "", $data);
 var_dump($data);
 var_dump(strip_tags(trim($data)));
 
-if (@preg_match_all("/来源：(.*)浏览次数/", $data, $out) === false) {
+if (@preg_match_all("/(.*)\|.*/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);

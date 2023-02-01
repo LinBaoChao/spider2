@@ -2037,6 +2037,9 @@ class topspider
                 if (isset($conf['filter_type']) && !empty($conf['filter_type']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
                     $filter_values = $fields[$conf['name']];
                     
+                    if(!isset($conf['filter']) || empty($conf['filter'])){
+                        $conf['filter'] = '';
+                    }
                     $filters = explode(self::SEPARATOR, $conf['filter']);
                     $filtertypes = explode(self::SEPARATOR, $conf['filter_type']);
                     $count = count($filters);

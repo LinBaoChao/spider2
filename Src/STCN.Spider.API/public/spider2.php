@@ -111,7 +111,7 @@ do {
         'fields' => array(
             array(
                 'name' => "source_title",
-                'selector' => "//div[@id='content']//text()",
+                'selector' => "//div[@id='content']/text()",
                 'required' => true,
             ),
             array(
@@ -432,7 +432,7 @@ function on_extract_field_cnstock($fieldname, $data, $page)
 
 // 2.text()：由于一个节点的文本值不属于属性，比如<a class=”baidu“ href=”http://www.baidu.com“>baidu</a>,所以，用text()函数来匹配节点：//a[text()='baidu']
 
-// 3.last()：//div[contains(@id, 'in')][las()]，表示选择id中包含有'in'的div节点的最后一个节点
+// 3.last()：//div[contains(@id, 'in')][last()]，表示选择id中包含有'in'的div节点的最后一个节点
 
 // 4.starts-with()： //div[starts-with(@id, 'in')] ，表示选择以’in’开头的id属性的div节点
 
