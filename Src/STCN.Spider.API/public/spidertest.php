@@ -26,6 +26,20 @@ function runSpider()
     // 轮询间隔 秒
     $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 30;
 
+    // db
+    $export = array(
+        'type' => 'db', // csv、sql、db、clickhouse
+        'table' => 'article_spider',
+    );
+
+    $db_config = array(
+        'host' => '127.0.0.1',
+        'port' => 3306,
+        'user' => 'root',
+        'pass' => '123456',
+        'name' => 'stcn_spider',
+    );
+
     // test db
     $clickhouse = array(
         'host' => '10.254.15.57',
@@ -38,13 +52,15 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('lfxwwcom', 0);
+            $configs = website::getWebsiteConfig('shuozhounews', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
                         // test
-                        $config['click_house'] = null;// $clickhouse;
+                        $config['click_house'] = null; // $clickhouse;
+                        $config['export'] = $export;
+                        $config['db_config'] = $db_config;
 
                         $spider = new topspider($config);
 

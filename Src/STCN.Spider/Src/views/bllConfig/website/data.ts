@@ -199,6 +199,7 @@ export const formSchema: FormSchema[] = [
     field: 'platform',
     label: '平台',
     component: 'Input',
+    defaultValue: '网站',
   },
   {
     field: 'channel',

@@ -62,12 +62,12 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "http://www.lfxww.com/linfen/shizheng/2708887.html";
+$url = "http://www.shuozhounews.cn/folder2074/folder2075/folder2110/folder2083/2023-01-31/518235.html";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//h3[@class='h4 text-center xb-h4']");
+$data = selector::select($data, "//div[@class='editor mt30']/text()");
 var_dump($data);
 // var_dump(substr($data, 0, 19));
 //var_dump(explode('【', ''));
@@ -77,7 +77,7 @@ $data = selector::select($data, "/来源：(.*)浏览次数/", "regex");
 var_dump($data);
 $data = selector::remove($data, "/(　　 )/", "regex");
 var_dump($data);
-$data = str_replace("　　 ", "", $data);
+$data = str_replace("发布时间：", "", $data);
 var_dump($data);
 var_dump(strip_tags(trim($data)));
 
