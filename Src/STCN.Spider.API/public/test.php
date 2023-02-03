@@ -62,18 +62,18 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "http://inews.nmgnews.com.cn/system/2022/12/03/013380281.shtml";
+$url = "http://news.nen.com.cn/network/international/guojinews/2023/02/03/475975000780707602.shtml";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
 //$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//li[@class='bj']/text()");
+$data = selector::select($data, "//div[@style='text-align:right;']/text()");
 var_dump($data);
 // var_dump(substr($data, 0, 19));
 //var_dump(explode('【', ''));
 //var_dump(strtotime('2023/3/3     22:33:33'));
 
-$data = selector::select($data, "/编辑：(.*)/", "regex");
+$data = selector::select($data, "/.*编辑：(.*)/", "regex");
 var_dump($data);
 $data = selector::remove($data, "/(　　 )/", "regex");
 var_dump($data);
@@ -159,6 +159,15 @@ $jsstr = <<<STR
 STR;
 // $data = selector::select($jsstr, "//store//book//author");
 // var_dump($data);
+
+$str = <<<STR
+&#13;
+     本报讯 （记者 王涛） 1月18日，市政协党组暨四届十一次主席会议召开。市政协党组书记、主席乔晓峰主持会议，副主席王阳平、薛爱平、郝金光、乔云、李慧义、刘晓春，秘书长杨成元出席会议。    会议集中学习了《习近平谈治国理政》、党的二十大报告、《党章》等；传达学习了中央、省委、市委经济工作会议精神和省“两会”精神；传达学习了中共中央政治局民主生活会、省委常委班子民主生活会精神，对开好市政协党组2022年度民主生活会作了安排部署；传达学习了市委《关于加强和改进新时代市县政协工作的实施意见》；听取了各工作机构2022年工作汇报及2023年工作计划。    乔晓峰指出，党委有部署，政协有行动。全市各级政协组织要把贯彻落实中央、省委、市委经济工作会议精神结合起来，做到在深学细悟中统一思想认识，在大局大势中找准履职方向，在助力高质量发展中发挥政协优势。要把贯彻落实省“两会”精神作为一项重要政治任务，准确把握省“两会”对吕梁高质量发展的重要部署，认真落实省“两会”对政协工作的部署要求，充分发挥专门协商机构作用，切实把学习成果转化为政协履职的强大动力和具体举措。    乔晓峰强调，要深入学习领会习近平总书记重要讲话精神，以中央政治局民主生活会为标杆，以省委常委班子民主生活会为示范，认真落实市委关于专题民主生活会的相关要求，坚持突出主题、注重增进团结、发扬斗争精神，高标准、高质量开好市政协党组班子民主生活会。要把中央关于加强和改进新时代市县政协工作的意见及省委、市委实施意见贯通起来理解、结合起来把握、协同起来推进，发挥市县政协联动作用，采取有力举措确保实施意见落地见效。要统筹做好值班值守、疫情防控、安全保卫等工作，从严落实中央八项规定实施细则精神及省委、市委相关要求，气正风清迎新春，廉洁文明过好年。 &#13;
+&#13;
+&#13;
+STR;
+
+var_dump(trim($str, '&#13;'));
 
 // $regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
 // $url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";

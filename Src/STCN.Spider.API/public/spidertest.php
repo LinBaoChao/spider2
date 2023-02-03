@@ -52,7 +52,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('nmgnews', 0);
+            $configs = website::getWebsiteConfig('nencomcn', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
@@ -237,6 +237,11 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
 {
+    if (!empty($data)) {
+        $data = str_replace("&#13;", "", $data);
+        $data = trim(strip_tags($data));
+    }
+
     // 如果不是需要的栏目则不要 则返回false
     if ($fieldname == "pub_channel_name") {
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
