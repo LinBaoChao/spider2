@@ -111,7 +111,7 @@ do {
         'fields' => array(
             array(
                 'name' => "source_title",
-                'selector' => "//div[@class='content']/text()",
+                'selector' => "//div[@class='cgzzmL left mt20']/text()",
                 'required' => true,
             ),
             array(
