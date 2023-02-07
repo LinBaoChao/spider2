@@ -57,47 +57,44 @@ require_once __DIR__ . '/../extend/topspider/autoloader.php';
 use topspider\core\log;
 use topspider\core\website;
 // $config = require_once __DIR__ . '/../config/spider.php';
-
+// $regex = "https://local.cctv.com/\d+/\d+/\d+/\S+";
+// $url = "https://local.cctv.com/2023/02/07/ARTIqllx5JECHf5QZ1g7YmxD230207.shtml?spm=C94212.PqvzMCO0QQvU.Eq5PG7t8Thea.3";
+// var_dump(preg_match("#{$regex}#i", $url));
 // $str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "http://news.cnjiwang.com/jwyc/202302/3683159.html";
+$url = "https://local.cctv.com/2023/02/07/ARTIqllx5JECHf5QZ1g7YmxD230207.shtml?spm=C94212.PqvzMCO0QQvU.Eq5PG7t8Thea.3";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
-//$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
-$data = selector::select($data, "//div[@class='content']");
+$data = selector::select($data, "//div[@class='zebian']/span[1]/text()");
 var_dump($data);
+$data = selector::select($data, "/来源：(.*)\|/", "regex");
+var_dump($data);
+// $data = selector::remove($data, "/<p>.*/", "regex");
+// var_dump($data);
+// $data = str_replace("\r",'', $data);
+// var_dump($data);
+var_dump(strip_tags($data));
+//var_dump(preg_replace("/<p>.*/", '', $data));
+//$data = trim(preg_replace("/<p>.*/", '', $data));
+//$data = strip_tags($data);
+//$data = trim($data);
+var_dump(substr($data, 0, 19));
+$data = str_replace(array('&nbsp;','&#13;',' '), '','更新&nbsp;时 间：(.*)来&#13;源');
+//$data = str_replace('   ', '', $data);
+var_dump($data);
+//$data = '<a class="baidu" href="http://www.baidu.com">baidu</a>';
 //var_dump(trim($data));
 //var_dump(strip_tags($data));
 //var_dump(substr($data, 0, 16));
 //var_dump(explode('【', ''));
 //var_dump(strtotime('2023/3/3     22:33:33'));
-
-$data = selector::select($data, "/APP记者 (.*)<\/strong><\/p><p/", "regex");
-var_dump($data);
-$data = '吉刻APP记者 李志明</strong></p><p dir="ltr" style="text-align: right;"><strong>通讯员 吴林锡 图片摄影 赵冷冰</strong></p>';
-if (@preg_match_all("/吉刻APP记者 (.*)<\/strong><\/p><p/", $data, $out) === false) {
+if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
-// $data = selector::remove($data, "/(　　 )/", "regex");
-// var_dump($data);
-// $data = str_replace("\r",'', "2023-01-31 11:20  |
-//          来源：
-
-
-
-// 中国吉林网
-       
-
-
-
-//      ");
-// var_dump($data);
-// var_dump(strip_tags(trim($data)));
-// var_dump(preg_replace("http://www.shenyang.gov.cn/zwgk/zwdt/zwyw/\d+/t\d+_\d+.html", '', '作者：李三无作者：ee'));
 // $data = '2023-01-13 07:21';
 // if(date('Y-m-d H:i',strtotime($data))==$data){
 //     var_dump(1);
@@ -182,8 +179,8 @@ STR;
 
 // var_dump(trim($str, '&#13;'));
 
-// $regex = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
-// $url = "http://www.bohaitoday.cn/h-nr-j-4_12.html【】_np=172_0";
+// $regex = "https://local.cctv.com/2023/02/07/ARTIqllx5JECHf5QZ1g7YmxD230207.shtml?spm=C94212.PqvzMCO0QQvU.Eq5PG7t8Thea.3";
+// $url = "https://local.cctv.com/2023/02/07/ARTIqllx5JECHf5QZ1g7YmxD230207.shtml?spm=C94212.PqvzMCO0QQvU.Eq5PG7t8Thea.3";
 // var_dump(preg_match("#{$regex}#i", $url));
 
 // var_dump(pack("C3", 80, 72, 80));

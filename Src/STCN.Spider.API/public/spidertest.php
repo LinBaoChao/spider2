@@ -52,7 +52,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('cnjiwangcom', 0);
+            $configs = website::getWebsiteConfig('cctvcom', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
@@ -238,8 +238,9 @@ function on_extract_field($fieldname, $data, $page)
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
 {
     if (!empty($data)) {
-        $data = str_replace("&#13;", "", $data);
-        $data = trim(strip_tags($data));
+        $data = trim(strip_tags($data)); // 去tag
+        $removes = ['&nbsp;', '&#13;']; // 移除字符 /&#13;【 【 【	【\n
+        $data = str_replace($removes, "", $data);
     }
 
     // 如果不是需要的栏目则不要 则返回false

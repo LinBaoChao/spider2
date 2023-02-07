@@ -195,6 +195,9 @@ class selector
      */
     private static function _regex_select($html, $selector, $remove = false)
     {
+        if(is_array($html)){
+            $html = $html[0];
+        }
         if(@preg_match_all($selector, $html, $out) === false)
         {
             self::$error = "the selector in the regex(\"{$selector}\") syntax errors";

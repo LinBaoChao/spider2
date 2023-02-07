@@ -208,8 +208,9 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
     if (!empty($data)) {
-        $data = str_replace("&#13;", "", $data);
-        $data = trim(strip_tags($data));
+        $data = trim(strip_tags($data)); // 去tag
+        $removes = ['&nbsp;', '&#13;']; // 移除字符 /&#13;【 【 【	【\n
+        $data = str_replace($removes, "", $data);
     }
 
     // 如果不是需要的栏目则不要 则返回false

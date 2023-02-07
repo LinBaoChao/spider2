@@ -2058,7 +2058,8 @@ class topspider
                                     // } else {
                                     //     $filter_values = preg_replace($filterstr, "", $filter_values);
                                     // }
-                                    // break;
+                                    $filter_values = preg_replace($filterstr, "", $filter_values);
+                                    break;
                                 case 'xpath':
                                 case 'css':
                                     try {
