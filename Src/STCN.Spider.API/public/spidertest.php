@@ -52,7 +52,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('cctvcom', 0);
+            $configs = website::getWebsiteConfig('xuexicn', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
@@ -258,6 +258,8 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
         $data = str_replace("年", "-", $data);
         $data = str_replace("月", "-", $data);
         $data = str_replace("日", " ", $data);
+
+        $data = str_replace(".", "-", $data);
 
         if (strtotime($data) === false) {
             // log::add("日期不正确：{$data}\r\n", 'pubtime');

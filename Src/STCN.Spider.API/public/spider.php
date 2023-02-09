@@ -229,6 +229,8 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         $data = str_replace("月", "-", $data);
         $data = str_replace("日", " ", $data);
 
+        $data = str_replace(".", "-", $data);
+
         if (strtotime($data) === false) {
             // log::add("日期不正确：{$data}\r\n", 'pubtime');
             return false;
