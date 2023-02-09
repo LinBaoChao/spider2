@@ -185,11 +185,11 @@ CREATE TABLE `website` (
   `media_name` varchar(50) DEFAULT NULL COMMENT '媒体名称，如证券时报',
   `product_name` varchar(50) DEFAULT NULL COMMENT '媒体下的某产品名称，如e公司',
   `platform` varchar(50) DEFAULT NULL COMMENT '平台，如网站、app、微信、微博',
-  `channel` varchar(50) DEFAULT NULL COMMENT '栏目/频道',
+  `channel` varchar(300) DEFAULT NULL COMMENT '栏目/频道',
   `name` varchar(50) DEFAULT NULL COMMENT '英文名，采集程序使用',
   `domains` varchar(200) DEFAULT NULL COMMENT '多个用【分割 爬虫爬取哪些域名下的网页, 非域名下的url会被忽略以提高爬取速度',
-  `scan_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 爬虫的入口链接',
-  `list_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 列表页url的规则',
+  `scan_urls` varchar(800) DEFAULT NULL COMMENT '多个用【分割 爬虫的入口链接',
+  `list_urls` varchar(800) DEFAULT NULL COMMENT '多个用【分割 列表页url的规则',
   `content_urls` varchar(500) DEFAULT NULL COMMENT '多个用【分割 内容页url的规则',
   `input_encoding` varchar(50) DEFAULT NULL COMMENT '输入编码，UTF-8,GB2312,…..',
   `output_encoding` varchar(50) DEFAULT NULL COMMENT '输出编码，UTF-8,GB2312,…..',
@@ -211,7 +211,7 @@ CREATE TABLE `website` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `website_field` */
 
@@ -237,7 +237,7 @@ CREATE TABLE `website_field` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -182,7 +182,7 @@ export const formSchema: FormSchema[] = [
     field: 'mediaName',
     label: '媒体名称',
     component: 'Input',
-    helpMessage: ['媒体名称不能重复', ''],
+    //helpMessage: ['媒体名称不能重复', ''],
     rules: [
       {
         required: true,

@@ -64,14 +64,14 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "https://www.xuexi.cn/lgpage/detail/index.html?id=8753466634831905598&item_id=8753466634831905598";
+$url = "http://news.cyol.com/gb/articles/2023-02/09/content_qbyYENHpdE.html";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//span[@class='link-text']/text()");
+$data = selector::select($data, "//div[@class='zbry']/text()");
 var_dump($data);
 //var_dump(substr($data, -10));
-$data = selector::select($data, "/来源：(.*)<\/span>/", "regex");
+$data = selector::select($data, "/编辑：(.*)】/", "regex");
 var_dump($data);
 //var_dump(strtotime(str_replace(".",'-',"2022.10.02 10:42")));
 // $data = selector::remove($data, "/<p>.*/", "regex");

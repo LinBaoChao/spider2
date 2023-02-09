@@ -92,12 +92,12 @@ class WebsiteController extends BaseController
             $mediaName = $params['mediaName'] ?? null;
             $name = $params['name'] ?? '';
 
-            $o = Website::where('media_name', $mediaName)->whereOr('name', $name)->findOrEmpty();
-            if (!$o->isEmpty()) {
-                $retval->code = ResultCode::FAIL;
-                $retval->message = "媒体已存在";
-                return json($retval);
-            }
+            // $o = Website::where('media_name', $mediaName)->whereOr('name', $name)->findOrEmpty();
+            // if (!$o->isEmpty()) {
+            //     $retval->code = ResultCode::FAIL;
+            //     $retval->message = "媒体已存在";
+            //     return json($retval);
+            // }
 
             $o = Website::create([
                 'parent_id' => $params['parentId'] ?? null,
@@ -170,19 +170,19 @@ class WebsiteController extends BaseController
             $name = $params['name'] ?? '';
 
             $o = Website::where('id', $id)->findOrEmpty();
-            if ($o->mediaName != $mediaName) {
-                $w = Website::where('media_name', $mediaName)->findOrEmpty();
-                if (!$w->isEmpty()) {
-                    $retval->code = ResultCode::FAIL;
-                    $retval->message = "媒体名称已存在";
-                    return json($retval);
-                }
-            }
+            // if ($o->mediaName != $mediaName) {
+            //     $w = Website::where('media_name', $mediaName)->findOrEmpty();
+            //     if (!$w->isEmpty()) {
+            //         $retval->code = ResultCode::FAIL;
+            //         $retval->message = "媒体名称已存在";
+            //         return json($retval);
+            //     }
+            // }
             if ($o->name != $name) {
                 $w = Website::where('name', $name)->findOrEmpty();
                 if (!$w->isEmpty()) {
                     $retval->code = ResultCode::FAIL;
-                    $retval->message = "媒体名称已存在";
+                    $retval->message = "媒体标识已存在";
                     return json($retval);
                 }
             }

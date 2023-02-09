@@ -13,8 +13,8 @@ class WebsiteValidate extends Validate
         'name'  => 'require|max:50',
         'mediaName'  => 'require|max:50',
         'domains'  => 'require|max:200',
-        'scanUrls'  => 'require|max:500',
-        'listUrls'  => 'max:500',
+        'scanUrls'  => 'require|max:800',
+        'listUrls'  => 'max:800',
         'contentUrls'  => 'max:500',
     ];
 
@@ -30,8 +30,8 @@ class WebsiteValidate extends Validate
         'name.max' => '媒体名称长度不能大于50',
         'mediaName.max' => '媒体名称长度不能大于50',
         'domains.max' => '域名长度不能大于200',
-        'scanUrls.max' => '入口页Url长度不能大于500',
-        'listUrls.max' => '列表页Url长度不能大于500',
+        'scanUrls.max' => '入口页Url长度不能大于800',
+        'listUrls.max' => '列表页Url长度不能大于800',
         'contentUrls.max' => '内容页Url长度不能大于500',
     ];
 
