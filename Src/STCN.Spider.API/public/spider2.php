@@ -111,7 +111,7 @@ do {
         'fields' => array(
             array(
                 'name' => "source_title",
-                'selector' => "//div[@class='am-text-center']/text()",
+                'selector' => "//div[@class='page_title']/h1/text()",
                 'required' => true,
             ),
             array(
@@ -120,25 +120,25 @@ do {
                 'required' => true,
             ),
             array(
-                'name' => "source_pub_time",
-                'selector' => "//span[contains(@class,'timer')]",
-                'required' => true,
-            ),
-            array(
                 'name' => "pub_channel_name",
                 'selector' => "//div[contains(@class,'breadcrumb')]//a[2]//text()",
                 'required' => true,
             ),
             array(
-                'name' => "source_author",
-                'selector' => "//span[contains(@class,'reporter')]//em",
-                'required' => false,
+                'name' => "source_pub_time",
+                'selector' => "//span[contains(@class,'timer')]",
+                'required' => true,
             ),
             array(
                 'name' => "source_name",
                 'selector' => "//div[contains(@class,'detail-info')]//span[1]",
                 'required' => false,
             ),
+            array(
+                'name' => "source_author",
+                'selector' => "//span[contains(@class,'reporter')]//em",
+                'required' => false,
+            ),            
         ),
     );
 
