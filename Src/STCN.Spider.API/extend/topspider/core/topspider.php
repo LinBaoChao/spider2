@@ -377,7 +377,7 @@ class topspider
     public $on_extract_field_extend = null;
 
     /**
-     * 在一个网页的所有field抽取完成之后, 可能需要对field进一步处理, 以发布到自己的网站 
+     * 在一个网页的所有field抽取完成之后, 可能需要对field进一步处理, 以发布到自己的网站，返回false则不入库
      * 
      * @var mixed
      * @access public
@@ -385,7 +385,7 @@ class topspider
     public $on_extract_page = null;
 
     /**
-     * 统一回调处理，在一个网页的所有field抽取完成之后
+     * 统一回调处理，在一个网页的所有field抽取完成之后，返回false则不入库
      *
      * @var mixed
      * @access public
@@ -400,6 +400,14 @@ class topspider
      * @access public
      */
     public $on_attachment_file = null;
+
+    /**
+     * 统一回调处理，在一个网页的所有field抽取完成之后准备入库时，返回false则不入库
+     *
+     * @var mixed
+     * @access public
+     */
+    public $on_before_insert_db = null;
 
     public function __construct($configs = array())
     {
@@ -1862,9 +1870,25 @@ class topspider
                         }
                     }                                       
                 }
-                unset($fieldscopy); 
+                unset($fieldscopy);
 
                 // log::add("filter after:" . var_export($fields, true), 'fields');
+
+                // 入库db前特殊回调处理
+                if ($this->on_before_insert_db) {
+                    $return = call_user_func($this->on_before_insert_db, $page, $fields, $url, self::$configs);
+                    if (!isset($return)) {
+                        log::warn("on_before_insert_db return value can't be empty");
+                    }
+                    // 返回false，跳过当前页面，内容不入库
+                    elseif ($return === false) {
+                        return false;
+                    } elseif (!is_array($return)) {
+                        log::warn('on_before_insert_db return value must be an array');
+                    } else {
+                        $fields = $return;
+                    }
+                }
 
                 if (version_compare(PHP_VERSION, '5.4.0', '<')) {
                     $fields_str = json_encode($fields);

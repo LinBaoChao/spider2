@@ -78,6 +78,11 @@ var_dump($data);
 // var_dump($data);
 $data = str_replace(">",'', $data);
 var_dump($data);
+var_dump(strtotime('2023-32-13' . '+30day'));
+if(strtotime('2023-32-13'. '+30day')< time()){
+    var_dump(1);
+}
+//var_dump(date_diff(date_create('2023-2-10'), date_create(date('Y-m-d h:i:s',time()))));    
 //var_dump(strip_tags($data));
 //var_dump(preg_replace("/<p>.*/", '', $data));
 //$data = trim(preg_replace("/<p>.*/", '', $data));

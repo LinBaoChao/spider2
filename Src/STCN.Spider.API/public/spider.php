@@ -11,6 +11,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
+define('ADD_DAY', "+30day"); // 30天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
@@ -43,6 +44,7 @@ function runSpider()
                         // 回调扩展
                         $spider->on_extract_field_extend = 'on_extract_field_extend'; 
                         $spider->on_extract_page_extend = 'on_extract_page_extend'; // 加入非配置的特殊字段处理
+                        $spider->on_before_insert_db = 'on_before_insert_db'; // 入库前统一回调处理
 
                         // 绑定回调函数 从业务配置中是否有回调函数，及动态脚本，可以把脚本存入某个文件里，然后上面引入这个文件，即可回调到这个函数
                         // 目前支持回调函数有on_start、on_extract_field、on_extract_page、on_scan_page、on_list_page、on_content_page、on_handle_img、on_download_page、on_download_attached_page、on_fetch_url、on_status_code、is_anti_spider、on_attachment_file
@@ -234,6 +236,12 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         if (strtotime($data) === false) {
             // log::add("日期不正确：{$data}\r\n", 'pubtime');
             return false;
+        } else {
+            // 30天前的数据不要
+            if (strtotime($data . ADD_DAY) < time()) {
+                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                return false;
+            }
         }
     }
 
@@ -262,6 +270,33 @@ function on_extract_page_extend($page, $fields, $url, $configs)
     // 如果来源为空则为发布源 lbc
     if (!isset($fields['source_name']) || empty($fields['source_name'])) {
         $fields['source_name'] = $fields['pub_source_name'];
+    }
+
+    return $fields;
+}
+
+function on_before_insert_db($page, $fields, $url, $configs)
+{
+    // 日期不符合则丢弃
+    if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {
+        $data = $fields['source_pub_time'];
+        $data = str_replace("年", "-", $data);
+        $data = str_replace("月", "-", $data);
+        $data = str_replace("日", " ", $data);
+        $data = str_replace(".", "-", $data);
+
+        if (strtotime($data) === false) {
+            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            return false;
+        } else {
+            // 30天前的数据不要
+            if (strtotime($data . ADD_DAY) < time()) {
+                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                return false;
+            }
+        }
+
+        $fields['source_pub_time'] = $data;
     }
 
     return $fields;

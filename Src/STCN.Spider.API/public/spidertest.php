@@ -11,6 +11,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
+define('ADD_DAY', "+30day"); // 30天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
@@ -264,6 +265,12 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
         if (strtotime($data) === false) {
             // log::add("日期不正确：{$data}\r\n", 'pubtime');
             return false;
+        } else {
+            // 30天前的数据不要
+            if (strtotime($data . ADD_DAY) < time()) {
+                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                return false;
+            }
         }
     }
 
@@ -292,6 +299,33 @@ function on_extract_page_extend($page, $fields, $url, $configs)
     // 如果来源为空则为发布源 lbc
     if (!isset($fields['source_name']) || empty($fields['source_name'])) {
         $fields['source_name'] = $fields['pub_source_name'];
+    }
+
+    return $fields;
+}
+
+function on_before_insert_db($page, $fields, $url, $configs)
+{
+    // 日期不符合则丢弃
+    if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {
+        $data = $fields['source_pub_time'];
+        $data = str_replace("年", "-", $data);
+        $data = str_replace("月", "-", $data);
+        $data = str_replace("日", " ", $data);
+        $data = str_replace(".", "-", $data);
+
+        if (strtotime($data) === false) {
+            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            return false;
+        } else {
+            // 30天前的数据不要
+            if (strtotime($data . ADD_DAY) < time()) {
+                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                return false;
+            }
+        }
+
+        $fields['source_pub_time'] = $data;
     }
 
     return $fields;
