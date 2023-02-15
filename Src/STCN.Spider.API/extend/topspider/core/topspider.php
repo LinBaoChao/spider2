@@ -419,16 +419,6 @@ class topspider
         log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_LOG . '/topspider.log';
         log::$log_type = isset($configs['log_type']) ? $configs['log_type'] : false;
 
-        // 彩蛋 lbc
-        // $included_files = get_included_files();
-        // $content = file_get_contents($included_files[0]);
-        // if (!preg_match("#/\* Do NOT delete this comment \*/#", $content) || !preg_match("#/\* 不要删除这段注释 \*/#", $content))
-        // {
-        //     $msg = "Unknown error...";
-        //     log::error($msg);
-        //     exit;
-        // }
-
         $configs['name']        = isset($configs['name'])        ? $configs['name']        : 'topspider';
         $configs['proxy']       = isset($configs['proxy'])       ? $configs['proxy']       : false;
         $configs['user_agent']  = isset($configs['user_agent'])  ? $configs['user_agent']  : self::AGENT_PC;
@@ -445,7 +435,7 @@ class topspider
         $configs['max_sub_num']       = isset($configs['max_sub_num']) ? $configs['max_sub_num'] : self::$max_sub_num;
         $configs['max_stand_by_time'] = isset($configs['max_stand_by_time']) ? $configs['max_stand_by_time'] : self::$max_stand_by_time;
         $configs['max_task_per_host'] = isset($configs['max_task_per_host']) ? $configs['max_task_per_host'] : self::$max_task_per_host;
-        //启用 host并发上限时，队列参数强制为随机 lbc todo
+        //启用 host并发上限时，队列参数强制为随机 todo
         if ($configs['max_task_per_host'] > 0) {
             $configs['queue_order'] = 'rand';
         } else {
@@ -488,7 +478,7 @@ class topspider
 
         // 不同项目的采集以采集名称作为前缀区分 缩短 spider name md5长度到4位，减少内存占用
         if (isset(self::$queue_config['prefix'])) {
-            self::$queue_config['prefix'] = self::$queue_config['prefix'] . '-' . $configs['name']; // substr(md5($configs['name']), 0, 4); lbc
+            self::$queue_config['prefix'] = self::$queue_config['prefix'] . '-' . $configs['name']; // substr(md5($configs['name']), 0, 4); 
         }
 
         // 当前服务器ID
@@ -523,7 +513,7 @@ class topspider
         $link['url_type'] = 'scan_page';
         $link             = $this->link_uncompress($link);
 
-        // lbc todo
+        // todo
         if ($this->is_content_page($url)) {
             $link['url_type'] = 'content_page';
             $status           = $this->queue_lpush($link, $allowed_repeat);
@@ -629,7 +619,7 @@ class topspider
             return false;
         }
 
-        //增加 要排除的列表页特征正则 // lbc todo
+        //增加 要排除的列表页特征正则 // todo
         if (!empty(self::$configs['list_url_regexes_remove'])) {
             foreach (self::$configs['list_url_regexes_remove'] as $regex) {
                 if (preg_match("#{$regex}#i", $url)) {
@@ -644,7 +634,7 @@ class topspider
         }
 
         //增加泛列表页，即所有页面都是列表页，只抓取链接，不抓取内容
-        if (self::$configs['list_url_regexes'][0] == '*') { // lbc todo
+        if (self::$configs['list_url_regexes'][0] == '*') { // todo
             return true;
         }
 
@@ -673,7 +663,7 @@ class topspider
             return false;
         }
 
-        //增加 要排除的内容页特征正则 lbc todo
+        //增加 要排除的内容页特征正则 todo
         if (!empty(self::$configs['content_url_regexes_remove'])) {
             foreach (self::$configs['content_url_regexes_remove'] as $regex) {
                 if (preg_match("#{$regex}#i", $url)) {
@@ -682,11 +672,11 @@ class topspider
             }
         }
 
-        //增加泛内容模式，即所有页面都要提取内容 lbc todo
+        //增加泛内容模式，即所有页面都要提取内容 todo
         if (empty(self::$configs['content_url_regexes']) or self::$configs['content_url_regexes'][0] == '*') {
             return true;
         }
-        //无内容，泛列表模式，即所有页面都不提取内容 lbc todo
+        //无内容，泛列表模式，即所有页面都不提取内容 todo
         if (self::$configs['content_url_regexes'][0] == 'x') {
             return false;
         }
@@ -956,7 +946,7 @@ class topspider
 
         // windows 下没法显示面板, 强制显示日志
         if (util::is_win()) {
-            self::$configs['name'] = self::$configs['name']; // iconv('UTF-8', 'GB2312//IGNORE', self::$configs['name']); // lbc
+            self::$configs['name'] = self::$configs['name']; // iconv('UTF-8', 'GB2312//IGNORE', self::$configs['name']); 
             log::$log_show         = true;
         }
         // 守护进程下也显示日志
@@ -1321,7 +1311,7 @@ class topspider
         }
 
         // 如果是内容页, 分析提取HTML页面中的字段
-        // 列表页也可以提取数据的, source_type: urlcontext, 未实现
+        // 列表页也可以提取数据的, source_type: urlcontext, 未实现 todo
         if ($link['url_type'] == 'content_page') {
             $this->get_html_fields($page['raw'], $url, $page);
         }
@@ -1821,7 +1811,7 @@ class topspider
                 // // }
                 // // 原文url
                 // $fields['source_url'] = $url;
-                // // 如果来源为空则为发布源 lbc
+                // // 如果来源为空则为发布源
                 // if (!isset($fields['source_name']) || empty($fields['source_name'])) {
                 //     $fields['source_name'] = $fields['pub_source_name'];
                 // }
@@ -1830,30 +1820,35 @@ class topspider
                 // log::add(var_export($fields, true), 'fields');
 
                 $fieldscopy = $fields; // 因为下面逻辑会把不入库的移除，所以备份一份，合并时能取出用
-                // lbc 是否入库，只有入库的才保留、合并fields
+                // 是否入库，只有入库的才保留、合并fields
                 foreach (self::$configs['fields'] as $config) {
                     // 合并字段处理
                     if (isset($config['is_write_db']) && !empty($config['is_write_db']) && $config['is_write_db'] == true && isset($config['join_field']) && !empty($config['join_field'])) {
                         $split = $config['join_field_split'];
-                        $joinFields = explode($split, $config['join_field']); 
+                        $joinFields = explode($split, $config['join_field']);
                         $joinval = "";
                         foreach ($joinFields as $joinField) {
                             if ($split == "|no|") { // 没有连接符号则直接连接值，否用符号连接各值
                                 $joinval .= $fieldscopy[$joinField];
-                            }elseif($split == "|space|"){ // 空格
+                            } elseif ($split == "|space|") { // 空格
                                 $joinval .= " " . $fieldscopy[$joinField]; // 空格连接
-                            }else{
+                            } elseif ($split == "|or|") { // 或
+                                if(isset($fieldscopy[$joinField]) && !empty($fieldscopy[$joinField])){
+                                    $joinval = $fieldscopy[$joinField];
+                                    break;
+                                }                                
+                            } else {
                                 $joinval .= $split . $fieldscopy[$joinField];
                             }
                         }
                         // 去掉开始的$split
-                        if ($split != "|no|") {
+                        if ($split != "|no|" && $split != "|or|") {
                             if ($split == "|space|") {
                                 $joinval = substr($joinval, 1);
                             } else {
                                 $len = Strlen($split);
                                 $joinval = substr($joinval, $len);
-                            }                            
+                            }
                         }
                         $fields[$config['name']] = $joinval;
 
@@ -1868,7 +1863,16 @@ class topspider
                         if (!empty($fields[$config['name']])) {
                             $fields[$config['name']] = trim($fields[$config['name']]);
                         }
-                    }                                       
+                    }
+
+                    // 判断必须字段是否为空，有空则返回不入库
+                    if(isset($config['required']) && $config['required']){
+                        if(empty($fields[$config['name']])){
+                            unset($fieldscopy);
+                            log::add("合并后还为空：field:{$config['name']},join:{$config['join_field']},value:{$joinval}, url: {$url}", 'required');
+                            return;
+                        }
+                    }
                 }
                 unset($fieldscopy);
 
@@ -1917,7 +1921,7 @@ class topspider
                     }
                 }
 
-                // 写入clickhouse lbc
+                // 写入clickhouse
                 if (!empty(self::$click_house_config)) {
                     clickhouse::insert($fields, self::$click_house_config);
                 }
@@ -1998,7 +2002,7 @@ class topspider
                             $selectvalue = $this->get_fields_css($selectvalue, $selector, $conf['name']);
                         } elseif ($selectortype == 'regex') {
                             $selectvalue = $this->get_fields_regex($selectvalue, $selector, $conf['name']);
-                        } elseif ($selectortype == 'self') { // 本身内容 lbc
+                        } elseif ($selectortype == 'self') { // 本身内容
                             $selectvalue = $conf['selector'];
                         }
                     } else {
@@ -2034,7 +2038,7 @@ class topspider
 
             if (!isset($values)) {
                 // 如果值为空而且值设置为必须项并且没有合并项, 跳出foreach循环
-                if ($required && empty($joinfield)) { // lbc to do trace
+                if ($required && empty($joinfield)) { // todo trace
                     $mediaId = self::$configs['name'];
                     log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url} mediaId：{$mediaId}");
                     // 清空整个 fields，当前页面就等于略过了
@@ -2057,7 +2061,7 @@ class topspider
                 // 不重复抽取则只取第一个元素
                 //$fields[$conf['name']] = $repeated ? $values : $values[0];
 
-                // 过滤项 lbc
+                // 过滤项
                 if (isset($conf['filter_type']) && !empty($conf['filter_type']) && isset($fields[$conf['name']]) && !empty($fields[$conf['name']])) {
                     $filter_values = $fields[$conf['name']];
                     
@@ -2161,7 +2165,7 @@ class topspider
                     }
                 }
 
-                // 特殊回调统一处理 lbc todo
+                // 特殊回调统一处理
                 if ($this->on_extract_field_extend) {
                     $return = call_user_func($this->on_extract_field_extend, $fieldname, $data, $page, $url, self::$configs);
                     if (!isset($return)) {
@@ -2227,7 +2231,7 @@ class topspider
                     }
                 }
 
-                // lbc todo check click house
+                // todo check click house
             }
         }
     }
@@ -2820,7 +2824,7 @@ class topspider
     {
         $result = selector::select($html, $selector);
         if (selector::$error) {
-            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // lbc todo trace 出错预警
+            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // todo trace 出错预警
         }
         return $result;
     }

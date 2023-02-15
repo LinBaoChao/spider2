@@ -43,7 +43,7 @@ class WebsiteFieldController extends BaseController
                 if ($status !== null) {
                     $query->where('status', $status);
                 }
-            })->select();
+            })->order("name", 'asc')->select();
 
             $child = WebsiteField::where(function ($query) use ($websiteId, $keyword, $status) {
                 $query->where('child.website_id', $websiteId)->whereNotNull('child.parent_id');

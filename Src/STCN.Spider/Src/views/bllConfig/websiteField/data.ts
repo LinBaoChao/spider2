@@ -276,7 +276,7 @@ export const formSchema: FormSchema[] = [
     field: 'joinFieldSplit',
     label: '合并分割符',
     component: 'Input',
-    helpMessage: ['合并字段分割符', '如果值直接连接不用分割则是|no|,空格则用|space|'],
+    helpMessage: ['合并字段分割符', '如果值直接连接不用分割则是|no|,空格则用|space|,或则用|or|'],
   },
   {
     field: 'parentId',

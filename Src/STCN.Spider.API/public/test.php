@@ -64,24 +64,27 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "https://china.chinadaily.com.cn/a/202302/10/WS63e57a65a3102ada8b22e68e.html";
+$url = "http://finance.china.com.cn/money/bank/20230210/5939608.shtml";
 $data = website::httpRequest($url);
 // $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//div[@id='Content']");
+$data = selector::select($data, "//span[@class='fl time2']");
 var_dump($data);
-//var_dump(substr($data, 15,19));
-$data = selector::select($data, "/责任编辑：(.*)】/", "regex");
+var_dump(substr($data, 0,22));
+$data = selector::select($data, "/编辑：(.*)\)/", "regex");
 var_dump($data);
+//var_dump(substr($data, 2));
 //var_dump(strtotime(str_replace(".",'-',"2022.10.02 10:42")));
 // $data = selector::remove($data, "/<p>.*/", "regex");
 // var_dump($data);
-$data = str_replace(">",'', $data);
-var_dump($data);
-var_dump(strtotime('2023-32-13' . '+30day'));
-if(strtotime('2023-32-13'. '+30day')< time()){
-    var_dump(1);
-}
+// $data = str_replace(">",'', $data);
+// var_dump($data);
+// define('ADD_DAY', "+30day");
+// var_dump(date('Y-m-d H:i:s', strtotime('2023-1-16' . ADD_DAY)));
+// var_dump(strtotime('2023-2-13' . ADD_DAY));
+// if(strtotime('2023-1-16'. ADD_DAY)< time()){
+//     var_dump(1);
+// }
 //var_dump(date_diff(date_create('2023-2-10'), date_create(date('Y-m-d h:i:s',time()))));    
 //var_dump(strip_tags($data));
 //var_dump(preg_replace("/<p>.*/", '', $data));
