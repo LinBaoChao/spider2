@@ -64,18 +64,18 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 
-$url = "http://finance.china.com.cn/money/bank/20230210/5939608.shtml";
-$data = website::httpRequest($url);
-// $data = requests::get($url);
+$url = "http://www.ce.cn/xwzx/gnsz/gdxw/202302/16/t20230216_38395089.shtml";
+//$data = website::httpRequest($url);
+$data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//span[@class='fl time2']");
+$data = selector::select($data, "//div[@id='articleText']");
 var_dump($data);
-var_dump(substr($data, 0,22));
-$data = selector::select($data, "/编辑：(.*)\)/", "regex");
+//var_dump(substr($data, 0,22));
+$data = selector::select($data, "/（责任编辑：(.*)）/", "regex");
 var_dump($data);
 //var_dump(substr($data, 2));
 //var_dump(strtotime(str_replace(".",'-',"2022.10.02 10:42")));
-// $data = selector::remove($data, "/<p>.*/", "regex");
+// $data = selector::remove($data, "/<p>.*/", "regex"); 1`
 // var_dump($data);
 // $data = str_replace(">",'', $data);
 // var_dump($data);
