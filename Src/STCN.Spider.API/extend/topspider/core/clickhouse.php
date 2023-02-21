@@ -37,7 +37,8 @@ class clickhouse
             return false;
         }
 
-        date_default_timezone_set('PRC');
+        // date_default_timezone_set('PRC');
+        date_default_timezone_set('Asia/Shanghai');
         $data['source_pub_time'] = strtotime($data['source_pub_time']);
 
         $items = [];

@@ -11,7 +11,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
-define('ADD_DAY', "+30day"); // 30天前的数据不要
+define('ADD_DAY', "+7day"); // 7天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
@@ -53,7 +53,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('wwwcecn', 0);
+            $configs = website::getWebsiteConfig('whbcn', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {

@@ -1862,15 +1862,16 @@ class topspider
                         // 去除前后空格
                         if (!empty($fields[$config['name']])) {
                             $fields[$config['name']] = trim($fields[$config['name']]);
-                        }
-                    }
 
-                    // 判断必须字段是否为空，有空则返回不入库
-                    if(isset($config['required']) && $config['required']){
-                        if(empty($fields[$config['name']])){
-                            unset($fieldscopy);
-                            log::add("合并后还为空：field:{$config['name']},join:{$config['join_field']},value:{$joinval}, url: {$url}", 'required');
-                            return;
+                            // 判断必须字段是否为空，有空则返回不入库
+                            if (isset($config['required']) && $config['required']) {
+                                if (empty($fields[$config['name']])) {
+                                    unset($fieldscopy);
+                                    $medianame = self::$configs['media_name'];
+                                    log::add("合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
+                                    return false;
+                                }
+                            }
                         }
                     }
                 }
@@ -1947,7 +1948,10 @@ class topspider
             $repeated = isset($conf['repeated']) && $conf['repeated'] ? true : false;
             // 当前field抽取到的内容是否必须有值
             $required = isset($conf['required']) && $conf['required'] ? true : false;
-            $joinfield = isset($conf['join_field']) && $conf['join_field'] ? $conf['join_field'] : '';
+            $joinfield = '';
+            if(isset($conf['join_field']) && !empty($conf['join_field'])){
+                $joinfield = $conf['join_field'];
+            }
 
             if (empty($conf['name'])) {
                 log::error("The field name is null, please check your \"fields\" and add the name of the field\n");

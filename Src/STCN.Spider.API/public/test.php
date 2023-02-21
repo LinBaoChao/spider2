@@ -63,15 +63,17 @@ use topspider\core\website;
 // $str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
-
-$url = "http://www.ce.cn/xwzx/gnsz/gdxw/202302/16/t20230216_38395089.shtml";
+var_dump(strtotime(date('Y-m-d h:i:s', time())));
+$url = "https://www.whb.cn/zhuzhan/sz/20230219/508429.html";
 //$data = website::httpRequest($url);
 $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//div[@id='articleText']");
+$data = selector::select($data, "div[@class='content_info']");
 var_dump($data);
+//var_dump(trim($data));
+//var_dump(strip_tags($data));
 //var_dump(substr($data, 0,22));
-$data = selector::select($data, "/（责任编辑：(.*)）/", "regex");
+$data = selector::select($data, "/来源：(.*)<\/span><\/p><p>/", "regex");
 var_dump($data);
 //var_dump(substr($data, 2));
 //var_dump(strtotime(str_replace(".",'-',"2022.10.02 10:42")));
@@ -100,7 +102,7 @@ var_dump($data);
 //var_dump(strip_tags($data));
 //var_dump(substr($data, 0, 16));
 //var_dump(explode('【', ''));
-//var_dump(strtotime('2023/3/3     22:33:33'));
+var_dump(strtotime('2023/02/20'));
 if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
     var_dump(false);
 }
