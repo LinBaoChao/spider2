@@ -2122,6 +2122,13 @@ class topspider
                                         $filter_values = trim($filter_values, $filterstr);
                                     }                                   
                                     break;
+                                case 'explode':
+                                    if (!empty($filterstr)) {
+                                        $separ = explode('`,`', $filterstr);
+                                        $filvals = explode($separ[0], $filter_values);
+                                        $filter_values = $filvals[(int)$separ[1]];
+                                    }
+                                    break;
                                 case 'self':
                                     $filter_values = $filterstr;
                                     break;
