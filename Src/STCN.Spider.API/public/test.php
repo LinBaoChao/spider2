@@ -64,11 +64,11 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 //var_dump(strtotime(date('Y-m-d h:i:s', time())));
-$url = "https://politics.gmw.cn/2023-02/22/content_36384369.htm";
+$url = "http://news.longhoo.net/2023/bmcz_0223/628504.html";
 //$data = website::httpRequest($url);
 $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//span[@class='liability']/text()");
+$data = selector::select($data, "//p[@class='articalWrite']/text()");
 var_dump($data);
 // $filterstr = "&gt;`,`1";
 // $separ = explode('`,`', $filterstr);
@@ -78,7 +78,7 @@ var_dump($data);
 //var_dump(trim($data));
 //var_dump(strip_tags($data));
 //var_dump(substr($data, 0,22));
-$data = selector::select($data, "/来源：(.*)/", "regex"); // /来源：(.*)<\/p>/
+$data = selector::select($data, "/编辑：(.*)/", "regex"); // /来源：(.*)<\/p>/
 //$data = selector::select($data, "/(.*) &gt; /", "regex");
 var_dump($data);
 var_dump(strip_tags($data));
