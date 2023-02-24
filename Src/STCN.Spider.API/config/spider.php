@@ -68,5 +68,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 30, // 单位秒，爬虫轮询周期，一般半小时
+    'sleep_seconds' => 60 * 10, // 单位秒，爬虫轮询周期，一般半小时
 ];

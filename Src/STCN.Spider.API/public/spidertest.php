@@ -53,7 +53,7 @@ function runSpider()
 
     do {
         try {
-            $configs = website::getWebsiteConfig('longhoonet', 0);
+            $configs = website::getWebsiteConfig('ycnewscn', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
@@ -296,10 +296,10 @@ function on_extract_page_extend($page, $fields, $url, $configs)
     // }
     // 原文url
     $fields['source_url'] = $url;
-    // 如果来源为空则为发布源 lbc
-    if (!isset($fields['source_name']) || empty($fields['source_name'])) {
-        $fields['source_name'] = $fields['pub_source_name'];
-    }
+    // 如果来源为空则为发布源
+    // if (!isset($fields['source_name']) || empty($fields['source_name'])) {
+    //     $fields['source_name'] = $fields['pub_source_name'];
+    // }
 
     return $fields;
 }
