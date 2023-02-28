@@ -43,6 +43,7 @@ class Website extends BaseModel
         'status' => 'int',
         'create_time' => 'datetime',
         'update_time' => 'datetime',
+        'remark' => 'string',
     ];
 
     public function fields()

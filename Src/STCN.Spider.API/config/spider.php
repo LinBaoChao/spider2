@@ -21,7 +21,7 @@ return [
     'max_fields' => 0, // 最大内容数,默认值为0，即不限制
 
     // 多服务 多线程 需要redis支持
-    'tasknum' => 3, // 多任务
+    'tasknum' => 8, // 多任务
     'multiserver' => true, // 多服务器
     'serverid' => 1, // 第几台服务器，当业务配置为空时取这个值 
     'save_running_state' => true, // 是否保存运行状态
@@ -48,13 +48,22 @@ return [
     //     'pass'  => '123456',
     //     'name'  => 'stcn_spider',
     // ),
-    // clickHouse db
+    // clickHouse db 
+    // 'click_house' => array(
+    //     'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
+    //     'port' => '8123',
+    //     'username' => 'stcn_influence_dev', // 'linbaocao',
+    //     'password' => 'NC95XPRyzodLuvB', // '345556',
+    //     'dbname' => 'sentiment_dbd', // 'sentiment_db',
+    //     'table' => 'sentiment_t_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed',
+    // ),
+    // test
     'click_house' => array(
-        'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
+        'host' => '10.254.15.57',
         'port' => '8123',
-        'username' => 'stcn_influence_dev', // 'linbaocao',
-        'password' => 'NC95XPRyzodLuvB', // '345556',
-        'dbname' => 'sentiment_dbd', // 'sentiment_db',
+        'username' => 'linbaocao',
+        'password' => '345556',
+        'dbname' => 'sentiment_db',
         'table' => 'sentiment_t_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed',
     ),
 
@@ -68,5 +77,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 10, // 单位秒，爬虫轮询周期，一般半小时
+    'sleep_seconds' => 60 * 5, // 单位秒，爬虫轮询周期，一般半小时
 ];

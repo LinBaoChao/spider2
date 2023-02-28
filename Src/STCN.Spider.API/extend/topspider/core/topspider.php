@@ -1137,7 +1137,7 @@ class topspider
      */
     public function collect_page()
     {
-        //减少非必要 queue_lsize 查询 20180214
+        //减少非必要 queue_lsize 查询
         if (isset(self::$configs['log_type']) and strstr(self::$configs['log_type'], 'info')) {
             $get_collect_url_num = $this->get_collect_url_num();
             log::info('task id: ' . self::$taskid . " Find pages: {$get_collect_url_num} ");
@@ -1251,7 +1251,7 @@ class topspider
         // 处理回调函数
         //--------------------------------------------------------------------------------
 
-        // 判断当前网页是否被反爬虫了, 需要开发者实现 
+        // 判断当前网页是否被反爬虫了
         if ($this->is_anti_spider) {
             $is_anti_spider = call_user_func($this->is_anti_spider, $url, $page['raw'], $this);
             // 如果在回调函数里面判断被反爬虫并且返回true

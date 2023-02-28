@@ -18,7 +18,7 @@ function runSpider()
     $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 5;
 
     // 抓的网站
-    $websites = ['cctvcom', 'financechinacom', 'djnewschinacom', 'newschinacom', 'chinachinadaily', 'cnwomencom', 'farmercom'];
+    $websites = ['youthnews', 'youthfinance', 'cyolcom', 'wwwcecn', 'rmzxbcomcn', 'haiwainetcn', 'qizhiwangorg'];
 
     do {
         try {
@@ -28,7 +28,7 @@ function runSpider()
                 foreach ($configs as $config) {
                     try {
                         if (!in_array($config['name'], $websites)) {
-                            log::add("noin：{$config['name']}\r\n", 'website2');
+                            log::add("noin：{$config['name']}\r\n", 'website3');
                             continue;
                         }
 
@@ -119,10 +119,10 @@ function runSpider()
 
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'],'runtimes2');
+                        log::add($config['name'],'runtimes3');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr2');
+                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr3');
                     }
                 }
             }

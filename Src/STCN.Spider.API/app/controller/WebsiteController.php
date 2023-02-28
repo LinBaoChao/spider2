@@ -127,6 +127,7 @@ class WebsiteController extends BaseController
                 'callback_method' => $params['callbackMethod'] ?? null,
                 'callback_script' => $params['callbackScript'] ?? null,
                 'status' => $params['status'] ?? 1,
+                'remark' => $params['remark'] ?? null,
             ]);
 
             $retval->result = $o;
@@ -215,6 +216,7 @@ class WebsiteController extends BaseController
                 'callback_method' => $params['callbackMethod'] ?? null,
                 'callback_script' => $params['callbackScript'] ?? null,
                 'status' => $params['status'] ?? 1,
+                'remark' => $params['remark'] ?? null,
             ]);
 
             $retval->result = $o;

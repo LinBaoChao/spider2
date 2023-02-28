@@ -25,7 +25,10 @@ function runSpider()
     $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
 
     // 轮询间隔 秒
-    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 60 * 2;
+    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 5;
+
+    // 不抓的网站
+    $websites = ['youthnews', 'youthfinance', 'cyolcom', 'wwwcecn', 'rmzxbcomcn', 'haiwainetcn', 'qizhiwangorg', 'cctvcom', 'financechinacom', 'djnewschinacom', 'newschinacom', 'chinachinadaily', 'cnwomencom', 'farmercom'];
 
     do {
         try {
@@ -34,6 +37,11 @@ function runSpider()
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
+                        if (in_array($config['name'], $websites)) {
+                            log::add("in：{$config['name']}\r\n", 'website');
+                            continue;
+                        }
+
                         $spider = new topspider($config);
 
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
@@ -129,7 +137,7 @@ function runSpider()
                 }
             }
 
-            sleep($sleepSeconds); // 轮询更新周期 秒
+            sleep($sleepSeconds); // 轮询更新周期 毫秒
         } catch (\Exception $ex) {
             log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
         }

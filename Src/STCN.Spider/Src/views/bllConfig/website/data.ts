@@ -137,6 +137,10 @@ export const columns: BasicColumn[] = [
     title: '回调脚本',
   },
   {
+    dataIndex: 'remark',
+    title: '备注',
+  },
+  {
     title: '创建时间',
     dataIndex: 'createTime',
     width: 160,
@@ -304,6 +308,7 @@ export const formSchema: FormSchema[] = [
     field: 'serverid',
     label: '第几台服务器',
     component: 'InputNumber',
+    defaultValue: 1,
   },
   {
     field: 'maxDepth',
@@ -376,6 +381,11 @@ export const formSchema: FormSchema[] = [
       '要和回调函数配对',
       '函数命名：函数名+_+媒体标识，如on_start_stcn，此脚本的每一个函数是一个php功能及业务逻辑完整的函数',
     ],
+  },
+  {
+    field: 'remark',
+    label: '备注',
+    component: 'InputTextArea',
   },
 ];
 
