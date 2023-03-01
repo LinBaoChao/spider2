@@ -11,7 +11,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
-define('ADD_DAY', "+7day"); // 7天前的数据不要
+define('ADD_DAY', "+5day"); // 7天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
@@ -40,6 +40,8 @@ function runSpider()
                         if (in_array($config['name'], $websites)) {
                             log::add("in：{$config['name']}\r\n", 'website');
                             continue;
+                        }else{
+                            log::add("noin：{$config['name']}\r\n", 'website');
                         }
 
                         $spider = new topspider($config);

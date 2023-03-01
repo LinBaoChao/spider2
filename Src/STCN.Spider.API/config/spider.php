@@ -26,28 +26,38 @@ return [
     'serverid' => 1, // 第几台服务器，当业务配置为空时取这个值 
     'save_running_state' => true, // 是否保存运行状态
     // redis
+    // 'queue_config' => array(
+    //     'host'      => '172.18.56.105',
+    //     'port'      => 6379,
+    //     'pass'      => 'redis1010',
+    //     'db'        => 5,
+    //     'prefix'    => 'topspider',
+    //     'timeout'   => 30,
+    //     // 'queue_order' => 'rand', 此项先不配，默认为列表采集
+    // ),
+    // redis test
     'queue_config' => array(
         'host'      => '127.0.0.1',
         'port'      => 6379,
         'pass'      => '',
-        'db'        => 5,
+        'db'        => 1,
         'prefix'    => 'topspider',
         'timeout'   => 30,
         // 'queue_order' => 'rand', 此项先不配，默认为列表采集
     ),
 
     // db
-    // 'export' => array(
-    //     'type' => 'db', // csv、sql、db、clickhouse
-    //     'table' => 'article_spider',
-    // ),
-    // 'db_config' => array(
-    //     'host'  => '127.0.0.1',
-    //     'port'  => 3306,
-    //     'user'  => 'root',
-    //     'pass'  => '123456',
-    //     'name'  => 'stcn_spider',
-    // ),
+    'export' => array(
+        'type' => 'db', // csv、sql、db、clickhouse
+        'table' => 'article_spider',
+    ),
+    'db_config' => array(
+        'host'  => '127.0.0.1',
+        'port'  => 3306,
+        'user'  => 'root',
+        'pass'  => '123456',
+        'name'  => 'stcn_spider',
+    ),
     // clickHouse db 
     // 'click_house' => array(
     //     'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'

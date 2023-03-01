@@ -153,7 +153,7 @@ class queue
      * @param int $expire   过期时间，单位：秒
      * @return void
      */
-    public static function set($key, $value, $expire = 0)
+    public static function set($key, $value, $expire = 604800) // 缓存7天
     {
         self::init();
         try
@@ -194,7 +194,7 @@ class queue
      * @param int $expire   过期时间，单位：秒
      * @return void
      */
-    public static function setnx($key, $value, $expire = 0)
+    public static function setnx($key, $value, $expire = 604800)
     {
         self::init();
         try

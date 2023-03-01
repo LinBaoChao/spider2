@@ -129,7 +129,7 @@ function runSpider()
 
             sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (\Exception $ex) {
-            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
+            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr3');
         }
     } while ($isRunSpider);
 }
