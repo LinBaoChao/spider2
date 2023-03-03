@@ -8,7 +8,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
-define('ADD_DAY', "+5day"); // 7天前的数据不要
+define('ADD_DAY', "+3day"); // 3天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 

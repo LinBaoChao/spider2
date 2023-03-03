@@ -10,3 +10,28 @@ pub_source_name='东北新闻网'
  order by FROM_UNIXTIME(c_time) DESC
 
 select FROM_UNIXTIME(c_time),FROM_UNIXTIME(u_time), * from sentiment_dbd.sentiment_t_distributed order by FROM_UNIXTIME(c_time) DESC -- final where is_ocr =0 and  pub_source_name='文汇网'  
+
+SELECT 
+FROM_UNIXTIME(source_pub_time),
+FROM_UNIXTIME(c_time), 
+pub_media_name , 
+* FROM sentiment_dbd.sentiment_t_distributed
+WHERE 1=1
+--AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
+AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
+--AND FROM_UNIXTIME(c_time) <= date_add(minute, 10, FROM_UNIXTIME(source_pub_time))
+--AND pub_media_name in('每日经济新闻') --('中国侨网','学习强国','国际在线') 
+ORDER BY FROM_UNIXTIME(c_time) DESC
+
+SELECT COUNT(*) FROM sentiment_dbd.sentiment_t_distributed
+WHERE 1=1
+--AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
+AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
+--AND FROM_UNIXTIME(c_time) <= date_add(minute, 10, FROM_UNIXTIME(source_pub_time))
+--AND pub_media_name in('中国侨网','学习强国','国际在线') 
+--ORDER BY FROM_UNIXTIME(c_time) DESC
+
+SELECT COUNT(*) FROM sentiment_dbd.sentiment_t_distributed
+
+SELECT * FROM sentiment_dbd.sentiment_t_distributed
+ORDER BY FROM_UNIXTIME(c_time) DESC

@@ -29,6 +29,11 @@ class queue
 
     public static $error = '';
 
+    /**
+     * 60X60X24X5 5天过期
+     */
+    private static $expire = 432000;
+
     public static function init()
     {
         if ( ! extension_loaded('redis'))
@@ -153,13 +158,17 @@ class queue
      * @param int $expire   过期时间，单位：秒
      * @return void
      */
-    public static function set($key, $value, $expire = 604800) // 缓存7天
+    public static function set($key, $value, $expire = 0)
     {
         self::init();
         try
         {
             if ( self::$links[self::$link_name] )
             {
+                if ($expire = 0) {
+                    $expire = self::$expire;
+                }
+                
                 if ($expire > 0)
                 {
                     return self::$links[self::$link_name]->setex($key, $expire, $value);
@@ -194,13 +203,17 @@ class queue
      * @param int $expire   过期时间，单位：秒
      * @return void
      */
-    public static function setnx($key, $value, $expire = 604800)
+    public static function setnx($key, $value, $expire = 0)
     {
         self::init();
         try
         {
             if ( self::$links[self::$link_name] )
             {
+                if ($expire = 0) {
+                    $expire = self::$expire;
+                }
+
                 if ($expire > 0)
                 {
                     return self::$links[self::$link_name]->set($key, $value, array('nx', 'ex' => $expire));

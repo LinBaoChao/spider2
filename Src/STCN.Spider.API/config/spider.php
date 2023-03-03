@@ -37,9 +37,9 @@ return [
     // ),
     // redis test
     'queue_config' => array(
-        'host'      => '127.0.0.1',
+        'host'      => '10.200.255.33',
         'port'      => 6379,
-        'pass'      => '',
+        'pass'      => 'stcn168',
         'db'        => 1,
         'prefix'    => 'topspider',
         'timeout'   => 30,
