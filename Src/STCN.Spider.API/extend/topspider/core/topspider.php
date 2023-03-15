@@ -594,7 +594,7 @@ class topspider
     public function is_scan_page($url)
     {
         $parse_url = parse_url($url);
-        //2018-1-3 通配所有域名
+        //通配所有域名
         if (!empty($parse_url['host']) and self::$configs['domains'][0] == '*') {
             return true;
         }
@@ -614,7 +614,7 @@ class topspider
     public function is_list_page($url)
     {
         $result = false;
-        //过滤下载类型文件 20180209
+        //过滤下载类型文件
         if (preg_match('/\.(zip|7z|cab|rar|iso|gho|jar|ace|tar|gz|bz2|z|xml|pdf|doc|txt|rtf|snd|xls|xlsx|docx|apk|ipa|flv|midi|mps|pls|pps|ppa|pwz|mp3|mp4|mpeg|mpe|asf|asx|mpg|3gp|mov|m4v|mkv|vob|vod|mod|ogg|rm|rmvb|wmv|avi|dat|exe|wps|js|css|bmp|jpg|png|gif|ico|tiff|jpeg|svg|webp|mpa|mdb|bin)$/iu', $url)) {
             return false;
         }
@@ -658,7 +658,7 @@ class topspider
     public function is_content_page($url)
     {
         $result = false;
-        //过滤下载类型文件 20180209
+        //过滤下载类型文件 
         if (preg_match('/\.(zip|7z|cab|rar|iso|gho|jar|ace|tar|gz|bz2|z|xml|pdf|doc|txt|rtf|snd|xls|xlsx|docx|apk|ipa|flv|midi|mps|pls|pps|ppa|pwz|mp3|mp4|mpeg|mpe|asf|asx|mpg|3gp|mov|m4v|mkv|vob|vod|mod|ogg|rm|rmvb|wmv|avi|dat|exe|wps|js|css|bmp|jpg|png|gif|ico|tiff|jpeg|svg|webp|mpa|mdb|bin)$/iu', $url)) {
             return false;
         }
@@ -888,7 +888,7 @@ class topspider
             log::error('The curl extension was not found');
             exit;
         }
-
+        
         // 多任务需要pcntl扩展支持
         if (self::$tasknum > 1 && !function_exists('pcntl_fork')) {
             log::error('Multitasking needs pcntl, the pcntl extension was not found');
@@ -925,10 +925,10 @@ class topspider
         }
 
         // 检查导出
-        $this->check_export();
+        // $this->check_export();
 
         // 检查缓存
-        $this->check_cache();
+        // $this->check_cache();
 
         // 检查 scan_urls 
         if (empty(self::$configs['scan_urls'])) {
@@ -966,7 +966,7 @@ class topspider
             }
 
             $header .= "\n[ " . self::$configs['name'] . " Spider ] is started...\n\n";
-            $header .= '  * TOPSpider Version: ' . self::VERSION . "\n";
+            $header .= '  * STCN Spider Version: ' . self::VERSION . "\n";
             $header .= '  * Task Number: ' . self::$tasknum . "\n\n";
             $header .= "Input \"php $start_file stop\" to quit. Start success.\n";
             if (!util::is_win()) {
@@ -1090,7 +1090,7 @@ class topspider
                         }
                     }
                 }
-                //在主进程中，保存当前配置到缓存，以使子进程可实时读取动态修改后的配置 20180209
+                //在主进程中，保存当前配置到缓存，以使子进程可实时读取动态修改后的配置
                 if (self::$use_redis and !empty(self::$configs)) {
                     queue::set('configs_' . self::$configs['name'], json_encode(self::$configs));
                 }
@@ -1108,7 +1108,7 @@ class topspider
             else {
                 // 主进程采集到多于任务数2个时, 子任务可以采集, 否则等待...
                 if ($queue_lsize > self::$taskid + 2) {
-                    //在子进程中，从内存中实时读取当前最新配置，用于适应主进程常驻内存模式，无限循环后的配置变动 20180209
+                    //在子进程中，从内存中实时读取当前最新配置，用于适应主进程常驻内存模式，无限循环后的配置变动
                     if (self::$use_redis and !empty(self::$configs)) {
                         if ($configs_active = queue::get('configs_' . self::$configs['name'])) {
                             self::$configs = json_decode($configs_active, true);
@@ -1662,7 +1662,7 @@ class topspider
         $domain    = empty($parse_url['host']) ? $domain : $parse_url['host'];
         // 如果host不为空, 判断是不是要爬取的域名
         if (!empty($parse_url['host'])) {
-            //2018-1-3 通配所有域名
+            //通配所有域名
             if (empty(self::$configs['domains']) or self::$configs['domains'][0] == '*') {
                 return $url;
             }
@@ -1730,6 +1730,7 @@ class topspider
      */
     public function link_uncompress($link)
     {
+        // TODO
         $link = array(
             'url'          => isset($link['url'])          ? $link['url']          : '',
             'url_type'     => isset($link['url_type'])     ? $link['url_type']     : '',
@@ -1910,17 +1911,17 @@ class topspider
                 log::info("Result[{$fields_num}]: " . $fields_str);
 
                 // 如果设置了导出选项
-                if (!empty(self::$configs['export'])) {
-                    self::$export_type = isset(self::$configs['export']['type']) ? self::$configs['export']['type'] : '';
-                    if (self::$export_type == 'csv') {
-                        util::put_file(self::$export_file, util::format_csv($fields) . "\n", FILE_APPEND);
-                    } elseif (self::$export_type == 'sql') {
-                        $sql = db::insert(self::$export_table, $fields, true);
-                        util::put_file(self::$export_file, $sql . ";\n", FILE_APPEND);
-                    } elseif (self::$export_type == 'db') {
-                        db::insert(self::$export_table, $fields);
-                    }
-                }
+                // if (!empty(self::$configs['export'])) {
+                //     self::$export_type = isset(self::$configs['export']['type']) ? self::$configs['export']['type'] : '';
+                //     if (self::$export_type == 'csv') {
+                //         util::put_file(self::$export_file, util::format_csv($fields) . "\n", FILE_APPEND);
+                //     } elseif (self::$export_type == 'sql') {
+                //         $sql = db::insert(self::$export_table, $fields, true);
+                //         util::put_file(self::$export_file, $sql . ";\n", FILE_APPEND);
+                //     } elseif (self::$export_type == 'db') {
+                //         db::insert(self::$export_table, $fields);
+                //     }
+                // }
 
                 // 写入clickhouse
                 if (!empty(self::$click_house_config)) {
@@ -2249,6 +2250,9 @@ class topspider
 
     public function check_cache()
     {
+        // TODO
+        return;
+
         if (!self::$use_redis || self::$save_running_state) {
             return false;
         }
@@ -2413,6 +2417,7 @@ class topspider
      */
     public function del_server_list($serverid)
     {
+        // todo
         if (!self::$use_redis) {
             return false;
         }
@@ -2947,10 +2952,10 @@ class topspider
         foreach ($loadavg as $k => $v) {
             $loadavg[$k] = round($v, 2);
         }
-        $display_str = "\033[1A\n\033[K-----------------------------\033[47;30m TOPSPIDER \033[0m-----------------------------\n\033[0m";
+        $display_str = "\033[1A\n\033[K-----------------------------\033[47;30m STCN SPIDER \033[0m---------------------------\n\033[0m";
         //$display_str = "-----------------------------\033[47;30m TOPSPIDER \033[0m-----------------------------\n\033[0m";
         $run_time_str = util::time2second(time() - self::$time_start, false);
-        $display_str .= 'TOPSPIDER version:' . self::VERSION . '          PHP version:' . PHP_VERSION . "\n";
+        $display_str .= 'STCN SPIDER version:' . self::VERSION . '          PHP version:' . PHP_VERSION . "\n";
         $display_str .= 'start time:' . date('Y-m-d H:i:s', self::$time_start) . '   run ' . $run_time_str . " \n";
 
         $display_str .= 'spider name: ' . self::$configs['name'] . "\n";

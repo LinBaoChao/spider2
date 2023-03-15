@@ -93,6 +93,7 @@ class queue
 
     public static function clear_link()
     {
+        // TODO
         if(self::$links) 
         {
             foreach(self::$links as $k=>$v)
@@ -168,7 +169,7 @@ class queue
                 if ($expire = 0) {
                     $expire = self::$expire;
                 }
-                
+
                 if ($expire > 0)
                 {
                     return self::$links[self::$link_name]->setex($key, $expire, $value);

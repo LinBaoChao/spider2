@@ -9,7 +9,7 @@ return [
     'output_encoding' => '', // 输出编码
 
     // logo
-    'log_show' => true, // 是否开启
+    'log_show' => false, // 是否开启
     'log_type' => 'error,debug,warn', // 'error,debug,info,warn' 默认空为所有
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
@@ -17,11 +17,11 @@ return [
     'interval' => 500, // 爬取间隔（毫秒），此值不配默认为100毫秒
     'timeout' => 5, // 爬取超时（秒）
     'max_try' => 3, // 失败重试
-    'max_depth' => 0, // 爬取深度,默认值为0，即不限制
+    'max_depth' => 1, // 爬取深度,默认值为0，即不限制
     'max_fields' => 0, // 最大内容数,默认值为0，即不限制
 
     // 多服务 多线程 需要redis支持
-    'tasknum' => 8, // 多任务
+    'tasknum' => 3, // 多任务
     'multiserver' => true, // 多服务器
     'serverid' => 1, // 第几台服务器，当业务配置为空时取这个值 
     'save_running_state' => true, // 是否保存运行状态
@@ -52,7 +52,7 @@ return [
         'table' => 'article_spider',
     ),
     'db_config' => array(
-        'host'  => '127.0.0.1',
+        'host'  => '10.254.15.33',
         'port'  => 3306,
         'user'  => 'root',
         'pass'  => '123456',
@@ -65,7 +65,7 @@ return [
     //     'username' => 'stcn_influence_dev', // 'linbaocao',
     //     'password' => 'NC95XPRyzodLuvB', // '345556',
     //     'dbname' => 'sentiment_dbd', // 'sentiment_db',
-    //     'table' => 'sentiment_t_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed',
+    //     'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     // ),
     // test
     'click_house' => array(
@@ -74,7 +74,7 @@ return [
         'username' => 'linbaocao',
         'password' => '345556',
         'dbname' => 'sentiment_db',
-        'table' => 'sentiment_t_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed',
+        'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     ),
 
     // 反爬
@@ -87,5 +87,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 5, // 单位秒，爬虫轮询周期，一般半小时
+    'sleep_seconds' => 60 * 10, // 单位秒，爬虫轮询周期，一般半小时
 ];

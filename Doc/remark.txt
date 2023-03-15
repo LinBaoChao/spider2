@@ -32,3 +32,13 @@ host='172.18.56.105',port=6379,password='redis1010'
 
 --开发测试liunx
 10.254.15.57 22 root wpx520
+宝塔liunx面板
+==================================================================
+外网面板地址: http://61.144.253.154:38923/37eed87e
+内网面板地址: http://10.254.15.57:38923/37eed87e
+username: rm4agduo
+password: b3ee4d54
+If you cannot access the panel,
+release the following panel port [38923] in the security group
+若无法访问面板，请检查防火墙/安全组是否有放行面板[38923]端口
+==================================================================

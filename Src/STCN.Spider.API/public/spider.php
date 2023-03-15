@@ -15,35 +15,70 @@ define('ADD_DAY', "+3day"); // 3天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
-function runSpider()
+const NEWLINE = "\n\n";
+
+/**
+ * 爬取入口函数，多进程处理
+ * @return void
+ */
+function main()
+{
+    if (strtolower(php_sapi_name()) != 'cli') {
+        die("请在cli模式下运行");
+    }
+
+    // echo "当前进程：" . getmypid() . NEWLINE;
+    echo "===========开始启动多任务爬取===========" . NEWLINE;
+
+    $configs = website::getWebsiteConfig();
+    if (!empty($configs) && $configs['code'] == 'success') {
+        $configs = $configs['result'];
+        foreach ($configs as $config) {
+            $name = $config['name'];
+
+            // fork后父进程会走自己的逻辑，子进程从处开始走自己的逻辑，堆栈信息会完全复制给子进程内存空间，父子进程相互独立
+            $pid = pcntl_fork(); 
+            if ($pid == -1) { // 失败
+                echo "[{$name}]创建爬取任务失败" . NEWLINE;
+            } else if ($pid) { // 父进程
+                // pcntl_wait($status); // 防止僵尸子进程
+            } else { // 子进程
+                runSpider($name);
+            }
+        }
+    }
+
+    echo "==============END=============" . NEWLINE;
+}
+
+/**
+ * 单个网站抓取进程
+ * @param mixed $mediaId 网站名称标识
+ * @return void
+ */
+function runSpider($mediaId)
 {
     ignore_user_abort();
     set_time_limit(0);
 
-    $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
-    // 是否运行
-    $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
-
-    // 轮询间隔 秒
-    $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 5;
-
-    // 不抓的网站
-    $websites = ['youthnews', 'youthfinance', 'cyolcom', 'wwwcecn', 'rmzxbcomcn', 'haiwainetcn', 'qizhiwangorg', 'cctvcom', 'financechinacom', 'djnewschinacom', 'newschinacom', 'chinachinadaily', 'cnwomencom', 'farmercom'];
+    $isRunSpider = true;
+    $runtimes = 0;
 
     do {
+        $runtimes++;
+
         try {
-            $configs = website::getWebsiteConfig();
+            $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+            // 是否运行
+            $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
+            // 轮询间隔 秒
+            $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 5;
+
+            $configs = website::getWebsiteConfig($mediaId, 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
-                        if (in_array($config['name'], $websites)) {
-                            log::add("in：{$config['name']}\r\n", 'website');
-                            continue;
-                        }else{
-                            log::add("noin：{$config['name']}\r\n", 'website');
-                        }
-
                         $spider = new topspider($config);
 
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
@@ -129,25 +164,27 @@ function runSpider()
                             include_once($filename);
                         }
 
+                        log::add("[{$mediaId}]第{$runtimes}次开始爬取", 'runSpider');
                         $spider->start();
-                        usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'],'runtimes');
+                        log::add("[{$mediaId}]第{$runtimes}次完成爬取", 'runSpider');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr');
+                        log::add("[{$mediaId}]第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpider');
                     }
                 }
+            }else{
+                log::add("[{$mediaId}]第{$runtimes}次时已停用\r\n", 'runSpider');
             }
 
-            sleep($sleepSeconds); // 轮询更新周期 毫秒
+            sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (\Exception $ex) {
-            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
+            log::add("[{$mediaId}]第{$runtimes}次时运行出错：{$ex->getMessage()}\r\n", 'runSpider');
         }
     } while ($isRunSpider);
 }
 
 // 运行开始爬虫
-runSpider();
+main();
 
 //----统一回调处理 begin----//
 

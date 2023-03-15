@@ -27,41 +27,22 @@ function runSpider()
     // 轮询间隔 秒
     $sleepSeconds = isset($spiderConfig['sleep_seconds']) ? $spiderConfig['sleep_seconds'] : 60 * 5;
 
-    // db
-    $export = array(
-        'type' => 'db', // csv、sql、db、clickhouse
-        'table' => 'article_spider',
-    );
+    // 不抓的网站
+    $websites = ['youthnews', 'youthfinance', 'cyolcom', 'wwwcecn', 'rmzxbcomcn', 'haiwainetcn', 'qizhiwangorg', 'cctvcom', 'financechinacom', 'djnewschinacom', 'newschinacom', 'chinachinadaily', 'cnwomencom', 'farmercom'];
 
-    $db_config = array(
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'user' => 'root',
-        'pass' => '123456',
-        'name' => 'stcn_spider',
-    );
-
-    // test db
-    $clickhouse = array(
-        'host' => '10.254.15.57',
-        'port' => '8123',
-        'username' => 'linbaocao',
-        'password' => '345556',
-        'dbname' => 'sentiment_db',
-        'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
-    );
-    
     do {
         try {
-            $configs = website::getWebsiteConfig('ycnewscn', 0);
+            $configs = website::getWebsiteConfig();
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
-                        // test
-                        $config['click_house'] = null; // $clickhouse;
-                        $config['export'] = $export;
-                        $config['db_config'] = $db_config;
+                        // if (in_array($config['name'], $websites)) {
+                        //     log::add("in：{$config['name']}\r\n", 'website');
+                        //     continue;
+                        // }else{
+                        //     log::add("noin：{$config['name']}\r\n", 'website');
+                        // }
 
                         $spider = new topspider($config);
 
@@ -71,8 +52,9 @@ function runSpider()
                         $spider->on_start = 'on_start';
                         $spider->on_extract_field = 'on_extract_field';
                         // 回调扩展
-                        $spider->on_extract_field_extend = 'on_extract_field_extend';
+                        $spider->on_extract_field_extend = 'on_extract_field_extend'; 
                         $spider->on_extract_page_extend = 'on_extract_page_extend'; // 加入非配置的特殊字段处理
+                        $spider->on_before_insert_db = 'on_before_insert_db'; // 入库前统一回调处理
 
                         // 绑定回调函数 从业务配置中是否有回调函数，及动态脚本，可以把脚本存入某个文件里，然后上面引入这个文件，即可回调到这个函数
                         // 目前支持回调函数有on_start、on_extract_field、on_extract_page、on_scan_page、on_list_page、on_content_page、on_handle_img、on_download_page、on_download_attached_page、on_fetch_url、on_status_code、is_anti_spider、on_attachment_file
@@ -149,7 +131,7 @@ function runSpider()
 
                         $spider->start();
                         usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'], 'runtimes');
+                        log::add($config['name'],'runtimes');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
                         log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr');
@@ -236,8 +218,7 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调处理 end----//
 
 //----统一回调扩展 begin----//
-function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
-{
+function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
     if (!empty($data)) {
         $data = trim(strip_tags($data)); // 去tag
         $removes = ['&nbsp;', '&#13;']; // 移除字符 /&#13;【 【 【	【\n
@@ -245,13 +226,13 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
     }
 
     // 如果不是需要的栏目则不要 则返回false
-    if ($fieldname == "pub_channel_name") {
+    if($fieldname == "pub_channel_name"){
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . trim($configs['channel']) . " ", " " . trim($data) . " ") === false) { // 不是需要的栏目则不需要则返回false
                 log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
-            } else {
+            }else{
                 // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }

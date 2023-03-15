@@ -19,6 +19,8 @@ SELECT * FROM website WHERE NAME = 'youthcn'
 
 SELECT * FROM `article_spider` WHERE id!=1 ORDER BY publish_time DESC LIMIT 60,20
 
-DELETE FROM article_spider WHERE create_time>='2022-12-4'
+--DELETE FROM article_spider WHERE create_time>='2022-12-4'
 
 -- 
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+FLUSH  PRIVILEGES;
