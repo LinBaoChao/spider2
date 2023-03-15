@@ -2045,7 +2045,7 @@ class topspider
                 // 如果值为空而且值设置为必须项并且没有合并项, 跳出foreach循环
                 if ($required && empty($joinfield)) { // todo trace
                     $mediaId = self::$configs['name'];
-                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url：{$url} mediaId：{$mediaId}");
+                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url:{$url} mediaId:{$mediaId}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();
                     break;
