@@ -18,16 +18,16 @@ FROM_UNIXTIME(source_pub_time) as pubtime,
 FROM_UNIXTIME(c_time) as ctime, 
 * FROM sentiment_new_distributed
 where 1=1
---and source_url='http://news.longhoo.net/2023/bmcz_0315/633971.html' 
+--and source_url='http://www.subaonet.com/2023/szyw/0316/679882.shtml' 
 and pub_source_name='苏州新闻网'
 order by c_time DESC
 
 SELECT COUNT(*) FROM sentiment_new_distributed
 WHERE 1=1
 --AND FROM_UNIXTIME(c_time) >= toDateTime('2023-03-08 00:00:00', 'Asia/Shanghai')  AS time
-AND (c_time >= toUnixTimestamp('2023-03-16 00:00:00', 'Asia/Shanghai') AS unix_timestamp)
+AND (c_time >= toUnixTimestamp('2023-03-16 19:00:00', 'Asia/Shanghai') AS unix_timestamp)
 --AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
-AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
+--AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
 --AND FROM_UNIXTIME(c_time) <= date_add(minute, 1, FROM_UNIXTIME(source_pub_time))
 AND pub_media_name in
 ('苏州新闻网','黑龙江日报','哈尔滨日报','文汇网','新民网','周到上海网','劳动报','龙虎网','南报网','宿迁网','大庆网','中央广播电视总台','中国网','中国日报','中国青年报','中国经济网','人民政协报','人民日报海外版','旗帜网','中国妇女网','农民日报','中国侨网','中央广播电视总台','东北网','长春新闻网','大吉网','中国吉林网','沈阳网','北国网','东北新闻网','包头日报','内蒙古晨网','正北方网','内蒙古新闻网','吕梁新闻网','忻州网','运城新闻网','晋城新闻网','临汾新闻网','长治新闻网','山西新闻网','河北青年报','河北日报','太行新闻网','廊坊传媒网','张家口新闻网','环渤海新闻网'
@@ -42,7 +42,7 @@ FROM_UNIXTIME(c_time) as ctime,
 * FROM sentiment_new_distributed
 WHERE 1=1
 --AND FROM_UNIXTIME(c_time) >= toDateTime('2023-03-10 00:00:00', 'Asia/Shanghai')  AS time
-AND (c_time >= toUnixTimestamp('2023-03-16 00:00:00', 'Asia/Shanghai') AS unix_timestamp)
+AND (c_time >= toUnixTimestamp('2023-03-16 19:00:00', 'Asia/Shanghai') AS unix_timestamp)
 --AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
 AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
 --AND FROM_UNIXTIME(c_time) <= date_add(minute, 10, FROM_UNIXTIME(source_pub_time))

@@ -36,6 +36,7 @@ function main()
 
     $second = 60 * 10; // 10分钟轮询库
     $websites = [];
+    $count = 0;
 
     do {
         try {
@@ -54,7 +55,8 @@ function main()
                         log::add("[{$name}]创建爬取任务失败\r\n", 'runspider');
                     } else if ($pid) { // 父进程
                         $websites[$name] = $pid;
-                        log::add("[{$name}]创建爬取任务成功{$pid}\r\n", 'runspider');
+                        $count++;
+                        log::add("[{$name}]创建爬取任务{$count}成功{$pid}\r\n", 'runspider');
                         sleep(60); // 睡1分钟再创建子任务，这样就可以错开休息，有效缓解同时资源占用
                         // pcntl_wait($status); // 防止僵尸子进程
                     } else { // 子进程
