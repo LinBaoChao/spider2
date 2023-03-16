@@ -98,10 +98,12 @@ class log
      */
     public static function add($msg, $log_type = '')
     {
-        if ($log_type != '') 
-        {
-            $msg = date("Y-m-d H:i:s")." [{$log_type}] " . $msg . "\n";
+        if (self::$log_type && strpos(self::$log_type, $log_type) === false) {
+            return false;
         }
+
+        $msg = date("Y-m-d H:i:s") . " [{$log_type}] " . $msg . "\n";
+        
         if(self::$log_show)
         {
             echo $msg;

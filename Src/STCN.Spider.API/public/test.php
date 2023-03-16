@@ -52,6 +52,25 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // $result = $db->select("SELECT * FROM sentiment_tmp LIMIT 100");
 // print_r($result->fetchOne());
 
+//var_dump(date('Y-m-d H:i:s', time()));
+
+$a = [];
+$a1 = "a1";
+$a2 = "a2";
+$a[] = array($a1 => 1);
+$a[] = array($a2 => 2);
+var_dump($a);
+
+$b = [];
+$b["b1"] = 1;
+$b["b2"] = 2;
+var_dump($b);
+
+var_dump(array_key_exists(1, $b));
+var_dump(in_array(array($a1 => 2), $a));
+var_dump(array_search(2, $b));
+
+
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
 
 use topspider\core\log;
@@ -63,7 +82,7 @@ use topspider\core\website;
 // $str = 'http://www.jcnews.com.cn/xw/gnxw/202301/t20230118_990495.html';
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
-//var_dump(strtotime(date('Y-m-d h:i:s', time())));
+//var_dump(strtotime(date('Y-m-d H:i:s', time())));
 $url = "http://www.ycnews.cn/p/637143.html";
 //$data = website::httpRequest($url);
 $data = requests::get($url);
@@ -94,7 +113,7 @@ var_dump(strip_tags($data));
 // if(strtotime('2023-1-16'. ADD_DAY)< time()){
 //     var_dump(1);
 // }
-//var_dump(date_diff(date_create('2023-2-10'), date_create(date('Y-m-d h:i:s',time()))));    
+//var_dump(date_diff(date_create('2023-2-10'), date_create(date('Y-m-d H:i:s',time()))));    
 //var_dump(strip_tags($data));
 //var_dump(preg_replace("/<p>.*/", '', $data));
 //$data = trim(preg_replace("/<p>.*/", '', $data));

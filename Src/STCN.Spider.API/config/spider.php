@@ -10,7 +10,7 @@ return [
 
     // logo
     'log_show' => false, // 是否开启
-    'log_type' => 'error,debug,warn', // 'error,debug,info,warn' 默认空为所有
+    'log_type' => 'error,debug,warn,runspider,joinfields,channel,pubtime,required', // 'error,debug,info,warn,runspider,joinfields,channel,pubtime,required,fields' 默认空为所有
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
@@ -87,5 +87,5 @@ return [
 
     // 程序控制
     'is_run_spider' => true, // 运行或停用爬虫程序
-    'sleep_seconds' => 60 * 10, // 单位秒，爬虫轮询周期，一般半小时
+    'sleep_seconds' => 60 * 5, // 单位秒，爬虫轮询周期，一般半小时
 ];

@@ -53,7 +53,7 @@ class ActionLog
             'heads' => $heads,
             'tokenDecode' => $token,
             'ip' => $_SERVER["REMOTE_ADDR"],
-            'createTime' => date("Y-m-d h:i:s", time()),
+            'createTime' => date("Y-m-d H:i:s", time()),
         ];
         Log::channel($this->logChannel)->info($data);
 

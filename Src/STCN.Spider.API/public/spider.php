@@ -27,28 +27,49 @@ function main()
         die("请在cli模式下运行");
     }
 
-    // echo "当前进程：" . getmypid() . NEWLINE;
-    echo "===========开始启动多任务爬取===========" . NEWLINE;
+    // global $argv;
+    // $start_file = $argv[0];
+    // exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}' |xargs kill -SIGKILL");
 
-    $configs = website::getWebsiteConfig();
-    if (!empty($configs) && $configs['code'] == 'success') {
-        $configs = $configs['result'];
-        foreach ($configs as $config) {
-            $name = $config['name'];
+    log::add("当前进程：" . getmypid() . "\r\n", 'runspider');
+    log::add("===========开始启动多任务爬取===========\r\n", 'runspider');
 
-            // fork后父进程会走自己的逻辑，子进程从处开始走自己的逻辑，堆栈信息会完全复制给子进程内存空间，父子进程相互独立
-            $pid = pcntl_fork(); 
-            if ($pid == -1) { // 失败
-                echo "[{$name}]创建爬取任务失败" . NEWLINE;
-            } else if ($pid) { // 父进程
-                // pcntl_wait($status); // 防止僵尸子进程
-            } else { // 子进程
-                runSpider($name);
+    $second = 60 * 10; // 10分钟轮询库
+    $websites = [];
+
+    do {
+        try {
+            $configs = website::getWebsiteConfig();
+            if (!empty($configs) && $configs['code'] == 'success') {
+                $configs = $configs['result'];
+                foreach ($configs as $config) {
+                    $name = $config['name'];
+                    if(array_key_exists($name,$websites)){
+                        continue;
+                    }
+
+                    // fork后父进程会走自己的逻辑，子进程从处开始走自己的逻辑，堆栈信息会完全复制给子进程内存空间，父子进程相互独立
+                    $pid = pcntl_fork();
+                    if ($pid == -1) { // 失败
+                        log::add("[{$name}]创建爬取任务失败\r\n", 'runspider');
+                    } else if ($pid) { // 父进程
+                        $websites[$name] = $pid;
+                        log::add("[{$name}]创建爬取任务成功{$pid}\r\n", 'runspider');
+                        sleep(60); // 睡1分钟再创建子任务，这样就可以错开休息，有效缓解同时资源占用
+                        // pcntl_wait($status); // 防止僵尸子进程
+                    } else { // 子进程
+                        runSpider($name);
+                    }
+                }
             }
+        } catch (\Exception $ex) {
+            log::add("main轮询时出错：{$ex->getMessage()}\r\n", 'runspider');
         }
-    }
 
-    echo "==============END=============" . NEWLINE;
+        sleep($second);
+    } while (true);
+
+    //echo "==============END=============" . NEWLINE;
 }
 
 /**
@@ -164,21 +185,21 @@ function runSpider($mediaId)
                             include_once($filename);
                         }
 
-                        log::add("[{$mediaId}]第{$runtimes}次开始爬取", 'runSpider');
+                        log::add("[{$mediaId}]第{$runtimes}次开始爬取", 'runspider');
                         $spider->start();
-                        log::add("[{$mediaId}]第{$runtimes}次完成爬取", 'runSpider');
+                        log::add("[{$mediaId}]第{$runtimes}次完成爬取", 'runspider');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("[{$mediaId}]第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpider');
+                        log::add("[{$mediaId}]第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runspider');
                     }
                 }
             }else{
-                log::add("[{$mediaId}]第{$runtimes}次时已停用\r\n", 'runSpider');
+                log::add("[{$mediaId}]第{$runtimes}次时已停用\r\n", 'runspider');
             }
 
             sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (\Exception $ex) {
-            log::add("[{$mediaId}]第{$runtimes}次时运行出错：{$ex->getMessage()}\r\n", 'runSpider');
+            log::add("[{$mediaId}]第{$runtimes}次时运行出错：{$ex->getMessage()}\r\n", 'runspider');
         }
     } while ($isRunSpider);
 }

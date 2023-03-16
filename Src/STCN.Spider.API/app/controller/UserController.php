@@ -80,7 +80,7 @@ class UserController extends BaseController
             }
 
             // 登录成功则写入登录时间
-            $user->loginTime =  date('Y-m-d h:i:s', time());
+            $user->loginTime =  date('Y-m-d H:i:s', time());
             $user->save();
 
             $roles = [];

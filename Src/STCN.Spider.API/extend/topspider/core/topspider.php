@@ -717,7 +717,7 @@ class topspider
                 if ($command2 === '-d') {
                     self::$daemonize = true;
                 }
-                break;
+                break; 
             case 'stop':
                 exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}'", $info);
                 if (count($info) <= 1) {

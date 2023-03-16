@@ -48,9 +48,9 @@ class clickhouse
         $value = [];
         $value[] = util::get_guid();
         $items[] = 'c_time';
-        $value[] = strtotime(date('Y-m-d h:i:s', time()));
+        $value[] = strtotime(date('Y-m-d H:i:s', time()));
         $items[] = 'u_time';
-        $value[] = strtotime(date('Y-m-d h:i:s', time()));
+        $value[] = strtotime(date('Y-m-d H:i:s', time()));
 
         foreach ($data as $k => $v) {
             $items[] = $k;
