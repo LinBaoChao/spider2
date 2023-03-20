@@ -53,7 +53,7 @@ return [
             // 日志记录方式 '\app\service\LogService' '\app\driver\log\Tp6Log',
             'type'           => 'File',
             // 日志保存目录
-            'path'           => runtime_path().'\log\ActionLog',  //日志存放目录
+            'path'           => runtime_path() . '/log/ActionLog',  //日志存放目录
             // 单文件日志写入
             'single'         =>  false,
             //'file_size'   	 => 	1024*1024*10,
@@ -79,7 +79,7 @@ return [
             // 日志记录方式
             'type'           => 'File',
             // 日志保存目录
-            'path'           => runtime_path().'\log\LovelyCat',  //日志存放目录
+            'path'           => runtime_path().'/log/LovelyCat',  //日志存放目录
             // 单文件日志写入
             'single'         =>  false,
             //'file_size'   	 => 	1024*1024*10,

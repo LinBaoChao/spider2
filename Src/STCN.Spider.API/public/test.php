@@ -54,21 +54,23 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //var_dump(date('Y-m-d H:i:s', time()));
 
-$a = [];
-$a1 = "a1";
-$a2 = "a2";
-$a[] = array($a1 => 1);
-$a[] = array($a2 => 2);
-var_dump($a);
+// $a = [];
+// $a1 = "a1";
+// $a2 = "a2";
+// $a[] = array($a1 => 1);
+// $a[] = array($a2 => 2);
+// var_dump($a);
 
-$b = [];
-$b["b1"] = 1;
-$b["b2"] = 2;
-var_dump($b);
+// $b = [];
+// $b["b1"] = 1;
+// $b["b2"] = 2;
+// var_dump($b);
 
-var_dump(array_key_exists(1, $b));
-var_dump(in_array(array($a1 => 2), $a));
-var_dump(array_search(2, $b));
+// var_dump(array_key_exists(1, $b));
+// var_dump(in_array(array($a1 => 2), $a));
+// var_dump(array_search(2, $b));
+
+//var_dump(runtime_path());
 
 
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
