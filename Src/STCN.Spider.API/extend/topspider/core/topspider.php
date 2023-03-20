@@ -1910,6 +1910,7 @@ class topspider
                 }
                 log::info("Result[{$fields_num}]: " . $fields_str);
 
+                // todo db
                 // 如果设置了导出选项
                 // if (!empty(self::$configs['export'])) {
                 //     self::$export_type = isset(self::$configs['export']['type']) ? self::$configs['export']['type'] : '';

@@ -20,13 +20,13 @@ FROM_UNIXTIME(c_time) as ctime,
 where 1=1
 AND (c_time >= toUnixTimestamp('2023-03-17 21:00:00', 'Asia/Shanghai') AS unix_timestamp)
 --and source_url='http://www.subaonet.com/2023/szyw/0317/680752.shtml' 
-and pub_source_name='苏州新闻网'
+--and pub_source_name='苏州新闻网'
 order by c_time DESC
 
 SELECT COUNT(*) FROM sentiment_new_distributed
 WHERE 1=1
 --AND FROM_UNIXTIME(c_time) >= toDateTime('2023-03-08 00:00:00', 'Asia/Shanghai')  AS time
-AND (c_time >= toUnixTimestamp('2023-03-17 21:00:00', 'Asia/Shanghai') AS unix_timestamp)
+AND (c_time >= toUnixTimestamp('2023-03-20 17:30:00', 'Asia/Shanghai') AS unix_timestamp)
 --AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
 --AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
 --AND FROM_UNIXTIME(c_time) <= date_add(minute, 1, FROM_UNIXTIME(source_pub_time))
@@ -43,7 +43,7 @@ FROM_UNIXTIME(c_time) as ctime,
 * FROM sentiment_new_distributed
 WHERE 1=1
 --AND FROM_UNIXTIME(c_time) >= toDateTime('2023-03-10 00:00:00', 'Asia/Shanghai')  AS time
-AND (c_time >= toUnixTimestamp('2023-03-16 19:00:00', 'Asia/Shanghai') AS unix_timestamp)
+AND (c_time >= toUnixTimestamp('2023-03-20 17:30:00', 'Asia/Shanghai') AS unix_timestamp)
 --AND FROM_UNIXTIME(c_time,'%Y-%m-%d') = FROM_UNIXTIME(source_pub_time,'%Y-%m-%d')
 AND FROM_UNIXTIME(c_time) > date_add(hour, 1, FROM_UNIXTIME(source_pub_time))
 --AND FROM_UNIXTIME(c_time) <= date_add(minute, 10, FROM_UNIXTIME(source_pub_time))

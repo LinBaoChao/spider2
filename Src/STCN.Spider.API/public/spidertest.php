@@ -50,6 +50,16 @@ function runSpider()
         'dbname' => 'sentiment_db',
         'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     );
+
+    $queueconfig = array(
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'pass' => '',
+        'db' => 1,
+        'prefix' => 'topspider',
+        'timeout' => 30,
+        // 'queue_order' => 'rand', 此项先不配，默认为列表采集
+    );
     
     do {
         try {
@@ -62,6 +72,7 @@ function runSpider()
                         $config['click_house'] = null; // $clickhouse;
                         $config['export'] = $export;
                         $config['db_config'] = $db_config;
+                        $config['queue_config'] = $queueconfig;
 
                         $spider = new topspider($config);
 

@@ -35,7 +35,7 @@ return [
             // 全局缓存有效期（0为永久有效）
             'expire'   => env('redis.expire', 300),
             // 缓存前缀
-            'prefix'   => env('redis.prefix', ''),
+            'prefix'   => env('redis.prefix', 'topspider'),
             'timeout'  => env('redis.timeout', 0),
         ],
     ],

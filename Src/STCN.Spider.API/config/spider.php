@@ -25,7 +25,7 @@ return [
     'multiserver' => true, // 多服务器
     'serverid' => 1, // 第几台服务器，当业务配置为空时取这个值 
     'save_running_state' => true, // 是否保存运行状态
-    // redis
+    // redis 阿里云服务器
     // 'queue_config' => array(
     //     'host'      => '172.18.56.105',
     //     'port'      => 6379,
@@ -35,7 +35,7 @@ return [
     //     'timeout'   => 30,
     //     // 'queue_order' => 'rand', 此项先不配，默认为列表采集
     // ),
-    // redis test
+    // redis oa
     'queue_config' => array(
         'host'      => '10.200.255.33',
         'port'      => 6379,
@@ -59,23 +59,23 @@ return [
         'name'  => 'stcn_spider',
     ),
     // clickHouse db 
-    // 'click_house' => array(
-    //     'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
-    //     'port' => '8123',
-    //     'username' => 'stcn_influence_dev', // 'linbaocao',
-    //     'password' => 'NC95XPRyzodLuvB', // '345556',
-    //     'dbname' => 'sentiment_dbd', // 'sentiment_db',
-    //     'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
-    // ),
-    // test
     'click_house' => array(
-        'host' => '10.254.15.57',
+        'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
         'port' => '8123',
-        'username' => 'linbaocao',
-        'password' => '345556',
-        'dbname' => 'sentiment_db',
+        'username' => 'stcn_influence_dev', // 'linbaocao',
+        'password' => 'NC95XPRyzodLuvB', // '345556',
+        'dbname' => 'sentiment_dbd', // 'sentiment_db',
         'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     ),
+    // test
+    // 'click_house' => array(
+    //     'host' => '10.254.15.57',
+    //     'port' => '8123',
+    //     'username' => 'linbaocao',
+    //     'password' => '345556',
+    //     'dbname' => 'sentiment_db',
+    //     'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
+    // ),
 
     // 反爬
     'proxy' => array(),

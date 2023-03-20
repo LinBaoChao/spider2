@@ -100,6 +100,15 @@ function runSpider($mediaId)
             $configs = website::getWebsiteConfig($mediaId, 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
+                if (empty($configs)) {
+                    log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
+                    // $curPid = posix_getpid();
+                    // $ret = exec("kill -9 {$curPid}");
+                    // log::add("[{$mediaId}]杀死自己{$curPid}结果是{$ret}\r\n", 'runspider');
+                    break;
+                    // sleep(60 * 60 * 2); // 睡2小时
+                }
+
                 foreach ($configs as $config) {
                     try {
                         $spider = new topspider($config);
@@ -195,8 +204,13 @@ function runSpider($mediaId)
                         log::add("[{$mediaId}]第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runspider');
                     }
                 }
-            }else{
-                log::add("[{$mediaId}]第{$runtimes}次时已停用\r\n", 'runspider');
+            } else if (!empty($configs) && $configs['code'] == 'error') {
+                log::add("[{$mediaId}]第{$runtimes}次时获取数据失败：{$configs['message']}\r\n", 'runspider');
+                sleep(60 * 3);
+            } else if (!empty($configs) && $configs['code'] == 'success' && empty($configs['result'])) {
+                log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
+                break;
+                // sleep(60 * 60 * 2); // 睡2小时
             }
 
             sleep($sleepSeconds); // 轮询更新周期 秒

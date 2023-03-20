@@ -38,6 +38,8 @@ extension=/www/server/php/81/lib/php/extensions/no-debug-non-zts-20210902/pcntl.
 在后台运行 nohup /www/server/php/81/bin/php /www/wwwroot/spider/public/spider.php &
 ps -ef|grep php
 ps -Af|grep php
+killall -9 python
+kill -9 PID
 ctrl + z：将正在前台执行的命令放到后台，且让命令处于暂停状态。
 jobs：查看当前有多少在后台运行的命令，-l选项可显示所有任务的PID。
  */

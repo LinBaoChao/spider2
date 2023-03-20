@@ -135,6 +135,10 @@ if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
+
+// $config = website::getWebsiteConfig('subaonetcom', 0);
+// var_dump($config);
+
 // $data = '2023-01-13 07:21';
 // if(date('Y-m-d H:i',strtotime($data))==$data){
 //     var_dump(1);
@@ -407,9 +411,6 @@ error_reporting(E_ALL);
 
 // $config = WebsiteService::test();
 // var_dump($config);
-
-// $config = WebsiteService::getWebsiteConfig();
-// var_dump(json($config));
 
 // log::$log_show = false;
 // $msg = var_export($data, true);
