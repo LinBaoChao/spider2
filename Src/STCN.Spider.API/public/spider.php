@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
 //require_once __DIR__ . '/../vendor/autoload.php';
 
+use EcsInc\Request\V20160314\QueryUsableSnapshotsRequest;
+use topspider\core\queue;
 use topspider\core\topspider;
 use topspider\core\selector;
 use topspider\core\website;
@@ -16,6 +18,7 @@ define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
 const NEWLINE = "\n\n";
+const KEYWEBSITESTOPED = "run-spider-website-stoped"; // redis存已停用网站的key
 
 /**
  * 爬取入口函数，多进程处理
@@ -26,6 +29,12 @@ function main()
     if (strtolower(php_sapi_name()) != 'cli') {
         die("请在cli模式下运行");
     }
+
+    // 清除已停用网站
+    $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+    queue::set_connect('default', $spiderConfig['queue_config']);
+    queue::init();
+    queue::del(KEYWEBSITESTOPED);
 
     // global $argv;
     // $start_file = $argv[0];
@@ -41,6 +50,13 @@ function main()
 
     do {
         try {
+            // 取已停用网站
+            $website_json = queue::get(KEYWEBSITESTOPED);
+            if ($website_json) {
+                $websitestop = json_decode($website_json, true);
+                ksort($websitestop);
+            }
+
             $configs = website::getWebsiteConfig();
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
@@ -67,7 +83,7 @@ function main()
                         sleep(60); // 睡1分钟再创建子任务，这样就可以错开休息，有效缓解同时资源占用
                         // pcntl_wait($status); // 防止僵尸子进程
                     } else { // 子进程
-                        runSpider($name, $websitestop);
+                        runSpider($name);
                     }
                 }
             }
@@ -91,7 +107,7 @@ function main()
  * @param mixed $mediaId 网站名称标识
  * @return void
  */
-function runSpider($mediaId,&$websitestop)
+function runSpider($mediaId)
 {
     ignore_user_abort();
     set_time_limit(0);
@@ -113,7 +129,17 @@ function runSpider($mediaId,&$websitestop)
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 if (empty($configs)) { // 没取到配置时说明网站已停用
+                    $websitestop = [];
+                    queue::set_connect('default', $spiderConfig['queue_config']);
+                    queue::init();
+                    $website_json = queue::get(KEYWEBSITESTOPED);
+                    if($website_json){
+                        $websitestop = json_decode($website_json, true);
+                    }
                     $websitestop[] = $mediaId; // 加入停用数组
+                    ksort($websitestop);
+                    queue::set(KEYWEBSITESTOPED, json_encode($websitestop));
+                    
                     log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
                     $websitestr = var_export($websitestop, true);
                     log::add("已停用的网站有3：{$websitestr}\r\n", 'runspider');
