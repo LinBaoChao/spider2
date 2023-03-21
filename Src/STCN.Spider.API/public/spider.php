@@ -36,6 +36,7 @@ function main()
 
     $second = 60 * 10; // 10分钟轮询库
     $websites = [];
+    $websitestop = [];
     $count = 0;
 
     do {
@@ -45,7 +46,9 @@ function main()
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     $name = $config['name'];
-                    if(array_key_exists($name,$websites)){
+                    
+                    // 如果已启动并且没有停用则不再启动
+                    if (array_key_exists($name, $websites) && !in_array($name, $websitestop)) {
                         continue;
                     }
 
@@ -57,13 +60,22 @@ function main()
                         $websites[$name] = $pid;
                         $count++;
                         log::add("[{$name}]创建爬取任务{$count}成功{$pid}\r\n", 'runspider');
+                        $websitestr = var_export($websites, true);
+                        log::add("已抓取的网站有：{$websitestr}\r\n", 'runspider');
+                        $websitestopstr = var_export($websitestop, true);
+                        log::add("已停用的网站有：{$websitestopstr}\r\n", 'runspider');
                         sleep(60); // 睡1分钟再创建子任务，这样就可以错开休息，有效缓解同时资源占用
                         // pcntl_wait($status); // 防止僵尸子进程
                     } else { // 子进程
-                        runSpider($name);
+                        runSpider($name, $websitestop);
                     }
                 }
             }
+
+            $websitestr = var_export($websites, true);
+            log::add("已抓取的网站有2：{$websitestr}\r\n", 'runspider');
+            $websitestopstr = var_export($websitestop, true);
+            log::add("已停用的网站有2：{$websitestopstr}\r\n", 'runspider');
         } catch (\Exception $ex) {
             log::add("main轮询时出错：{$ex->getMessage()}\r\n", 'runspider');
         }
@@ -79,7 +91,7 @@ function main()
  * @param mixed $mediaId 网站名称标识
  * @return void
  */
-function runSpider($mediaId)
+function runSpider($mediaId,&$websitestop)
 {
     ignore_user_abort();
     set_time_limit(0);
@@ -100,8 +112,11 @@ function runSpider($mediaId)
             $configs = website::getWebsiteConfig($mediaId, 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
-                if (empty($configs)) {
+                if (empty($configs)) { // 没取到配置时说明网站已停用
+                    $websitestop[] = $mediaId; // 加入停用数组
                     log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
+                    $websitestr = var_export($websitestop, true);
+                    log::add("已停用的网站有3：{$websitestr}\r\n", 'runspider');
                     // $curPid = posix_getpid();
                     // $ret = exec("kill -9 {$curPid}");
                     // log::add("[{$mediaId}]杀死自己{$curPid}结果是{$ret}\r\n", 'runspider');
@@ -208,7 +223,7 @@ function runSpider($mediaId)
                 log::add("[{$mediaId}]第{$runtimes}次时获取数据失败：{$configs['message']}\r\n", 'runspider');
                 sleep(60 * 3);
             } else if (!empty($configs) && $configs['code'] == 'success' && empty($configs['result'])) {
-                log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
+                log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取2\r\n", 'runspider');
                 break;
                 // sleep(60 * 60 * 2); // 睡2小时
             }

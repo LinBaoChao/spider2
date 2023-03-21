@@ -31,7 +31,7 @@ class clickhouse
         // $db->ping(true); // if can`t connect throw exception  
     }
 
-    public static function insert($data, $config = null)
+    public static function insert($data, $config = null, $url = '')
     {
         if (empty($data)) {
             return false;
@@ -46,7 +46,7 @@ class clickhouse
 
         $items[] = 'id';
         $value = [];
-        $value[] = util::get_guid();
+        $value[] = util::create_guid($url);
         $items[] = 'c_time';
         $value[] = strtotime(date('Y-m-d H:i:s', time()));
         $items[] = 'u_time';

@@ -10,7 +10,7 @@ return [
 
     // logo
     'log_show' => false, // 是否开启
-    'log_type' => 'error,debug,warn,runspider,joinfields,channel,pubtime,required', // 'error,debug,info,warn,runspider,joinfields,channel,pubtime,required,fields' 默认空为所有
+    'log_type' => 'error,debug,warn,task,runspider,joinfields,channel,pubtime,required', // 'error,debug,info,warn,task,runspider,joinfields,channel,pubtime,required,fields' 默认空为所有
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
@@ -59,23 +59,23 @@ return [
         'name'  => 'stcn_spider',
     ),
     // clickHouse db 
-    'click_house' => array(
-        'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
-        'port' => '8123',
-        'username' => 'stcn_influence_dev', // 'linbaocao',
-        'password' => 'NC95XPRyzodLuvB', // '345556',
-        'dbname' => 'sentiment_dbd', // 'sentiment_db',
-        'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
-    ),
-    // test
     // 'click_house' => array(
-    //     'host' => '10.254.15.57',
+    //     'host' => 'cc-wz9mfwjh6aa64dl77.public.clickhouse.ads.aliyuncs.com', // '10.254.15.57'
     //     'port' => '8123',
-    //     'username' => 'linbaocao',
-    //     'password' => '345556',
-    //     'dbname' => 'sentiment_db',
+    //     'username' => 'stcn_influence_dev', // 'linbaocao',
+    //     'password' => 'NC95XPRyzodLuvB', // '345556',
+    //     'dbname' => 'sentiment_dbd', // 'sentiment_db',
     //     'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     // ),
+    // test
+    'click_house' => array(
+        'host' => '10.254.15.57',
+        'port' => '8123',
+        'username' => 'linbaocao',
+        'password' => '345556',
+        'dbname' => 'sentiment_db',
+        'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
+    ),
 
     // 反爬
     'proxy' => array(),

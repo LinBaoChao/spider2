@@ -54,21 +54,24 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //var_dump(date('Y-m-d H:i:s', time()));
 
-// $a = [];
-// $a1 = "a1";
-// $a2 = "a2";
-// $a[] = array($a1 => 1);
-// $a[] = array($a2 => 2);
-// var_dump($a);
+$a = [];
+$a1 = "a1";
+$a2 = "a2";
+$a[] = array($a1 => 1);
+$a[] = array($a2 => 2);
+var_dump($a);
 
-// $b = [];
-// $b["b1"] = 1;
-// $b["b2"] = 2;
-// var_dump($b);
+$b = [];
+$b["b1"] = 1;
+$b["b2"] = 2;
+var_dump($b);
 
-// var_dump(array_key_exists(1, $b));
-// var_dump(in_array(array($a1 => 2), $a));
-// var_dump(array_search(2, $b));
+$c = [];
+$c[] = 'a';
+$c[] = 'b';
+var_dump(array_key_exists(1, $b));
+var_dump(in_array('a1', $c));
+var_dump(array_search(2, $b));
 
 //var_dump(runtime_path());
 
@@ -135,6 +138,81 @@ if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
+
+// var_dump(GUIDv4(true));
+// var_dump(create_guid('http://news.sq1996.com/sqyw/2023/0317/493443.shtml'));
+function GUIDv4($trim = true)
+{
+    // Windows
+    if (function_exists('com_create_guid') === true) {
+        if ($trim === true)
+            return trim(com_create_guid(), '{}');
+        else
+            return com_create_guid();
+    }
+    var_dump(1);
+    // OSX/Linux
+    if (function_exists('openssl_random_pseudo_bytes') === true) {
+        $data = openssl_random_pseudo_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);    // set version to 0100
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);    // set bits 6-7 to 10
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+    var_dump(2);
+    // Fallback (PHP 4.2+)
+    mt_srand((float)microtime() * 10000);
+    $charid = strtolower(md5(uniqid(rand(), true)));
+    $hyphen = chr(45);                  // "-"
+    $lbrace = $trim ? "" : chr(123);    // "{"
+    $rbrace = $trim ? "" : chr(125);    // "}"
+    $guidv4 = $lbrace .
+        substr($charid,  0,  8) . $hyphen .
+        substr($charid,  8,  4) . $hyphen .
+        substr($charid, 12,  4) . $hyphen .
+        substr($charid, 16,  4) . $hyphen .
+        substr($charid, 20, 12) .
+        $rbrace;
+    var_dump(3);
+    return $guidv4;
+}
+
+function create_guid($url)
+{ // Create GUID (Globally Unique Identifier)
+    $guid = '';
+    $namespace = rand(11111, 99999);
+    $uid = uniqid('', true);
+    $data = $namespace;
+    $data .= $_SERVER['REQUEST_TIME'];
+    $data .= $_SERVER['HTTP_USER_AGENT'];
+    $data .= $_SERVER['REMOTE_ADDR'];
+    $data .= $_SERVER['REMOTE_PORT'];
+    $data .= $url;
+    var_dump($data);
+    $hash = strtolower(hash('ripemd128', $uid . $guid . md5($data)));
+    var_dump($hash);
+    $guid = substr($hash,  0,  8) . '-' .
+    substr($hash,  8,  4) . '-' .
+    substr($hash, 12,  4) . '-' .
+    substr($hash, 16,  4) . '-' .
+    substr($hash, 20, 12);
+    return $guid;
+}
+
+// $websites =['a'=>1,'b'=>2];
+// var_dump(var_export($websites,true));
+
+// function a(&$aa){
+//     var_dump($aa);
+//     unset($aa['a']);
+// }
+
+// function b(){
+//     $a = array('a'=>1,'b'=>2,'c'=>3);
+//     a($a);
+//     var_dump($a);
+// }
+
+// b();
 
 // $config = website::getWebsiteConfig('subaonetcom', 0);
 // var_dump($config);

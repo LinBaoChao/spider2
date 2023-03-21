@@ -503,7 +503,7 @@ class topspider
             //抓取到的子域名超过指定数量，就丢掉此域名
             $sub_domain_count = $this->sub_domain_count($url);
             if ($sub_domain_count > self::$configs['max_sub_num']) {
-                log::debug('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_scan_url $url [Skip]");
+                log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_scan_url $url [Skip]", "task");
                 return $status;
             }
         }
@@ -554,7 +554,7 @@ class topspider
             //抓取超过 max_sub_num 子域名的，就丢掉
             $sub_domain_count = $this->sub_domain_count($url);
             if ($sub_domain_count > self::$configs['max_sub_num']) {
-                log::debug('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_url $url [Skip]");
+                log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_url $url [Skip]", "task");
                 //echo '[on_download_page] ' . $domain . "'s subdomin > 1000 ,Skip!\n";
                 return $status;
             }
@@ -841,7 +841,7 @@ class topspider
                 if ($all_stop) {
                     break;
                 } else {
-                    log::warn('Task stop waiting...');
+                    log::add('Task stop waiting...', "task");
                 }
                 sleep(1);
             }
@@ -1038,7 +1038,7 @@ class topspider
         }
         // 子进程运行
         elseif (0 === $pid) {
-            log::warn("Fork children task({$taskid}) successful...");
+            log::add("Fork children task({$taskid}) successful...", "task");
 
             // 初始化子进程参数
             self::$time_start   = microtime(true);
@@ -1055,18 +1055,18 @@ class topspider
             self::$stand_by_time = 0;
             while (self::$stand_by_time < self::$configs['max_stand_by_time']) {
                 $this->do_collect_page();
-                log::warn('Task(' . self::$taskid . ') Stand By ' . self::$stand_by_time . '/' . self::$configs['max_stand_by_time'] . ' s');
+                log::add('Task(' . self::$taskid . ') Stand By ' . self::$stand_by_time . '/' . self::$configs['max_stand_by_time'] .' s', "task");
                 self::$stand_by_time++;
                 sleep(1);
             }
             $queue_lsize = $this->queue_lsize();
-            log::warn('Task(' . self::$taskid . ') exit : queue_lsize = ' . $queue_lsize);
+            log::add('Task(' . self::$taskid . ') exit : queue_lsize = ' .$queue_lsize, "task");
             $this->del_task_status(self::$serverid, $taskid);
 
             // 这里用0表示子进程正常退出
             exit(0);
         } else {
-            log::error("Fork children task({$taskid}) fail...");
+            log::add("Fork children task({$taskid}) fail...", "task");
             exit;
         }
     }
@@ -1119,7 +1119,7 @@ class topspider
                     // 保存任务状态
                     $this->set_task_status();
                 } else {
-                    log::warn('Task(' . self::$taskid . ') waiting...reason: queue_lsize = ' . $queue_lsize . ' < tasknum  = ' . self::$tasknum);
+                    log::add('Task(' . self::$taskid . ') waiting...reason: queue_lsize = ' . $queue_lsize . ' < tasknum  = ' . self::$tasknum, "task");
                     sleep(1);
                 }
             }
@@ -1140,29 +1140,29 @@ class topspider
         //减少非必要 queue_lsize 查询
         if (isset(self::$configs['log_type']) and strstr(self::$configs['log_type'], 'info')) {
             $get_collect_url_num = $this->get_collect_url_num();
-            log::info('task id: ' . self::$taskid . " Find pages: {$get_collect_url_num} ");
+            log::add('task id: ' . self::$taskid . " Find pages: {$get_collect_url_num} ", "task");
 
             $queue_lsize = $this->queue_lsize();
-            log::info('task id: ' . self::$taskid . " Waiting for collect pages: {$queue_lsize} ");
+            log::add('task id: ' . self::$taskid . " Waiting for collect pages: {$queue_lsize} ", "task");
 
             $get_collected_url_num = $this->get_collected_url_num();
-            log::info('task id: ' . self::$taskid . " Collected pages: {$get_collected_url_num} ");
+            log::add('task id: ' . self::$taskid . " Collected pages: {$get_collected_url_num} ", "task");
 
             // 多任务的时候输出爬虫序号
             if (self::$tasknum > 1) {
-                log::info('Current task id: ' . self::$taskid);
+                log::add('Current task id: ' . self::$taskid, "task");
             }
         }
         //顺序提取任务，先进先出(当配置 queue_order = rand ，先进先出无效，都为随机提取任务)
         $link = $this->queue_rpop();
 
         if (empty($link)) {
-            log::warn('Task(' . self::$taskid . ') Get Task link Fail...Stand By...');
+            log::add('Task(' . self::$taskid .') Get Task link Fail...Stand By...', "task");
             return false;
         }
         $link = $this->link_uncompress($link);
         if (empty($link['url'])) {
-            log::warn('Task(' . self::$taskid . ') Get Task url Fail...Stand By...');
+            log::add('Task(' . self::$taskid .') Get Task url Fail...Stand By...', "task");
             return false;
         }
         self::$stand_by_time = 0; //接到任务，则超时退出计时重置
@@ -1173,7 +1173,7 @@ class topspider
         if (isset(self::$configs['max_pages']) and self::$configs['max_pages'] > 0) {
             $domain_pages_num = $this->incr_pages_num($url);
             if ($domain_pages_num > self::$configs['max_pages']) {
-                log::debug('Task(' . self::$taskid . ') pages = ' . $domain_pages_num . ' more than ' . self::$configs['max_pages'] . ", $url [Skip]");
+                log::add('Task(' . self::$taskid . ') pages = ' . $domain_pages_num . ' more than ' . self::$configs['max_pages'] . ", $url [Skip]", "task");
                 return false;
             }
         }
@@ -1182,7 +1182,7 @@ class topspider
         if (isset(self::$configs['max_duration']) and self::$configs['max_duration'] > 0) {
             $domain_duration = $this->get_duration_num($url);
             if ($domain_duration > self::$configs['max_duration']) {
-                log::debug('Task(' . self::$taskid . ') duration = ' . $domain_duration . ' more than ' . self::$configs['max_duration'] . ", $url [Skip]");
+                log::add('Task(' . self::$taskid . ') duration = ' . $domain_duration . ' more than ' . self::$configs['max_duration'] . ", $url [Skip]", "task");
                 return false;
             }
         }
@@ -1193,7 +1193,7 @@ class topspider
             if ($task_per_host < self::$configs['max_task_per_host']) {
                 $task_per_host = $this->incr_task_per_host($url);
             } else {
-                log::warn('Task(' . self::$taskid . ') task_per_host = ' . $task_per_host . ' > ' . self::$configs['max_task_per_host'] . ' ; URL: ' . $url . ' will be retry later...');
+                log::add('Task(' . self::$taskid . ') task_per_host = ' . $task_per_host . ' > ' . self::$configs['max_task_per_host'] . ' ; URL: ' . $url .' will be retry later...', "task");
                 $this->queue_lpush($link); //放回队列
                 usleep(100000);
                 return false;
@@ -1321,10 +1321,10 @@ class topspider
 
         // 处理页面耗时时间
         $time_run = round(microtime(true) - $page_time_start, 3);
-        log::debug('task id: ' . self::$taskid . " Success process page {$url} in {$time_run} s");
+        log::add('task id: ' . self::$taskid . " Success process page {$url} in {$time_run} s", "task");
 
         $spider_time_run = util::time2second(intval(microtime(true) - self::$time_start));
-        log::info('task id: ' . self::$taskid . " Spider running in {$spider_time_run}");
+        log::add('task id: ' . self::$taskid . " Spider running in {$spider_time_run}", "task");
 
         // 爬虫爬取每个网页的时间间隔, 单位: 毫秒
         if (!isset(self::$configs['interval'])) {
@@ -1490,7 +1490,7 @@ class topspider
                 $sub_domain_count = $this->sub_domain_count($url);
                 if ($sub_domain_count > self::$configs['max_sub_num']) {
                     unset($urls[$key]);
-                    log::debug('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",get_urls $url [Skip]");
+                    log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",get_urls $url [Skip]", "task");
                     continue;
                 }
             }
@@ -1926,7 +1926,7 @@ class topspider
 
                 // 写入clickhouse
                 if (!empty(self::$click_house_config)) {
-                    clickhouse::insert($fields, self::$click_house_config);
+                    clickhouse::insert($fields, self::$click_house_config, $url);
                 }
             }
 

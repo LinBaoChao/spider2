@@ -63,7 +63,7 @@ function runSpider()
     
     do {
         try {
-            $configs = website::getWebsiteConfig('ycnewscn', 0);
+            $configs = website::getWebsiteConfig('subaonetcom', 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
