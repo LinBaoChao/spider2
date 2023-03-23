@@ -1,6 +1,7 @@
 <?php
 use topspider\core\requests;
 use topspider\core\selector;
+use topspider\core\queue;
 use think\helper\Str;
 //var_dump(__DIR__);
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -139,6 +140,18 @@ if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
 }
 var_dump($out);
 
+// $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+// $qe = queue::set_connect('default', $spiderConfig['queue_config']);
+// var_dump($spiderConfig['queue_config']);
+// $qei = queue::init();
+// var_dump($qei);
+// $website_json = queue::get("topspider-subaonetcom:run-spider-website-stoped");
+// var_dump($website_json);
+
+//queue::del(KEYWEBSITESTOPED);
+
+// var_dump(getmypid() . ',' . posix_getpid() . ',' . posix_getppid());
+
 // var_dump(GUIDv4(true));
 // var_dump(create_guid('http://news.sq1996.com/sqyw/2023/0317/493443.shtml'));
 function GUIDv4($trim = true)
@@ -198,6 +211,21 @@ function create_guid($url)
     return $guid;
 }
 
+var_dump(mt_rand(1, 5));
+// $a = [];
+// $a[] = 'a';
+// $a[] = 'b';
+// var_dump($a);
+// $k = array_search('b1', $a);
+// if($k!==false){
+//     unset($a[$k]);
+// }
+// var_dump($a);
+
+// $b = array('a', 'b');
+// var_dump($b);
+// $b[] = 'c';
+// var_dump($b);
 // $websites =['a'=>1,'b'=>2];
 // var_dump(var_export($websites,true));
 

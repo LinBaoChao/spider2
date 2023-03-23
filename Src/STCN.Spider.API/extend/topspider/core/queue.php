@@ -30,7 +30,7 @@ class queue
     public static $error = '';
 
     /**
-     * 60X60X24X5 5天过期
+     * 60X60X24X5 5天过期，-1则永不过期
      */
     private static $expire = 432000;
 

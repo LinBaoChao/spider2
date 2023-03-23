@@ -824,6 +824,9 @@ class topspider
             return false;
         }
 
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         // 删除当前任务状态
         $this->del_task_status(self::$serverid, self::$taskid);
 
@@ -841,7 +844,7 @@ class topspider
                 if ($all_stop) {
                     break;
                 } else {
-                    log::add('Task stop waiting...', "task");
+                    log::add("Task[PID:{$cpid} PPID:{$ppid}] stop waiting...", "task");
                 }
                 sleep(1);
             }
@@ -1035,16 +1038,21 @@ class topspider
         if ($pid > 0) {
             // 暂时没用
             //self::$taskpids[$taskid] = $pid;
+
+            pcntl_wait($status, WNOHANG); //protect against zombie children, one wait vs one child
         }
         // 子进程运行
         elseif (0 === $pid) {
-            log::add("Fork children task({$taskid}) successful...", "task");
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+
+            log::add("Fork children task[PID:{$cpid} PPID:{$ppid}]({$taskid}) successful...", "task");
 
             // 初始化子进程参数
             self::$time_start   = microtime(true);
             self::$taskid       = $taskid;
             self::$taskmaster   = false;
-            self::$taskpid      = posix_getpid();
+            self::$taskpid      = $cpid;
             self::$collect_succ = 0;
             self::$collect_fail = 0;
 
@@ -1055,13 +1063,16 @@ class topspider
             self::$stand_by_time = 0;
             while (self::$stand_by_time < self::$configs['max_stand_by_time']) {
                 $this->do_collect_page();
-                log::add('Task(' . self::$taskid . ') Stand By ' . self::$stand_by_time . '/' . self::$configs['max_stand_by_time'] .' s', "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') Stand By ' . self::$stand_by_time . '/' . self::$configs['max_stand_by_time'] .' s', "task");
                 self::$stand_by_time++;
                 sleep(1);
             }
             $queue_lsize = $this->queue_lsize();
-            log::add('Task(' . self::$taskid . ') exit : queue_lsize = ' .$queue_lsize, "task");
+            $logmsg = "Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') exit : queue_lsize = ' . $queue_lsize;
+            log::add($logmsg, "task");
             $this->del_task_status(self::$serverid, $taskid);
+
+            //register_shutdown_function("task_finished", $logmsg); //to kill self before exit();, or else the resource shared with parent will be closed
 
             // 这里用0表示子进程正常退出
             exit(0);
@@ -1071,8 +1082,19 @@ class topspider
         }
     }
 
+    public function task_finished($msg){
+        $cpid = posix_getpid();
+        //$ppid = posix_getppid();
+
+        log::add("子进程退出，杀死进程 {$msg}\r\n", 'task');
+        posix_kill($cpid, SIGKILL);
+    }
+
     public function do_collect_page()
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         while ($queue_lsize = $this->queue_lsize()) {
             // 如果是主任务
             if (self::$taskmaster) {
@@ -1119,7 +1141,7 @@ class topspider
                     // 保存任务状态
                     $this->set_task_status();
                 } else {
-                    log::add('Task(' . self::$taskid . ') waiting...reason: queue_lsize = ' . $queue_lsize . ' < tasknum  = ' . self::$tasknum, "task");
+                    log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') waiting...reason: queue_lsize = ' . $queue_lsize . ' < tasknum  = ' . self::$tasknum, "task");
                     sleep(1);
                 }
             }
@@ -1137,32 +1159,35 @@ class topspider
      */
     public function collect_page()
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         //减少非必要 queue_lsize 查询
         if (isset(self::$configs['log_type']) and strstr(self::$configs['log_type'], 'info')) {
             $get_collect_url_num = $this->get_collect_url_num();
-            log::add('task id: ' . self::$taskid . " Find pages: {$get_collect_url_num} ", "task");
+            log::add("task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ") Find pages: {$get_collect_url_num} ", "task");
 
             $queue_lsize = $this->queue_lsize();
-            log::add('task id: ' . self::$taskid . " Waiting for collect pages: {$queue_lsize} ", "task");
+            log::add("task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ") Waiting for collect pages: {$queue_lsize} ", "task");
 
             $get_collected_url_num = $this->get_collected_url_num();
-            log::add('task id: ' . self::$taskid . " Collected pages: {$get_collected_url_num} ", "task");
+            log::add("task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ") Collected pages: {$get_collected_url_num} ", "task");
 
             // 多任务的时候输出爬虫序号
             if (self::$tasknum > 1) {
-                log::add('Current task id: ' . self::$taskid, "task");
+                log::add("Current task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ")", "task");
             }
         }
         //顺序提取任务，先进先出(当配置 queue_order = rand ，先进先出无效，都为随机提取任务)
         $link = $this->queue_rpop();
 
         if (empty($link)) {
-            log::add('Task(' . self::$taskid .') Get Task link Fail...Stand By...', "task");
+            log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') Get Task link Fail...Stand By...', "task");
             return false;
         }
         $link = $this->link_uncompress($link);
         if (empty($link['url'])) {
-            log::add('Task(' . self::$taskid .') Get Task url Fail...Stand By...', "task");
+            log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') Get Task url Fail...Stand By...', "task");
             return false;
         }
         self::$stand_by_time = 0; //接到任务，则超时退出计时重置
@@ -1173,7 +1198,7 @@ class topspider
         if (isset(self::$configs['max_pages']) and self::$configs['max_pages'] > 0) {
             $domain_pages_num = $this->incr_pages_num($url);
             if ($domain_pages_num > self::$configs['max_pages']) {
-                log::add('Task(' . self::$taskid . ') pages = ' . $domain_pages_num . ' more than ' . self::$configs['max_pages'] . ", $url [Skip]", "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') pages = ' . $domain_pages_num . ' more than ' . self::$configs['max_pages'] . ", $url [Skip]", "task");
                 return false;
             }
         }
@@ -1182,7 +1207,7 @@ class topspider
         if (isset(self::$configs['max_duration']) and self::$configs['max_duration'] > 0) {
             $domain_duration = $this->get_duration_num($url);
             if ($domain_duration > self::$configs['max_duration']) {
-                log::add('Task(' . self::$taskid . ') duration = ' . $domain_duration . ' more than ' . self::$configs['max_duration'] . ", $url [Skip]", "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') duration = ' . $domain_duration . ' more than ' . self::$configs['max_duration'] . ", $url [Skip]", "task");
                 return false;
             }
         }
@@ -1193,7 +1218,7 @@ class topspider
             if ($task_per_host < self::$configs['max_task_per_host']) {
                 $task_per_host = $this->incr_task_per_host($url);
             } else {
-                log::add('Task(' . self::$taskid . ') task_per_host = ' . $task_per_host . ' > ' . self::$configs['max_task_per_host'] . ' ; URL: ' . $url .' will be retry later...', "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') task_per_host = ' . $task_per_host . ' > ' . self::$configs['max_task_per_host'] . ' ; URL: ' . $url .' will be retry later...', "task");
                 $this->queue_lpush($link); //放回队列
                 usleep(100000);
                 return false;
@@ -1321,10 +1346,10 @@ class topspider
 
         // 处理页面耗时时间
         $time_run = round(microtime(true) - $page_time_start, 3);
-        log::add('task id: ' . self::$taskid . " Success process page {$url} in {$time_run} s", "task");
+        log::add("task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ") Success process page {$url} in {$time_run} s", "task");
 
         $spider_time_run = util::time2second(intval(microtime(true) - self::$time_start));
-        log::add('task id: ' . self::$taskid . " Spider running in {$spider_time_run}", "task");
+        log::add("task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ") Spider running in {$spider_time_run}", "task");
 
         // 爬虫爬取每个网页的时间间隔, 单位: 毫秒
         if (!isset(self::$configs['interval'])) {

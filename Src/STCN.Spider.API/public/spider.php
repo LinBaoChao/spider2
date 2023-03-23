@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
-//require_once __DIR__ . '/../vendor/autoload.php';
+// require_once __DIR__ . '/../vendor/autoload.php';
 
-use EcsInc\Request\V20160314\QueryUsableSnapshotsRequest;
 use topspider\core\queue;
 use topspider\core\topspider;
 use topspider\core\selector;
@@ -19,6 +18,9 @@ util::path_exists(SCRIPT_DIR);
 
 const NEWLINE = "\n\n";
 const KEYWEBSITESTOPED = "run-spider-website-stoped"; // redis存已停用网站的key
+const SPIDER_FILE_KILL = "ps aux | grep /www/wwwroot/spider/public/spider.php | grep -v grep | awk '{print $2}' |xargs kill -SIGKILL";
+
+//------------------爬取逻辑开始--------------------//
 
 /**
  * 爬取入口函数，多进程处理
@@ -26,22 +28,42 @@ const KEYWEBSITESTOPED = "run-spider-website-stoped"; // redis存已停用网站
  */
 function main()
 {
+    ignore_user_abort();
+    set_time_limit(0);
+
     if (strtolower(php_sapi_name()) != 'cli') {
         die("请在cli模式下运行");
     }
 
-    // 清除已停用网站
-    $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
-    queue::set_connect('default', $spiderConfig['queue_config']);
-    queue::init();
-    queue::del(KEYWEBSITESTOPED);
-
+    // 清除已开启的进程
+    // exec(SPIDER_FILE_KILL);
+    // sleep(3);
     // global $argv;
     // $start_file = $argv[0];
     // exec("ps aux | grep $start_file | grep -v grep | awk '{print $2}' |xargs kill -SIGKILL");
 
-    log::add("当前进程：" . getmypid() . "\r\n", 'runspider');
+    // 清除已停用网站
+    $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+    $quereConfig = $spiderConfig['queue_config'];
+    // $configstr = var_export($spiderConfig, true);
+    // log::add($configstr . " abc\r\n", 'runspider');
+    log::$log_show = isset($spiderConfig['log_show']) ? $spiderConfig['log_show'] : false;
+    log::$log_type = isset($spiderConfig['log_type']) ? $spiderConfig['log_type'] : false;
+
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+    log::add("当前进程[PID:{$cpid} PPID:{$ppid}]\r\n", 'runspider');
     log::add("===========开始启动多任务爬取===========\r\n", 'runspider');
+
+    // del redis
+    $redis2 = connectRedis($quereConfig);
+    if ($redis2) {
+        try {
+            $redis2->del(KEYWEBSITESTOPED);
+        } catch (\Exception $ex) {
+            log::add("[PID:{$cpid} PPID:{$ppid}] redis del error：{$ex->getMessage()}\r\n", 'runspider');
+        }
+    }
 
     $second = 60 * 10; // 10分钟轮询库
     $websites = [];
@@ -50,11 +72,25 @@ function main()
 
     do {
         try {
-            // 取已停用网站
-            $website_json = queue::get(KEYWEBSITESTOPED);
-            if ($website_json) {
-                $websitestop = json_decode($website_json, true);
-                ksort($websitestop);
+            // 已抓取网站
+            $websitestr = var_export($websites, true);
+            log::add("主进程 [PID:{$cpid} PPID:{$ppid}] 已抓取网站：{$websitestr}\r\n", 'runspider');
+            // 已停用网站
+            $redis2 = connectRedis($quereConfig);
+            if ($redis2) {
+                try {
+                    $website_json = $redis2->get(KEYWEBSITESTOPED);
+                    log::add("主进程 [PID:{$cpid} PPID:{$ppid}] redis中已停用网站：{$website_json}\r\n", 'runspider');
+                    if ($website_json) {
+                        $websitestop = json_decode($website_json, true);
+                    }
+
+                    foreach($websitestop as $wstop){
+                        unset($websites[$wstop]); // 从已爬数组中移除已停用的
+                    }
+                } catch (\Exception $ex) {
+                    log::add("[PID:{$cpid} PPID:{$ppid}] redis error：{$ex->getMessage()}\r\n", 'runspider');
+                }
             }
 
             $configs = website::getWebsiteConfig();
@@ -62,7 +98,7 @@ function main()
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     $name = $config['name'];
-                    
+
                     // 如果已启动并且没有停用则不再启动
                     if (array_key_exists($name, $websites) && !in_array($name, $websitestop)) {
                         continue;
@@ -70,28 +106,53 @@ function main()
 
                     // fork后父进程会走自己的逻辑，子进程从处开始走自己的逻辑，堆栈信息会完全复制给子进程内存空间，父子进程相互独立
                     $pid = pcntl_fork();
-                    if ($pid == -1) { // 失败
-                        log::add("[{$name}]创建爬取任务失败\r\n", 'runspider');
+                    if ($pid === -1) { // 创建错误，返回-1
+                        log::add("主进程 [PID:{$cpid} PPID:{$ppid}] 创建{$name}爬取任务失败\r\n", 'runspider');
                     } else if ($pid) { // 父进程
-                        $websites[$name] = $pid;
+                        $pName = '主进程';
+
+                        if (!array_key_exists($name, $websites)) {
+                            $websites[$name] = $pid;
+                        }
+
+                        // 如果没在启动列表又在已停用列表，表示此网站又启用了，需要把已停用列表中移除
+                        $akey = array_search($name, $websitestop);
+                        if ($akey !== false) {
+                            log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 重新启动再创建 [{$name} {$pid}] 任务{$count}成功 \r\n", 'runspider');
+                            
+                            unset($websitestop[$k]);
+                            ksort($websitestop);
+                            if ($redis2) {
+                                try {
+                                    $redis2->set(KEYWEBSITESTOPED, json_encode($websitestop));
+                                } catch (\Exception $ex) {
+                                    log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] [{$name} {$pid}]重新加入redis error：{$ex->getMessage()}\r\n", 'runspider');
+                                }
+                            }
+                        }
+
                         $count++;
-                        log::add("[{$name}]创建爬取任务{$count}成功{$pid}\r\n", 'runspider');
+                        $cpid = posix_getpid();
+                        $ppid = posix_getppid();
+                        log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 创建 [{$name} {$pid}] 任务{$count}成功 \r\n", 'runspider');
                         $websitestr = var_export($websites, true);
-                        log::add("已抓取的网站有：{$websitestr}\r\n", 'runspider');
+                        log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 已抓取网站2：{$websitestr}\r\n", 'runspider');
                         $websitestopstr = var_export($websitestop, true);
-                        log::add("已停用的网站有：{$websitestopstr}\r\n", 'runspider');
-                        sleep(60); // 睡1分钟再创建子任务，这样就可以错开休息，有效缓解同时资源占用
-                        // pcntl_wait($status); // 防止僵尸子进程
-                    } else { // 子进程
-                        runSpider($name);
+                        log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 已停用网站2：{$websitestopstr}\r\n", 'runspider');
+                        pcntl_wait($status, WNOHANG); //protect against zombie children, one wait vs one child
+
+                        sleep(1);
+                    } else if ($pid === 0) { // 子进程
+                        $pName = '子进程 ';
+                        runSpider($name, $spiderConfig);
+                        //ob_start(); //prevent output to main process
+
+                        register_shutdown_function("finish", $name); //to kill self before exit();, or else the resource shared with parent will be closed
+
+                        exit(0); //avoid foreach loop in child process
                     }
                 }
             }
-
-            $websitestr = var_export($websites, true);
-            log::add("已抓取的网站有2：{$websitestr}\r\n", 'runspider');
-            $websitestopstr = var_export($websitestop, true);
-            log::add("已停用的网站有2：{$websitestopstr}\r\n", 'runspider');
         } catch (\Exception $ex) {
             log::add("main轮询时出错：{$ex->getMessage()}\r\n", 'runspider');
         }
@@ -107,10 +168,13 @@ function main()
  * @param mixed $mediaId 网站名称标识
  * @return void
  */
-function runSpider($mediaId)
+function runSpider($mediaId, $spiderConfig)
 {
-    ignore_user_abort();
-    set_time_limit(0);
+    sleep(mt_rand(1, 9)); // 随机休息1-5秒，错开执行
+
+    $pName = '子进程';
+    $cpid = posix_getpid();
+    $ppid = posix_getppid();
 
     $isRunSpider = true;
     $runtimes = 0;
@@ -119,7 +183,10 @@ function runSpider($mediaId)
         $runtimes++;
 
         try {
-            $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+            // $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
+            $configstr = var_export($spiderConfig, true);
+            log::add($configstr . " spiderConfig\r\n", 'runspider');
+
             // 是否运行
             $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
             // 轮询间隔 秒
@@ -130,24 +197,30 @@ function runSpider($mediaId)
                 $configs = $configs['result'];
                 if (empty($configs)) { // 没取到配置时说明网站已停用
                     $websitestop = [];
-                    queue::set_connect('default', $spiderConfig['queue_config']);
-                    queue::init();
-                    $website_json = queue::get(KEYWEBSITESTOPED);
-                    if($website_json){
-                        $websitestop = json_decode($website_json, true);
-                    }
-                    $websitestop[] = $mediaId; // 加入停用数组
-                    ksort($websitestop);
-                    queue::set(KEYWEBSITESTOPED, json_encode($websitestop));
-                    
-                    log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
+                    $redis2 = connectRedis($configs['queue_config']);
+                    if ($redis2) {
+                        try {
+                            $website_json = $redis2->get(KEYWEBSITESTOPED);
+                            log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] redis中已停用网站：{$website_json}\r\n", 'runspider');
+                            if ($website_json) {
+                                $websitestop = json_decode($website_json, true);
+                            }
+                            if (!in_array($mediaId, $websitestop)) {
+                                $websitestop[] = $mediaId; // 加入停用数组
+                                ksort($websitestop);
+                                $redis2->set(KEYWEBSITESTOPED, json_encode($websitestop));
+                            }
+                        } catch (\Exception $ex) {
+                            log::add("[PID:{$cpid} PPID:{$ppid}] redis error：{$ex->getMessage()}\r\n", 'runspider');
+                        }
+                    }                    
+
+                    log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
                     $websitestr = var_export($websitestop, true);
-                    log::add("已停用的网站有3：{$websitestr}\r\n", 'runspider');
-                    // $curPid = posix_getpid();
-                    // $ret = exec("kill -9 {$curPid}");
-                    // log::add("[{$mediaId}]杀死自己{$curPid}结果是{$ret}\r\n", 'runspider');
+                    log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 已停用网站：{$websitestr}\r\n", 'runspider');
+
+                    unset($websitestop);
                     break;
-                    // sleep(60 * 60 * 2); // 睡2小时
                 }
 
                 foreach ($configs as $config) {
@@ -160,7 +233,7 @@ function runSpider($mediaId)
                         $spider->on_start = 'on_start';
                         $spider->on_extract_field = 'on_extract_field';
                         // 回调扩展
-                        $spider->on_extract_field_extend = 'on_extract_field_extend'; 
+                        $spider->on_extract_field_extend = 'on_extract_field_extend';
                         $spider->on_extract_page_extend = 'on_extract_page_extend'; // 加入非配置的特殊字段处理
                         $spider->on_before_insert_db = 'on_before_insert_db'; // 入库前统一回调处理
 
@@ -237,32 +310,100 @@ function runSpider($mediaId)
                             include_once($filename);
                         }
 
-                        log::add("[{$mediaId}]第{$runtimes}次开始爬取", 'runspider');
+                        log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次开始爬取", 'runspider');
                         $spider->start();
-                        log::add("[{$mediaId}]第{$runtimes}次完成爬取", 'runspider');
+                        log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次完成爬取", 'runspider');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("[{$mediaId}]第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runspider');
+                        log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runspider');
                     }
                 }
             } else if (!empty($configs) && $configs['code'] == 'error') {
-                log::add("[{$mediaId}]第{$runtimes}次时获取数据失败：{$configs['message']}\r\n", 'runspider');
+                log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时获取数据失败：{$configs['message']}\r\n", 'runspider');
                 sleep(60 * 3);
             } else if (!empty($configs) && $configs['code'] == 'success' && empty($configs['result'])) {
-                log::add("[{$mediaId}]第{$runtimes}次时已停用，则退出抓取2\r\n", 'runspider');
+                log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时已停用，则退出抓取2\r\n", 'runspider');
                 break;
                 // sleep(60 * 60 * 2); // 睡2小时
             }
 
             sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (\Exception $ex) {
-            log::add("[{$mediaId}]第{$runtimes}次时运行出错：{$ex->getMessage()}\r\n", 'runspider');
+            log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时运行出错：{$ex->getMessage()}\r\n", 'runspider');
         }
     } while ($isRunSpider);
 }
 
+/**
+ * 退出或停用时杀死自己
+ * @param mixed $mediaId
+ * @return void
+ */
+function finish($mediaId)
+{
+    try {
+        //ob_end_clean();
+        $cpid = getmypid();
+        $ppid = posix_getppid();
+
+        log::add("子进程 [{$mediaId} PID:{$cpid} PPID:{$ppid}]停用，杀死进程\r\n", 'runspider');
+        posix_kill($cpid, SIGKILL);
+    } catch (\Exception $ex) {
+        log::add("子进程 [{$mediaId}] 停用，杀死进程出错：{$ex->getMessage()}\r\n", 'runspider');
+    }
+}
+
+function connectRedis($config)
+{
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+
+    try {
+        if (isset($config['prefix'])) {
+            $config['prefix'] = $config['prefix'] . '-' . "runspider:";
+        }
+
+        $redis2 = new Redis();
+        if (strstr($config['host'], '.sock')) {
+            if (!$redis2->connect($config['host'])) {
+                log::add("[PID:{$cpid} PPID:{$ppid}] Unable to connect to redis server\r\n", 'runspider');
+                unset($redis2);
+                return false;
+            }
+        } else {
+            if (!$redis2->connect($config['host'], $config['port'], $config['timeout'])) {
+                log::add("[PID:{$cpid} PPID:{$ppid}] Unable to connect to redis server\r\n", 'runspider');
+                unset($redis2);
+                return false;
+            }
+        }
+
+        // 验证
+        if ($config['pass']) {
+            if (!$redis2->auth($config['pass'])) {
+                log::add("[PID:{$cpid} PPID:{$ppid}] Redis Server authentication failed\r\n", 'runspider');
+                unset($redis2);
+                return false;
+            }
+        }
+
+        $prefix = empty($config['prefix']) ? 'topspider-runspider:' : $config['prefix'];
+        $redis2->setOption(Redis::OPT_PREFIX, $prefix);
+        // 永不超时
+        // ini_set('default_socket_timeout', -1); 无效，要用下面的做法
+        $redis2->setOption(Redis::OPT_READ_TIMEOUT, -1);
+        $redis2->select($config['db']);
+
+        return $redis2;
+    } catch (\Exception $ex) {
+        log::add("[PID:{$cpid} PPID:{$ppid}] connect to redis server error：{$ex->getMessage()}\r\n", 'runspider');
+    }
+}
+
 // 运行开始爬虫
 main();
+
+//------------------爬取逻辑结束--------------------//
 
 //----统一回调处理 begin----//
 
