@@ -74,13 +74,13 @@ function main()
         try {
             // 已抓取网站
             $websitestr = var_export($websites, true);
-            log::add("主进程 [PID:{$cpid} PPID:{$ppid}] 已抓取网站：{$websitestr}\r\n", 'runspider');
+            log::add("主进程 [PID:{$cpid} PPID:{$ppid}] 已抓取网站1：{$websitestr}\r\n", 'runspider');
             // 已停用网站
             $redis2 = connectRedis($quereConfig);
             if ($redis2) {
                 try {
                     $website_json = $redis2->get(KEYWEBSITESTOPED);
-                    log::add("主进程 [PID:{$cpid} PPID:{$ppid}] redis中已停用网站：{$website_json}\r\n", 'runspider');
+                    log::add("主进程 [PID:{$cpid} PPID:{$ppid}] redis中已停用网站1：{$website_json}\r\n", 'runspider');
                     if ($website_json) {
                         $websitestop = json_decode($website_json, true);
                     }
@@ -178,6 +178,9 @@ function runSpider($mediaId, $spiderConfig)
     // $rancount = array("1", "3", "5", "7"); // 随机休息，错开执行
     // sleep((int)$rancount[mt_rand(0, count($rancount) - 1)]);
 
+    log::$log_show = isset($spiderConfig['log_show']) ? $spiderConfig['log_show'] : false;
+    log::$log_type = isset($spiderConfig['log_type']) ? $spiderConfig['log_type'] : false;
+
     $pName = '子进程';
     $cpid = posix_getpid();
     $ppid = posix_getppid();
@@ -207,7 +210,7 @@ function runSpider($mediaId, $spiderConfig)
                     if ($redis2) {
                         try {
                             $website_json = $redis2->get(KEYWEBSITESTOPED);
-                            log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] redis中已停用网站：{$website_json}\r\n", 'runspider');
+                            log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] redis中已停用网站3：{$website_json}\r\n", 'runspider');
                             if ($website_json) {
                                 $websitestop = json_decode($website_json, true);
                             }
@@ -223,7 +226,7 @@ function runSpider($mediaId, $spiderConfig)
 
                     log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 第{$runtimes}次时已停用，则退出抓取\r\n", 'runspider');
                     $websitestr = var_export($websitestop, true);
-                    log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 已停用网站：{$websitestr}\r\n", 'runspider');
+                    log::add("{$pName} [{$mediaId} PID:{$cpid} PPID:{$ppid}] 已停用网站3：{$websitestr}\r\n", 'runspider');
 
                     unset($websitestop);
                     break;
