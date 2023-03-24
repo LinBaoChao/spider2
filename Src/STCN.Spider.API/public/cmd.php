@@ -27,12 +27,13 @@ http://www.findme.wang/blog/detail/id/300.html
 1 /www/server/php/81/bin/phpize
 2 ./configure --prefix=/www/server/php/81/bin/php --with-php-config=/www/server/php/81/bin/php-config
 3 make && make install
-编辑php配置文件打开扩展，增加行如
+4 编辑php配置文件打开扩展，增加行如，如果出现重复加载的提示则不需要加以下
 [pcntl]
 extension=/www/server/php/81/lib/php/extensions/no-debug-non-zts-20210902/pcntl.so
 
-检查是否安装成功 php --ri pcntl
-安装结束
+5 检查是否安装成功 php --ri pcntl
+6 安装结束
+7 项目需要配置的文件有（若配置文件有变则需要重新运行）：.env .env.develop config下的app.php、database.php、spider.php、queue.php 需要配置的内容有：数据库、redis、api url
 
 运行php文件 /www/server/php/81/bin/php /www/wwwroot/spider/public/spider.php
 在后台运行 nohup /www/server/php/81/bin/php /www/wwwroot/spider/public/spider.php &
