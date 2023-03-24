@@ -170,7 +170,8 @@ function main()
  */
 function runSpider($mediaId, $spiderConfig)
 {
-    sleep(mt_rand(1, 9)); // 随机休息1-5秒，错开执行
+    $rancount = array("1", "3", "5", "7"); // 随机休息，错开执行
+    sleep((int)$rancount[mt_rand(0, count($rancount) - 1)]);
 
     $pName = '子进程';
     $cpid = posix_getpid();

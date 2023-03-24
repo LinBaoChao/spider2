@@ -210,8 +210,11 @@ function create_guid($url)
     substr($hash, 20, 12);
     return $guid;
 }
-
-var_dump(mt_rand(1, 5));
+$ma = array("1", "3", "5", "7");
+$i = $ma[mt_rand(0, count($ma) - 1)];
+var_dump($i);
+sleep((int)$i);
+var_dump($i);
 // $a = [];
 // $a[] = 'a';
 // $a[] = 'b';
