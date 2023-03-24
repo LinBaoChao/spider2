@@ -19,8 +19,8 @@ FROM_UNIXTIME(c_time) as ctime,
 * FROM sentiment_new_distributed
 where 1=1
 --AND (c_time >= toUnixTimestamp('2023-03-17 21:00:00', 'Asia/Shanghai') AS unix_timestamp)
---and source_url='http://www.subaonet.com/2023/szyw/0317/680752.shtml'
-AND id = '030b7e72-f73a-4798-b133-0e64a572a9dd' 
+and source_url='https://www.my399.com/p/199666.html'
+--AND id = '030b7e72-f73a-4798-b133-0e64a572a9dd' 
 --and pub_source_name='苏州新闻网'
 order by c_time DESC
 
@@ -74,7 +74,9 @@ GROUP BY pub_media_name
 --ORDER BY pub_media_name DESC
 
 SELECT 
-id,pub_media_name,pub_platform_name 
+--id
+source_url
+,COUNT(*)
 FROM sentiment_new_distributed
 WHERE 1=1
 AND c_time >= toUnixTimestamp('2023-03-21 16:50:00', 'Asia/Shanghai')
@@ -85,9 +87,10 @@ AND pub_platform_name = '网站'
 AND pub_media_name in
 ('苏州新闻网','黑龙江日报','哈尔滨日报','文汇网','新民网','周到上海网','劳动报','龙虎网','南报网','宿迁网','大庆网','中央广播电视总台','中国网','中国日报','中国青年报','中国经济网','人民政协报','人民日报海外版','旗帜网','中国妇女网','农民日报','中国侨网','中央广播电视总台','东北网','长春新闻网','大吉网','中国吉林网','沈阳网','北国网','东北新闻网','包头日报','内蒙古晨网','正北方网','内蒙古新闻网','吕梁新闻网','忻州网','运城新闻网','晋城新闻网','临汾新闻网','长治新闻网','山西新闻网','河北青年报','河北日报','太行新闻网','廊坊传媒网','张家口新闻网','环渤海新闻网'
 ,'沧州新闻网','河工新闻网','长城网','北京商报','北青网','北京日报网','新京报网')
-GROUP BY id,pub_media_name,pub_platform_name
+--GROUP BY id
+GROUP BY source_url
 HAVING COUNT(*) > 2 
-ORDER BY id DESC
+--ORDER BY id DESC
 
 SELECT
 pub_media_name , 

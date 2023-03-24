@@ -55,24 +55,24 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //var_dump(date('Y-m-d H:i:s', time()));
 
-$a = [];
-$a1 = "a1";
-$a2 = "a2";
-$a[] = array($a1 => 1);
-$a[] = array($a2 => 2);
-var_dump($a);
+// $a = [];
+// $a1 = "a1";
+// $a2 = "a2";
+// $a[] = array($a1 => 1);
+// $a[] = array($a2 => 2);
+// var_dump($a);
 
-$b = [];
-$b["b1"] = 1;
-$b["b2"] = 2;
-var_dump($b);
+// $b = [];
+// $b["b1"] = 1;
+// $b["b2"] = 2;
+// var_dump($b);
 
-$c = [];
-$c[] = 'a';
-$c[] = 'b';
-var_dump(array_key_exists(1, $b));
-var_dump(in_array('a1', $c));
-var_dump(array_search(2, $b));
+// $c = [];
+// $c[] = 'a';
+// $c[] = 'b';
+// var_dump(array_key_exists(1, $b));
+// var_dump(in_array('a1', $c));
+// var_dump(array_search(2, $b));
 
 //var_dump(runtime_path());
 
@@ -89,11 +89,11 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 //var_dump(strtotime(date('Y-m-d H:i:s', time())));
-$url = "http://www.ycnews.cn/p/637143.html";
+$url = "http://news.youth.cn/gj/202303/t20230324_14408124.htm";
 //$data = website::httpRequest($url);
 $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//div[@class='zy ov']/span[2]/text()");
+$data = selector::select($data, "//span[@id='page_right']/text()");
 var_dump($data);
 // $filterstr = "&gt;`,`1";
 // $separ = explode('`,`', $filterstr);
@@ -103,7 +103,7 @@ var_dump($data);
 //var_dump(trim($data));
 //var_dump(strip_tags($data));
 //var_dump(substr($data, 0,16));
-$data = selector::select($data, "/记者(.*)/", "regex"); // /来源：(.*)<\/p>/
+$data = selector::select($data, "/发稿时间：(.*)/", "regex"); // /来源：(.*)<\/p>/
 //$data = selector::select($data, "/(.*) &gt; /", "regex");
 var_dump($data);
 var_dump(strip_tags($data));
@@ -210,11 +210,12 @@ function create_guid($url)
     substr($hash, 20, 12);
     return $guid;
 }
-$ma = array("1", "3", "5", "7");
-$i = $ma[mt_rand(0, count($ma) - 1)];
-var_dump($i);
-sleep((int)$i);
-var_dump($i);
+// $ma = array("1", "3", "5", "7");
+// $i = $ma[mt_rand(0, count($ma) - 1)];
+// var_dump($i);
+// sleep((int)$i);
+// var_dump($i);
+
 // $a = [];
 // $a[] = 'a';
 // $a[] = 'b';
