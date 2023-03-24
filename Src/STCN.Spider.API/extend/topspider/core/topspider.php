@@ -283,6 +283,14 @@ class topspider
     public $on_before_download_page = null;
 
     /**
+     * 子进程结束回调 
+     * 
+     * @var mixed
+     * @access public
+     */
+    public $on_task_finished = null;
+
+    /**
      * 网页状态码回调 
      * 
      * @var mixed
@@ -414,6 +422,9 @@ class topspider
         // 产生时钟云，解决php7下面ctrl+c无法停止bug
         declare(ticks=1);
 
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         // 先打开以显示验证报错内容
         log::$log_show = true;
         log::$log_file = isset($configs['log_file']) ? $configs['log_file'] : PATH_LOG . '/topspider.log';
@@ -456,7 +467,7 @@ class topspider
         }
 
         if (isset($configs['tasknum']) && $configs['tasknum'] > 1 && !isset($configs['queue_config'])) {
-            $msg = "Please configure parameters to enable multi-process 'queue_config'";
+            $msg = "[PID:{$cpid} PPID:{$ppid}] Please configure parameters to enable multi-process 'queue_config'";
             log::error($msg);
             exit;
         }
@@ -496,6 +507,9 @@ class topspider
 
     public function add_scan_url($url, $options = array(), $allowed_repeat = true)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         // 投递状态
         $status = false;
         //限制最大子域名数量
@@ -503,7 +517,7 @@ class topspider
             //抓取到的子域名超过指定数量，就丢掉此域名
             $sub_domain_count = $this->sub_domain_count($url);
             if ($sub_domain_count > self::$configs['max_sub_num']) {
-                log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_scan_url $url [Skip]", "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_scan_url $url [Skip]", "task");
                 return $status;
             }
         }
@@ -526,11 +540,11 @@ class topspider
 
         if ($status) {
             if ($link['url_type'] == 'scan_page') {
-                log::debug("Find scan page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find scan page: {$url}");
             } elseif ($link['url_type'] == 'content_page') {
-                log::debug("Find content page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find content page: {$url}");
             } elseif ($link['url_type'] == 'list_page') {
-                log::debug("Find list page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find list page: {$url}");
             }
         }
 
@@ -547,6 +561,9 @@ class topspider
      */
     public function add_url($url, $options = array(), $depth = 0)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         // 投递状态
         $status = false;
         //限制最大子域名数量
@@ -554,7 +571,7 @@ class topspider
             //抓取超过 max_sub_num 子域名的，就丢掉
             $sub_domain_count = $this->sub_domain_count($url);
             if ($sub_domain_count > self::$configs['max_sub_num']) {
-                log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_url $url [Skip]", "task");
+                log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",add_url $url [Skip]", "task");
                 //echo '[on_download_page] ' . $domain . "'s subdomin > 1000 ,Skip!\n";
                 return $status;
             }
@@ -574,11 +591,11 @@ class topspider
 
         if ($status) {
             if ($link['url_type'] == 'scan_page') {
-                log::debug("Find scan page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find scan page: {$url}");
             } elseif ($link['url_type'] == 'content_page') {
-                log::debug("Find content page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find content page: {$url}");
             } elseif ($link['url_type'] == 'list_page') {
-                log::debug("Find list page: {$url}");
+                log::debug("[PID:{$cpid} PPID:{$ppid}] Find list page: {$url}");
             }
         }
 
@@ -748,15 +765,18 @@ class topspider
      */
     public function signal_handler($signal)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         switch ($signal) {
                 // Stop.
             case SIGINT:
-                log::warn('Program stopping...');
+                log::warn("[PID:{$cpid} PPID:{$ppid}] Program stopping...");
                 self::$terminate = true;
                 break;
                 // Show status.
             case SIGUSR2:
-                echo "show status\n";
+                echo "[PID:{$cpid} PPID:{$ppid}] show status\n";
                 break;
         }
     }
@@ -855,10 +875,10 @@ class topspider
             log::$log_show = true;
 
             $spider_time_run = util::time2second(intval(microtime(true) - self::$time_start));
-            log::note("Spider finished in {$spider_time_run}");
+            log::note("[PID:{$cpid} PPID:{$ppid}] Spider finished in {$spider_time_run}");
 
             $get_collected_url_num = $this->get_collected_url_num();
-            log::note("Total pages: {$get_collected_url_num} \n");
+            log::note("[PID:{$cpid} PPID:{$ppid}] Total pages: {$get_collected_url_num} \n");
         }
         exit();
     }
@@ -1072,7 +1092,9 @@ class topspider
             log::add($logmsg, "task");
             $this->del_task_status(self::$serverid, $taskid);
 
-            //register_shutdown_function("task_finished", $logmsg); //to kill self before exit();, or else the resource shared with parent will be closed
+            if($this->on_task_finished){
+                register_shutdown_function($this->on_task_finished, $logmsg); //to kill self before exit();, or else the resource shared with parent will be closed
+            }            
 
             // 这里用0表示子进程正常退出
             exit(0);
@@ -1080,14 +1102,6 @@ class topspider
             log::add("Fork children task({$taskid}) fail...", "task");
             exit;
         }
-    }
-
-    public function task_finished($msg){
-        $cpid = posix_getpid();
-        //$ppid = posix_getppid();
-
-        log::add("子进程退出，杀死进程 {$msg}\r\n", 'task');
-        posix_kill($cpid, SIGKILL);
     }
 
     public function do_collect_page()
@@ -1368,6 +1382,8 @@ class topspider
      */
     public function request_url($url, $link = array())
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
         $time_start = microtime(true);
 
         //$url = "http://www.qiushibaike.com/article/117568316";
@@ -1458,19 +1474,19 @@ class topspider
                         // 扔到队列头部去, 继续采集，第二个参数为true，否则会被判断为已经存在队列无法重复采集
                         $this->queue_rpush($link, true);
                     }
-                    log::error("Failed to download page {$url}, retry({$link['try_num']})");
+                    log::error("[PID:{$cpid} PPID:{$ppid}] Failed to download page {$url}, retry({$link['try_num']})");
                 } else {
-                    log::error("Failed to download page {$url}");
+                    log::error("[PID:{$cpid} PPID:{$ppid}] Failed to download page {$url}");
                     self::$collect_fail++;
                 }
-                log::error("HTTP CODE: {$http_code}");
+                log::error("[PID:{$cpid} PPID:{$ppid}] HTTP CODE: {$http_code}");
                 return false;
             }
         }
 
         // 爬取页面耗时时间
         $time_run = round(microtime(true) - $time_start, 3);
-        log::debug("Success download page {$url} in {$time_run} s");
+        log::debug("[PID:{$cpid} PPID:{$ppid}] Success download page {$url} in {$time_run} s");
         self::$collect_succ++;
 
         return $html;
@@ -1485,6 +1501,9 @@ class topspider
      */
     public function get_urls($html, $collect_url, $depth = 0)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         //--------------------------------------------------------------------------------
         // 正则匹配出页面中的URL
         //--------------------------------------------------------------------------------
@@ -1515,7 +1534,7 @@ class topspider
                 $sub_domain_count = $this->sub_domain_count($url);
                 if ($sub_domain_count > self::$configs['max_sub_num']) {
                     unset($urls[$key]);
-                    log::add('Task(' . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",get_urls $url [Skip]", "task");
+                    log::add("Task[PID:{$cpid} PPID:{$ppid}](" . self::$taskid . ') subdomin = ' . $sub_domain_count . ' more than ' . self::$configs['max_sub_num'] . ",get_urls $url [Skip]", "task");
                     continue;
                 }
             }
@@ -1780,19 +1799,22 @@ class topspider
      */
     public function get_html_fields($html, $url, $page)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         $fields = $this->get_fields(self::$configs['fields'], $html, $url, $page);
 
         if (!empty($fields)) {
             if ($this->on_extract_page) {
                 $return = call_user_func($this->on_extract_page, $page, $fields);
                 if (!isset($return)) {
-                    log::warn("on_extract_page return value can't be empty");
+                    log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_page return value can't be empty");
                 }
                 // 返回false，跳过当前页面，内容不入库
                 elseif ($return === false) {
                     return false;
                 } elseif (!is_array($return)) {
-                    log::warn('on_extract_page return value must be an array');
+                    log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_page return value must be an array");
                 } else {
                     $fields = $return;
                 }
@@ -1808,13 +1830,13 @@ class topspider
                 if ($this->on_extract_page_extend) {
                     $return = call_user_func($this->on_extract_page_extend, $page, $fields, $url, self::$configs);
                     if (!isset($return)) {
-                        log::warn("on_extract_page_extend return value can't be empty");
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_page_extend return value can't be empty");
                     }
                     // 返回false，跳过当前页面，内容不入库
                     elseif ($return === false) {
                         return false;
                     } elseif (!is_array($return)) {
-                        log::warn('on_extract_page_extend return value must be an array');
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_page_extend return value must be an array");
                     } else {
                         $fields = $return;
                     }
@@ -1878,7 +1900,7 @@ class topspider
                         }
                         $fields[$config['name']] = $joinval;
 
-                        log::add("field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}, url: {$url}", 'joinfields');
+                        log::add("[PID:{$cpid} PPID:{$ppid}] field:{$config['name']},join:{$config['join_field']},split:{$config['join_field_split']},value:{$joinval}, url: {$url}", 'joinfields');
                     }
 
                     // 不入库则移除
@@ -1894,7 +1916,7 @@ class topspider
                                 if (empty($fields[$config['name']])) {
                                     unset($fieldscopy);
                                     $medianame = self::$configs['media_name'];
-                                    log::add("合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
+                                    log::add("[PID:{$cpid} PPID:{$ppid}] 合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
                                     return false;
                                 }
                             }
@@ -1909,13 +1931,13 @@ class topspider
                 if ($this->on_before_insert_db) {
                     $return = call_user_func($this->on_before_insert_db, $page, $fields, $url, self::$configs);
                     if (!isset($return)) {
-                        log::warn("on_before_insert_db return value can't be empty");
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_before_insert_db return value can't be empty");
                     }
                     // 返回false，跳过当前页面，内容不入库
                     elseif ($return === false) {
                         return false;
                     } elseif (!is_array($return)) {
-                        log::warn('on_before_insert_db return value must be an array');
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_before_insert_db return value must be an array");
                     } else {
                         $fields = $return;
                     }
@@ -1933,7 +1955,7 @@ class topspider
                 if (util::is_win()) {
                     $fields_str = mb_convert_encoding($fields_str, 'gb2312', 'utf-8');
                 }
-                log::info("Result[{$fields_num}]: " . $fields_str);
+                log::info("[PID:{$cpid} PPID:{$ppid}] Result[{$fields_num}]: " . $fields_str);
 
                 // todo db
                 // 如果设置了导出选项
@@ -1969,6 +1991,9 @@ class topspider
      */
     public function get_fields($confs, $html, $url, $page)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         $fields = array();
         foreach ($confs as $conf) {
             // 当前field抽取到的内容是否是有多项
@@ -1981,7 +2006,7 @@ class topspider
             }
 
             if (empty($conf['name'])) {
-                log::error("The field name is null, please check your \"fields\" and add the name of the field\n");
+                log::error("[PID:{$cpid} PPID:{$ppid}] The field name is null, please check your \"fields\" and add the name of the field\n");
                 exit;
             }
 
@@ -1993,7 +2018,7 @@ class topspider
                     // 取出上个field的内容作为连接, 内容分页是不进队列直接下载网页的
                     if (!empty($fields[$conf['attached_url']])) {
                         $collect_url = $this->fill_url($fields[$conf['attached_url']], $url);
-                        log::debug("Find attached content page: {$collect_url}");
+                        log::debug("[PID:{$cpid} PPID:{$ppid}] Find attached content page: {$collect_url}");
                         $link['url'] = $collect_url;
                         $link = $this->link_uncompress($link);
                         requests::$input_encoding = null;
@@ -2071,7 +2096,7 @@ class topspider
                 // 如果值为空而且值设置为必须项并且没有合并项, 跳出foreach循环
                 if ($required && empty($joinfield)) { // todo trace
                     $mediaId = self::$configs['name'];
-                    log::warn("Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url:{$url} mediaId:{$mediaId}");
+                    log::warn("[PID:{$cpid} PPID:{$ppid}] Selector {$conf['name']}[{$conf['selector']}] not found, It's a must. url:{$url} mediaId:{$mediaId}");
                     // 清空整个 fields，当前页面就等于略过了
                     $fields = array();
                     break;
@@ -2124,7 +2149,7 @@ class topspider
                                     try {
                                         $filter_values = selector::remove($filter_values, $filterstr, $filtertype);
                                     } catch (Exception $ex) {
-                                        log::error('过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}');
+                                        log::error("[PID:{$cpid} PPID:{$ppid}] 过滤出错：{$ex->getMessage()}\r\n html:{$filter_values}\r\n filter:{$filterstr}");
                                     }
                                     break;
                                 case 'strip_tags':
@@ -2181,7 +2206,7 @@ class topspider
                 if ($this->on_handle_img && preg_match($pattern, $data)) {
                     $return = call_user_func($this->on_handle_img, $fieldname, $data);
                     if (!isset($return)) {
-                        log::warn("on_handle_img return value can't be empty\n");
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_handle_img return value can't be empty\n");
                     } else {
                         // 有数据才会执行 on_handle_img 方法, 所以这里不要被替换没了
                         $data = $return;
@@ -2192,7 +2217,7 @@ class topspider
                 if ($this->on_extract_field) {
                     $return = call_user_func($this->on_extract_field, $fieldname, $data, $page);
                     if (!isset($return)) {
-                        log::warn("on_extract_field return value can't be empty\n");
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_field return value can't be empty\n");
                     } elseif ($return === false) { // 如果返回false则此内容放弃不入库
                         $fields = array();
                         break;
@@ -2207,7 +2232,7 @@ class topspider
                 if ($this->on_extract_field_extend) {
                     $return = call_user_func($this->on_extract_field_extend, $fieldname, $data, $page, $url, self::$configs);
                     if (!isset($return)) {
-                        log::warn("on_extract_field_extend return value can't be empty\n");
+                        log::warn("[PID:{$cpid} PPID:{$ppid}] on_extract_field_extend return value can't be empty\n");
                     } elseif ($return === false) { // 如果返回false则此内容放弃不入库
                         $fields = array();
                         break;
@@ -2229,22 +2254,25 @@ class topspider
      */
     public function check_export()
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         // 如果设置了导出选项
         if (!empty(self::$configs['export'])) {
             if (self::$export_type == 'csv') {
                 if (empty(self::$export_file)) {
-                    log::error('Export data into CSV files need to Set the file path.');
+                    log::error("[PID:{$cpid} PPID:{$ppid}] Export data into CSV files need to Set the file path.");
                     exit;
                 }
             } elseif (self::$export_type == 'sql') {
                 if (empty(self::$export_file)) {
-                    log::error('Export data into SQL files need to Set the file path.');
+                    log::error("[PID:{$cpid} PPID:{$ppid}] Export data into SQL files need to Set the file path.");
                     exit;
                 }
             } elseif (self::$export_type == 'db')
             {
                 if (!function_exists('mysqli_connect')) {
-                    log::error('Export data to a database need Mysql support, unable to load mysqli extension.');
+                    log::error("[PID:{$cpid} PPID:{$ppid}] Export data to a database need Mysql support, unable to load mysqli extension.");
                     exit;
                 }
 
@@ -2256,7 +2284,7 @@ class topspider
                     $config = self::$db_config;
                     @mysqli_connect($config['host'], $config['user'], $config['pass'], $config['name'], $config['port']);
                     if (mysqli_connect_errno()) {
-                        log::error('Export data to a database need Mysql support, ' . mysqli_connect_error());
+                        log::error("[PID:{$cpid} PPID:{$ppid}] Export data to a database need Mysql support, " . mysqli_connect_error());
                         exit;
                     }
 
@@ -2264,7 +2292,7 @@ class topspider
                     db::_init();
 
                     if (!db::table_exists(self::$export_table)) {
-                        log::error('Table ' . self::$export_table . ' does not exist');
+                        log::error("[PID:{$cpid} PPID:{$ppid}] Table " . self::$export_table . " does not exist");
                         exit;
                     }
                 }
@@ -2278,6 +2306,9 @@ class topspider
     {
         // TODO
         return;
+
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
 
         if (!self::$use_redis || self::$save_running_state) {
             return false;
@@ -2298,7 +2329,7 @@ class topspider
             $arg = strtolower(trim(fgets(STDIN)));
             $arg = empty($arg) || !in_array($arg, array('Y', 'N', 'y', 'n')) ? 'y' : strtolower($arg);
             if ($arg == 'n') {
-                log::warn('Clear redis data...');
+                log::warn("[PID:{$cpid} PPID:{$ppid}] Clear redis data...");
                 queue::flushdb();
                 // 下面这种性能太差了
                 //foreach ($keys as $key) 
@@ -2864,9 +2895,12 @@ class topspider
      */
     public function get_fields_xpath($html, $selector, $fieldname)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         $result = selector::select($html, $selector);
         if (selector::$error) {
-            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n"); // todo trace 出错预警
+            log::error("[PID:{$cpid} PPID:{$ppid}] Field(\"{$fieldname}\") " . selector::$error . "\n"); // todo trace 出错预警
         }
         return $result;
     }
@@ -2880,9 +2914,12 @@ class topspider
      */
     public function get_fields_regex($html, $selector, $fieldname)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         $result = selector::select($html, $selector, 'regex');
         if (selector::$error) {
-            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n");
+            log::error("[PID:{$cpid} PPID:{$ppid}] Field(\"{$fieldname}\") " . selector::$error . "\n");
         }
         return $result;
     }
@@ -2897,9 +2934,12 @@ class topspider
      */
     public function get_fields_css($html, $selector, $fieldname)
     {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+
         $result = selector::select($html, $selector, 'css');
         if (selector::$error) {
-            log::error("Field(\"{$fieldname}\") " . selector::$error . "\n");
+            log::error("[PID:{$cpid} PPID:{$ppid}] Field(\"{$fieldname}\") " . selector::$error . "\n");
         }
         return $result;
     }

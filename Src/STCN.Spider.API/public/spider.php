@@ -46,7 +46,7 @@ function main()
     $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
     $quereConfig = $spiderConfig['queue_config'];
     // $configstr = var_export($spiderConfig, true);
-    // log::add($configstr . " abc\r\n", 'runspider');
+    // log::add($configstr . " spiderConfig1\r\n", 'runspider');
     log::$log_show = isset($spiderConfig['log_show']) ? $spiderConfig['log_show'] : false;
     log::$log_type = isset($spiderConfig['log_type']) ? $spiderConfig['log_type'] : false;
 
@@ -120,7 +120,7 @@ function main()
                         if ($akey !== false) {
                             log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 重新启动再创建 [{$name} {$pid}] 任务{$count}成功 \r\n", 'runspider');
                             
-                            unset($websitestop[$k]);
+                            unset($websitestop[$akey]);
                             ksort($websitestop);
                             if ($redis2) {
                                 try {
@@ -147,7 +147,7 @@ function main()
                         runSpider($name, $spiderConfig);
                         //ob_start(); //prevent output to main process
 
-                        register_shutdown_function("finish", $name); //to kill self before exit();, or else the resource shared with parent will be closed
+                        register_shutdown_function("on_finish", $name); //to kill self before exit();, or else the resource shared with parent will be closed
 
                         exit(0); //avoid foreach loop in child process
                     }
@@ -184,8 +184,8 @@ function runSpider($mediaId, $spiderConfig)
 
         try {
             // $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
-            $configstr = var_export($spiderConfig, true);
-            log::add($configstr . " spiderConfig\r\n", 'runspider');
+            // $configstr = var_export($spiderConfig, true);
+            // log::add($configstr . " spiderConfig\r\n", 'runspider');
 
             // 是否运行
             $isRunSpider = isset($spiderConfig['is_run_spider']) ? $spiderConfig['is_run_spider'] : true;
@@ -197,7 +197,7 @@ function runSpider($mediaId, $spiderConfig)
                 $configs = $configs['result'];
                 if (empty($configs)) { // 没取到配置时说明网站已停用
                     $websitestop = [];
-                    $redis2 = connectRedis($configs['queue_config']);
+                    $redis2 = connectRedis($spiderConfig['queue_config']);
                     if ($redis2) {
                         try {
                             $website_json = $redis2->get(KEYWEBSITESTOPED);
@@ -227,6 +227,7 @@ function runSpider($mediaId, $spiderConfig)
                     try {
                         $spider = new topspider($config);
 
+                        $spider->on_task_finished = 'on_task_finished'; // 子子进程结束回调
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
                         $spider->on_status_code = 'on_status_code'; // 总处理反爬
                         $spider->is_anti_spider = 'is_anti_spider'; // 总处理反爬
@@ -339,23 +340,37 @@ function runSpider($mediaId, $spiderConfig)
  * @param mixed $mediaId
  * @return void
  */
-function finish($mediaId)
+function on_finish($mediaId)
 {
     try {
         //ob_end_clean();
-        $cpid = getmypid();
+        $cpid = posix_getpid();
         $ppid = posix_getppid();
 
-        log::add("子进程 [{$mediaId} PID:{$cpid} PPID:{$ppid}]停用，杀死进程\r\n", 'runspider');
+        log::add("子进程 [{$mediaId} PID:{$cpid} PPID:{$ppid}] 停用，杀死进程\r\n", 'runspider');
         posix_kill($cpid, SIGKILL);
     } catch (\Exception $ex) {
         log::add("子进程 [{$mediaId}] 停用，杀死进程出错：{$ex->getMessage()}\r\n", 'runspider');
     }
 }
 
+/**
+ * 子进程退出或停用时杀死自己
+ * @param mixed $msg
+ * @return void
+ */
+function on_task_finished($msg)
+{
+    $cpid = posix_getpid();
+    $ppid = posix_getppid();
+
+    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
+    posix_kill($cpid, SIGKILL);
+}
+
 function connectRedis($config)
 {
-    $cpid = getmypid();
+    $cpid = posix_getpid();
     $ppid = posix_getppid();
 
     try {
@@ -475,6 +490,9 @@ function on_extract_field($fieldname, $data, $page)
 
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+
     if (!empty($data)) {
         $data = trim(strip_tags($data)); // 去tag
         $removes = ['&nbsp;', '&#13;']; // 移除字符 /&#13;【 【 【	【\n
@@ -486,10 +504,10 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . trim($configs['channel']) . " ", " " . trim($data) . " ") === false) { // 不是需要的栏目则不需要则返回false
-                log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
+                log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             }else{
-                // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
+                // log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
     } elseif ($fieldname == 'source_pub_time') { // 日期不正确则丢弃
@@ -500,12 +518,12 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         $data = str_replace(".", "-", $data);
 
         if (strtotime($data) === false) {
-            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            // log::add("[PID:{$cpid} PPID:{$ppid}] 日期不正确：{$data}\r\n", 'pubtime');
             return false;
         } else {
             // 30天前的数据不要
             if (strtotime($data . ADD_DAY) < time()) {
-                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
@@ -543,6 +561,9 @@ function on_extract_page_extend($page, $fields, $url, $configs)
 
 function on_before_insert_db($page, $fields, $url, $configs)
 {
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+
     // 日期不符合则丢弃
     if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {
         $data = $fields['source_pub_time'];
@@ -552,12 +573,12 @@ function on_before_insert_db($page, $fields, $url, $configs)
         $data = str_replace(".", "-", $data);
 
         if (strtotime($data) === false) {
-            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            // log::add("[PID:{$cpid} PPID:{$ppid}] 日期不正确：{$data}\r\n", 'pubtime');
             return false;
         } else {
             // 30天前的数据不要
             if (strtotime($data . ADD_DAY) < time()) {
-                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
