@@ -911,10 +911,10 @@ class util
         $namespace = rand(11111, 99999);
         $uid = uniqid('', true);
         $data = $namespace;
-        $data .= $_SERVER['REQUEST_TIME'];
-        $data .= $_SERVER['HTTP_USER_AGENT'];
-        $data .= $_SERVER['REMOTE_ADDR'];
-        $data .= $_SERVER['REMOTE_PORT'];
+        $data .= isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : "";
+        $data .= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+        $data .= isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+        $data .= isset($_SERVER['REMOTE_PORT']) ? $_SERVER['REMOTE_PORT'] : "";
         $data .= $url;
         $data .= self::GUIDv4(true);
 

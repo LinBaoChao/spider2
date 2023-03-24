@@ -104,6 +104,13 @@ function main()
                         continue;
                     }
 
+                    if($count > 0){
+                        // 随机休息，错开执行
+                        sleep(mt_rand(3, 9));
+                        // $rancount = array("1", "3", "5", "7");
+                        // sleep((int)$rancount[mt_rand(0, count($rancount) - 1)]);
+                    }
+
                     // fork后父进程会走自己的逻辑，子进程从处开始走自己的逻辑，堆栈信息会完全复制给子进程内存空间，父子进程相互独立
                     $pid = pcntl_fork();
                     if ($pid === -1) { // 创建错误，返回-1
@@ -140,8 +147,6 @@ function main()
                         $websitestopstr = var_export($websitestop, true);
                         log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 已停用网站2：{$websitestopstr}\r\n", 'runspider');
                         pcntl_wait($status, WNOHANG); //protect against zombie children, one wait vs one child
-
-                        sleep(1);
                     } else if ($pid === 0) { // 子进程
                         $pName = '子进程 ';
                         runSpider($name, $spiderConfig);
@@ -170,8 +175,8 @@ function main()
  */
 function runSpider($mediaId, $spiderConfig)
 {
-    $rancount = array("1", "3", "5", "7"); // 随机休息，错开执行
-    sleep((int)$rancount[mt_rand(0, count($rancount) - 1)]);
+    // $rancount = array("1", "3", "5", "7"); // 随机休息，错开执行
+    // sleep((int)$rancount[mt_rand(0, count($rancount) - 1)]);
 
     $pName = '子进程';
     $cpid = posix_getpid();
@@ -365,8 +370,10 @@ function on_task_finished($msg)
     $cpid = posix_getpid();
     $ppid = posix_getppid();
 
-    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
-    posix_kill($cpid, SIGKILL);
+    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
+
+    // log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
+    // posix_kill($cpid, SIGKILL);
 }
 
 function connectRedis($config)
