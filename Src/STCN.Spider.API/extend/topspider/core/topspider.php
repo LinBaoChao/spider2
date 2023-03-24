@@ -1092,9 +1092,9 @@ class topspider
             log::add($logmsg, "task");
             $this->del_task_status(self::$serverid, $taskid);
 
-            if($this->on_task_finished){
-                register_shutdown_function($this->on_task_finished, $logmsg); //to kill self before exit();, or else the resource shared with parent will be closed
-            }            
+            // if($this->on_task_finished){
+            //     register_shutdown_function($this->on_task_finished, $logmsg); //to kill self before exit();, or else the resource shared with parent will be closed
+            // }            
 
             // 这里用0表示子进程正常退出
             exit(0);
