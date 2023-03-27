@@ -424,7 +424,7 @@ class topspider
 
         $cpid = posix_getpid();
         $ppid = posix_getppid();
-        $mediaId = self::$configs['name'];
+        $mediaId = $configs['name'];
 
         // 先打开以显示验证报错内容
         log::$log_show = true;
