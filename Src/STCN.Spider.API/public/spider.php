@@ -515,7 +515,7 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . trim($configs['channel']) . " ", " " . trim($data) . " ") === false) { // 不是需要的栏目则不需要则返回false
-                log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
+                log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$configs['name']}] {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             }else{
                 // log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 在 {$configs['channel']}\r\n", 'channel');
@@ -540,7 +540,7 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
 
             // 只抓当天的数据
             if (date('Y-m-d', strtotime($data . ADD_DAY)) < date('Y-m-d')) {
-                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+                log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$configs['name']}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
@@ -601,7 +601,7 @@ function on_before_insert_db($page, $fields, $url, $configs)
 
             // 只抓当天的数据
             if (date('Y-m-d', strtotime($data . ADD_DAY)) < date('Y-m-d')) {
-                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+                log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$configs['name']}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
