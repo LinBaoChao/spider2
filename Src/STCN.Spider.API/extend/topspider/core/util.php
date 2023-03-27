@@ -915,6 +915,8 @@ class util
         $data .= isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
         $data .= isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
         $data .= isset($_SERVER['REMOTE_PORT']) ? $_SERVER['REMOTE_PORT'] : "";
+        $data .= posix_getpid();
+        $data .= posix_getppid();
         $data .= $url;
         $data .= self::GUIDv4(true);
 

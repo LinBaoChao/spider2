@@ -373,10 +373,10 @@ function on_task_finished($msg)
     $cpid = posix_getpid();
     $ppid = posix_getppid();
 
-    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
+    //log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
 
-    // log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
-    // posix_kill($cpid, SIGKILL);
+    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
+    posix_kill($cpid, SIGKILL);
 }
 
 function connectRedis($config)
@@ -533,7 +533,13 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
             return false;
         } else {
             // 30天前的数据不要
-            if (strtotime($data . ADD_DAY) < time()) {
+            // if (strtotime($data . ADD_DAY) < time()) {
+            //     log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+            //     return false;
+            // }
+
+            // 只抓当天的数据
+            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
                 log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
@@ -588,7 +594,13 @@ function on_before_insert_db($page, $fields, $url, $configs)
             return false;
         } else {
             // 30天前的数据不要
-            if (strtotime($data . ADD_DAY) < time()) {
+            // if (strtotime($data . ADD_DAY) < time()) {
+            //     log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+            //     return false;
+            // }
+
+            // 只抓当天的数据
+            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
                 log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }

@@ -249,6 +249,9 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
 {
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+
     if (!empty($data)) {
         $data = trim(strip_tags($data)); // 去tag
         $removes = ['&nbsp;', '&#13;']; // 移除字符 /&#13;【 【 【	【\n
@@ -260,10 +263,10 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
         // 如果栏目不为空并且配置的需要的栏目不为空及不是全部即*
         if (!empty($data) && (isset($configs['channel']) && !empty($configs['channel']) && $configs['channel'] != "*")) {
             if (strpos(" " . trim($configs['channel']) . " ", " " . trim($data) . " ") === false) { // 不是需要的栏目则不需要则返回false
-                log::add("{$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
+                log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 不在 {$configs['channel']} url: {$url}\r\n", 'channel');
                 return false;
             } else {
-                // log::add("{$data} 在 {$configs['channel']}\r\n", 'channel');
+                // log::add("[PID:{$cpid} PPID:{$ppid}] {$data} 在 {$configs['channel']}\r\n", 'channel');
             }
         }
     } elseif ($fieldname == 'source_pub_time') { // 日期不正确则丢弃
@@ -274,12 +277,18 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
         $data = str_replace(".", "-", $data);
 
         if (strtotime($data) === false) {
-            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            // log::add("[PID:{$cpid} PPID:{$ppid}] 日期不正确：{$data}\r\n", 'pubtime');
             return false;
         } else {
             // 30天前的数据不要
-            if (strtotime($data . ADD_DAY) < time()) {
-                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+            // if (strtotime($data . ADD_DAY) < time()) {
+            //     log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+            //     return false;
+            // }
+
+            // 只抓当天的数据
+            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
+                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
@@ -317,6 +326,9 @@ function on_extract_page_extend($page, $fields, $url, $configs)
 
 function on_before_insert_db($page, $fields, $url, $configs)
 {
+    $cpid = getmypid();
+    $ppid = posix_getppid();
+
     // 日期不符合则丢弃
     if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {
         $data = $fields['source_pub_time'];
@@ -326,12 +338,18 @@ function on_before_insert_db($page, $fields, $url, $configs)
         $data = str_replace(".", "-", $data);
 
         if (strtotime($data) === false) {
-            // log::add("日期不正确：{$data}\r\n", 'pubtime');
+            // log::add("[PID:{$cpid} PPID:{$ppid}] 日期不正确：{$data}\r\n", 'pubtime');
             return false;
         } else {
             // 30天前的数据不要
-            if (strtotime($data . ADD_DAY) < time()) {
-                log::add("日期太早：{$data}\r\n{$url}", 'pubtime');
+            // if (strtotime($data . ADD_DAY) < time()) {
+            //     log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
+            //     return false;
+            // }
+
+            // 只抓当天的数据
+            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
+                log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
         }
