@@ -8,7 +8,7 @@ use topspider\core\util;
 ignore_user_abort();
 set_time_limit(0);
 
-define('ADD_DAY', "+3day"); // 3天前的数据不要
+define('ADD_DAY', "+1day"); // 3天前的数据不要
 define('SCRIPT_DIR', __DIR__ . "/../spiderscript");
 util::path_exists(SCRIPT_DIR);
 
@@ -121,7 +121,7 @@ function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
             // }
 
             // 只抓当天的数据
-            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
+            if (date('Y-m-d', strtotime($data . ADD_DAY)) < date('Y-m-d')) {
                 log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }
@@ -182,7 +182,7 @@ function on_before_insert_db($page, $fields, $url, $configs)
             // }
 
             // 只抓当天的数据
-            if (date('Y-m-d', strtotime($data)) < date('Y-m-d')) {
+            if (date('Y-m-d', strtotime($data . ADD_DAY)) < date('Y-m-d')) {
                 log::add("[PID:{$cpid} PPID:{$ppid}] 日期太早：{$data}\r\n{$url}", 'pubtime');
                 return false;
             }

@@ -76,13 +76,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //var_dump(runtime_path());
 
-// $t1 = date('Y-m-d', strtotime('2023-3-28'));
-// var_dump($t1);
-// $t2 = date('Y-m-d');
-// var_dump($t2);
-// if($t1<$t2){
-//     var_dump(1);
-// } 
+$d = "+1day";
+$t1 = date('Y-m-d', strtotime('2023-3-25'.$d));
+var_dump($t1);
+$t2 = date('Y-m-d');
+var_dump($t2);
+if($t1<$t2){
+    var_dump(1);
+} 
 
 // $a = '2014-3-27';
 // $a .= posix_getppid();
