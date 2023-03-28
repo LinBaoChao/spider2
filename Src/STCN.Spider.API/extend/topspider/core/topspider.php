@@ -953,7 +953,7 @@ class topspider
         }
 
         // 检查导出
-        // $this->check_export();
+        $this->check_export();
 
         // 检查缓存
         // $this->check_cache();
@@ -1928,7 +1928,7 @@ class topspider
                                 if (empty($fields[$config['name']])) {
                                     unset($fieldscopy);
                                     $medianame = self::$configs['media_name'];
-                                    log::add("[PID:{$cpid} PPID:{$ppid}] 合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
+                                    log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] 合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
                                     return false;
                                 }
                             }
@@ -1971,17 +1971,17 @@ class topspider
 
                 // todo db
                 // 如果设置了导出选项
-                // if (!empty(self::$configs['export'])) {
-                //     self::$export_type = isset(self::$configs['export']['type']) ? self::$configs['export']['type'] : '';
-                //     if (self::$export_type == 'csv') {
-                //         util::put_file(self::$export_file, util::format_csv($fields) . "\n", FILE_APPEND);
-                //     } elseif (self::$export_type == 'sql') {
-                //         $sql = db::insert(self::$export_table, $fields, true);
-                //         util::put_file(self::$export_file, $sql . ";\n", FILE_APPEND);
-                //     } elseif (self::$export_type == 'db') {
-                //         db::insert(self::$export_table, $fields);
-                //     }
-                // }
+                if (!empty(self::$configs['export'])) {
+                    self::$export_type = isset(self::$configs['export']['type']) ? self::$configs['export']['type'] : '';
+                    if (self::$export_type == 'csv') {
+                        util::put_file(self::$export_file, util::format_csv($fields) . "\n", FILE_APPEND);
+                    } elseif (self::$export_type == 'sql') {
+                        $sql = db::insert(self::$export_table, $fields, true);
+                        util::put_file(self::$export_file, $sql . ";\n", FILE_APPEND);
+                    } elseif (self::$export_type == 'db' && !empty(self::$db_config)) {
+                        db::insert(self::$export_table, $fields);
+                    }
+                }
 
                 // 写入clickhouse
                 if (!empty(self::$click_house_config)) {
@@ -2267,12 +2267,12 @@ class topspider
      */
     public function check_export()
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
-        $mediaId = self::$configs['name'];
-
         // 如果设置了导出选项
         if (!empty(self::$configs['export'])) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+            $mediaId = self::$configs['name'];
+
             if (self::$export_type == 'csv') {
                 if (empty(self::$export_file)) {
                     log::error("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] Export data into CSV files need to Set the file path.");
@@ -2283,8 +2283,7 @@ class topspider
                     log::error("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] Export data into SQL files need to Set the file path.");
                     exit;
                 }
-            } elseif (self::$export_type == 'db')
-            {
+            } elseif (self::$export_type == 'db') {
                 if (!function_exists('mysqli_connect')) {
                     log::error("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] Export data to a database need Mysql support, unable to load mysqli extension.");
                     exit;

@@ -234,8 +234,11 @@ function runSpider($mediaId, $spiderConfig)
 
                 foreach ($configs as $config) {
                     try {
-                        $spider = new topspider($config);
+                        // 生产时不需要写mysql
+                        $config['export'] = null;
+                        $config['db_config'] = null;
 
+                        $spider = new topspider($config);
                         $spider->on_task_finished = 'on_task_finished'; // 子子进程结束回调
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
                         $spider->on_status_code = 'on_status_code'; // 总处理反爬

@@ -50,6 +50,7 @@ return [
     'export' => array(
         'type' => 'db', // csv、sql、db、clickhouse
         'table' => 'article_spider',
+        'file' => 'export_file',
     ),
     'db_config' => array(
         'host'  => '10.254.15.33',

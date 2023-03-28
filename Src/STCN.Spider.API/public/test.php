@@ -76,18 +76,29 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 //var_dump(runtime_path());
 
-$d = "+1day";
-$t1 = date('Y-m-d', strtotime('2023-3-25'.$d));
-var_dump($t1);
-$t2 = date('Y-m-d');
-var_dump($t2);
-if($t1<$t2){
-    var_dump(1);
-} 
+// $d = "+1day";
+// $t1 = date('Y-m-d', strtotime('2023-3-25'.$d));
+// var_dump($t1);
+// $t2 = date('Y-m-d');
+// var_dump($t2);
+// if($t1<$t2){
+//     var_dump(1);
+// } 
 
 // $a = '2014-3-27';
 // $a .= posix_getppid();
 // var_dump($a);
+
+// var_dump(strtotime(date('Y-m-d H:i:s', time())));
+// var_dump(time());
+
+$s = array();
+if(isset($s)){
+    var_dump("set");
+}
+if (empty($s)) {
+    var_dump("set2");
+}
 
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
 

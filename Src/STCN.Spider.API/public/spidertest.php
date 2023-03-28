@@ -31,8 +31,8 @@ function runSpider()
     $export = array(
         'type' => 'db', // csv、sql、db、clickhouse
         'table' => 'article_spider',
+        'file' => 'export_file',
     );
-
     $db_config = array(
         'host' => '127.0.0.1',
         'port' => 3306,
@@ -54,8 +54,8 @@ function runSpider()
     $queueconfig = array(
         'host' => '127.0.0.1',
         'port' => 6379,
-        'pass' => '',
-        'db' => 1,
+        'pass' => 'stcn168',
+        'db' => 0,
         'prefix' => 'topspider',
         'timeout' => 30,
         // 'queue_order' => 'rand', 此项先不配，默认为列表采集
@@ -75,7 +75,7 @@ function runSpider()
                         $config['queue_config'] = $queueconfig;
 
                         $spider = new topspider($config);
-
+                        $spider->on_task_finished = 'on_task_finished'; // 子子进程结束回调
                         // 统一处理，如果设置了个性处理，下面会替换成设置的
                         $spider->on_status_code = 'on_status_code'; // 总处理反爬
                         $spider->is_anti_spider = 'is_anti_spider'; // 总处理反爬
@@ -173,6 +173,22 @@ function runSpider()
             log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
         }
     } while ($isRunSpider);
+}
+
+/**
+ * 子进程退出或停用时杀死自己
+ * @param mixed $msg
+ * @return void
+ */
+function on_task_finished($msg)
+{
+    $cpid = posix_getpid();
+    $ppid = posix_getppid();
+
+    //log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
+
+    log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 退出，杀死进程 {$msg}\r\n", 'task');
+    posix_kill($cpid, SIGKILL);
 }
 
 // 运行开始爬虫
