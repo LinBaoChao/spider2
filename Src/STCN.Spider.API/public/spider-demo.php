@@ -110,13 +110,8 @@ do {
         // 定义内容页的抽取规则 规则由一个个field组成, 一个field代表一个数据抽取项 数组类型 不能为空
         'fields' => array(
             array(
-                'name' => "source_title",
-                'selector' => "//div[@class='page_title']/h1/text()",
-                'required' => true,
-            ),
-            array(
-                'name' => "source_content",
-                'selector' => "//div[contains(@class,'articleCenter')]",
+                'name' => "source_pub_time",
+                'selector' => "//span[contains(@class,'timer')]",
                 'required' => true,
             ),
             array(
@@ -125,8 +120,13 @@ do {
                 'required' => true,
             ),
             array(
-                'name' => "source_pub_time",
-                'selector' => "//span[contains(@class,'timer')]",
+                'name' => "source_title",
+                'selector' => "//div[@class='page_title']/h1/text()",
+                'required' => true,
+            ),
+            array(
+                'name' => "source_content",
+                'selector' => "//div[contains(@class,'articleCenter')]",
                 'required' => true,
             ),
             array(

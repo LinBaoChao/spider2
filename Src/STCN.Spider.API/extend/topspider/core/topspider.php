@@ -1927,8 +1927,8 @@ class topspider
                             if (isset($config['required']) && $config['required']) {
                                 if (empty($fields[$config['name']])) {
                                     unset($fieldscopy);
-                                    $medianame = self::$configs['media_name'];
-                                    log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] 合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url: {$url}, media:{$medianame}", 'required');
+                                    // $medianame = self::$configs['media_name'];
+                                    log::add("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] 合并后还为空：field:{$config['name']}, join:{$config['join_field']}, value:{$joinval}, url:{$url} mediaId:{$mediaId}", 'required');
                                     return false;
                                 }
                             }

@@ -200,7 +200,7 @@ class WebsiteService
             //         $query->where('status!=0');
             //     }
             // })->select();
-            $websiteFields = WebsiteField::where('status!=0')->whereNull('parent_id')->select();
+            $websiteFields = WebsiteField::where('status!=0')->whereNull('parent_id')->order('create_time', 'asc')->select();
 
             // 所有字段的子字段
             // $websiteFields2 = WebsiteField::where(function ($query) use ($status) {
@@ -221,6 +221,7 @@ class WebsiteService
                 ->alias('f')
                 ->field('f2.*')
                 ->join('website_field f2', 'f2.parent_id=f.id')
+                ->order('f2.create_time', 'asc')
                 ->select();
 
             if (!$websites->isEmpty()) {
