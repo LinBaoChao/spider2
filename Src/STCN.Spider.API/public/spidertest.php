@@ -63,15 +63,15 @@ function runSpider()
     
     do {
         try {
-            $configs = website::getWebsiteConfig('subaonetcom', 1);
+            $configs = website::getWebsiteConfig('huaihaitv', 0);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
                     try {
-                        // test
+                        // test 只写mysql库
                         $config['click_house'] = null; // $clickhouse;
                         $config['export'] = $export;
-                        $config['db_config'] = $db_config;
+                        // $config['db_config'] = $db_config; // 直接用配置文件中的配置
                         $config['queue_config'] = $queueconfig;
 
                         $spider = new topspider($config);
@@ -158,19 +158,20 @@ function runSpider()
                             include_once($filename);
                         }
 
+                        log::add("{$config['name']} begin", 'spidertest');
                         $spider->start();
-                        usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
-                        log::add($config['name'], 'runtimes');
+                        //usleep(1000); // 微秒，休息一下，大量的时候可以缓解下cpu
+                        log::add("{$config['name']} end", 'spidertest');
                     } catch (\Exception $ex) {
                         $configstr = var_export($config, true);
-                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'runSpiderErr');
+                        log::add("爬取配置出错：{$ex->getMessage()}\r\n config：{$configstr}\r\n", 'spidertest');
                     }
                 }
             }
 
             sleep($sleepSeconds); // 轮询更新周期 秒
         } catch (\Exception $ex) {
-            log::add("run spider err：{$ex->getMessage()}\r\n", 'runSpiderErr');
+            log::add("run spider err：{$ex->getMessage()}\r\n", 'spidertest');
         }
     } while ($isRunSpider);
 }

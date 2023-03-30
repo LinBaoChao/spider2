@@ -50,4 +50,6 @@ jobs：查看当前有多少在后台运行的命令，-l选项可显示所有�
 
 开端口：firewall-cmd --zone=public --add-port=3306/tcp --permanent
 关端口：firewall-cmd --zone=public --remove-port=8080/tcp --permanent
+
+mysql -h10.0.0.1 -uroot -p123
  */

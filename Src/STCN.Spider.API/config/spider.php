@@ -10,13 +10,13 @@ return [
 
     // logo
     'log_show' => false, // 是否开启
-    'log_type' => 'error,debug,warn,task,runspider,joinfields,channel,pubtime,required', // 'error,debug,info,warn,task,runspider,joinfields,channel,pubtime,required,fields' 默认空为所有
+    'log_type' => 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest', // 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest,fields' 默认空为所有
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
     'interval' => 500, // 爬取间隔（毫秒），此值不配默认为100毫秒
     'timeout' => 5, // 爬取超时（秒）
-    'max_try' => 3, // 失败重试
+    'max_try' => 5, // 失败重试
     'max_depth' => 3, // 爬取深度,默认值为0，即不限制
     'max_fields' => 0, // 最大内容数,默认值为0，即不限制
 

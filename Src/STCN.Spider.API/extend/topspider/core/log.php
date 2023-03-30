@@ -96,7 +96,7 @@ class log
      * @param string $log_type  Note|Warning|Error
      * @return void
      */
-    public static function add($msg, $log_type = '')
+    public static function add($msg, $log_type = 'Debug')
     {
         if (self::$log_type && strpos(self::$log_type, $log_type) === false) {
             return false;

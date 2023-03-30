@@ -2435,7 +2435,7 @@ class topspider
      * 
      * @return void
      */
-    public function get_task_status_list($serverid = 1, $tasknum)
+    public function get_task_status_list($serverid = 1, $tasknum = 0)
     {
         $task_status = array();
         if (self::$use_redis) {

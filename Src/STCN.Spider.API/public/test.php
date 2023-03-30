@@ -92,13 +92,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // var_dump(strtotime(date('Y-m-d H:i:s', time())));
 // var_dump(time());
 
-$s = array();
-if(isset($s)){
-    var_dump("set");
-}
-if (empty($s)) {
-    var_dump("set2");
-}
+// $s = array();
+// if(isset($s)){
+//     var_dump("set");
+// }
+// if (empty($s)) {
+//     var_dump("set2");
+// }
 
 require_once __DIR__ . '/../extend/topspider/autoloader.php';
 
@@ -112,11 +112,11 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 //var_dump(strtotime(date('Y-m-d H:i:s', time())));
-$url = "http://news.youth.cn/gj/202303/t20230324_14408124.htm";
+$url = "http://www.huaihai.tv/folder7147/folder7265/folder7267/2023-03-24/SxBKI57Mhr7Sc7Ho.html";
 //$data = website::httpRequest($url);
 $data = requests::get($url);
 //var_dump($data);
-$data = selector::select($data, "//span[@id='page_right']/text()");
+$data = selector::select($data, "//div[@class='am_list_author']/a/span[3]/text()");
 var_dump($data);
 // $filterstr = "&gt;`,`1";
 // $separ = explode('`,`', $filterstr);
@@ -126,7 +126,7 @@ var_dump($data);
 //var_dump(trim($data));
 //var_dump(strip_tags($data));
 //var_dump(substr($data, 0,16));
-$data = selector::select($data, "/发稿时间：(.*)/", "regex"); // /来源：(.*)<\/p>/
+$data = selector::select($data, "/编辑：(.*)/", "regex"); // /来源：(.*)<\/p>/
 //$data = selector::select($data, "/(.*) &gt; /", "regex");
 var_dump($data);
 var_dump(strip_tags($data));
@@ -134,8 +134,8 @@ var_dump(strip_tags($data));
 //var_dump(strtotime(str_replace(".",'-',"2022.10.02 10:42")));
 // $data = selector::remove($data, "/<p>.*/", "regex"); 1`
 // var_dump($data);
-// $data = str_replace(">",'', $data);
-// var_dump($data);
+$data = str_replace("编辑：",'', $data);
+var_dump($data);
 // define('ADD_DAY', "+30day");
 // var_dump(date('Y-m-d H:i:s', strtotime('2023-1-16' . ADD_DAY)));
 // var_dump(strtotime('2023-2-13' . ADD_DAY));
