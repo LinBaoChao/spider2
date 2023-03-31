@@ -1059,6 +1059,11 @@ class topspider
     {
         $mediaId = self::$configs['name'];
 
+        // 每个子任务间隔1秒，缓解压力也能不被反爬
+        if ($taskid > 1) {
+            sleep(1);
+        }
+
         $pid = pcntl_fork();
 
         // 主进程记录子进程pid
@@ -1369,7 +1374,7 @@ class topspider
 
         // 处理页面耗时时间
         $time_run = round(microtime(true) - $page_time_start, 3);
-        log::add("task[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}](" . self::$taskid . ") Success process page {$url} in {$time_run} s", "task");
+        log::add("task[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}](" . self::$taskid . ") Success process {$link['url_type']} page {$url} in {$time_run} s", "task");
 
         $spider_time_run = util::time2second(intval(microtime(true) - self::$time_start));
         log::add("task[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}](" . self::$taskid . ") Spider running in {$spider_time_run}", "task");
@@ -1395,8 +1400,6 @@ class topspider
         $ppid = posix_getppid();
         $mediaId = self::$configs['name'];
         $time_start = microtime(true);
-
-        //$url = "http://www.qiushibaike.com/article/117568316";
 
         // 设置了编码就不要让requests去判断了
         if (isset(self::$configs['input_encoding'])) {
@@ -1496,7 +1499,7 @@ class topspider
 
         // 爬取页面耗时时间
         $time_run = round(microtime(true) - $time_start, 3);
-        log::debug("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] Success download page {$url} in {$time_run} s");
+        log::debug("[PID:{$cpid} PPID:{$ppid} MEDIA:{$mediaId}] Success download {$link['url_type']} page {$url} in {$time_run} s");
         self::$collect_succ++;
 
         return $html;

@@ -111,7 +111,7 @@ class log
 
         $path = self::$file_path . date('Ymd') . '/';
         util::path_exists($path);
-        file_put_contents($path . strtolower($log_type) . ".log", $msg, FILE_APPEND | LOCK_EX);
+        file_put_contents($path . $log_type . ".log", $msg, FILE_APPEND | LOCK_EX);
     }
 
 }

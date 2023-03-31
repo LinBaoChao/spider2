@@ -11,7 +11,7 @@ SELECT * FROM article_spider WHERE pub_media_name = '沧州新闻网' ORDER BY i
 
 SELECT * FROM website_field WHERE website_id=81 selector LIKE '%contentbox%'
 
-SELECT * FROM website WHERE NAME = 'youthcn'
+SELECT * FROM website WHERE `interval`>0  NAME = 'youthcn'
 
  -- truncate article_spider
  

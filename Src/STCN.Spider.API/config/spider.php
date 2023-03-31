@@ -14,7 +14,7 @@ return [
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
-    'interval' => 500, // 爬取间隔（毫秒），此值不配默认为100毫秒
+    'interval' => 3000, // 爬取间隔（毫秒），此值不配默认为100毫秒
     'timeout' => 5, // 爬取超时（秒）
     'max_try' => 5, // 失败重试
     'max_depth' => 3, // 爬取深度,默认值为0，即不限制
@@ -79,9 +79,28 @@ return [
     ),
 
     // 反爬
-    'proxy' => array(),
-    'client_ip' => array(),
-    'user_agent' => array(),
+    'proxy' => array(
+        // 'http://user:pass@host:port',
+        // 'http://host:port',
+        // 'tcp://192.168.0.2:3128',
+    ),
+    'client_ip' => array(
+        '10.254.15.58',
+        '10.254.15.34',
+        '10.254.15.1',
+        '10.254.15.2',
+        '10.254.15.3',
+        '10.254.15.4',
+        '10.254.15.5',
+        '10.254.15.6',
+        '10.254.15.7',
+        '10.254.15.8',
+    ),
+    'user_agent' => array(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
+        "Mozilla/5.0 (Linux; U; Android 6.0.1;zh_cn; Le X820 Build/FEXCNFN5801507014S) AppleWebKit/537.36 (KHTML, like Gecko)Version/4.0 Chrome/49.0.0.0 Mobile Safari/537.36 EUI Browser/5.8.015S",
+    ),
 
     // api url
     'api_url' => 'http://127.0.0.1:7777/', // 以/结尾

@@ -21,7 +21,8 @@ where 1=1
 --AND (c_time >= toUnixTimestamp('2023-03-17 21:00:00', 'Asia/Shanghai') AS unix_timestamp)
 --and source_url='http://news.longhoo.net/2023/njxw_0325/636505.html'
 --AND id = '030b7e72-f73a-4798-b133-0e64a572a9dd' 
-and pub_media_name='淮海网'
+AND pub_platform_name = '网站'
+and pub_media_name='北京日报'
 order by c_time DESC
 
 SELECT COUNT(*) FROM sentiment_new_distributed

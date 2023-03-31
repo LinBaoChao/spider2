@@ -63,7 +63,7 @@ function runSpider()
     
     do {
         try {
-            $configs = website::getWebsiteConfig('huaihaitv', 0);
+            $configs = website::getWebsiteConfig('ynet', 1);
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {
