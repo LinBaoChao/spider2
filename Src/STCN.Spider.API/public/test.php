@@ -112,13 +112,13 @@ use topspider\core\website;
 // $isMatched = preg_match('#http://www.jcnews.com.cn/xw/gnxw/\d+/t\d+_\d+.html#', $str, $matches);
 // var_dump($isMatched, $matches);
 //var_dump(strtotime(date('Y-m-d H:i:s', time())));
-$url = "http://finance.ynet.com/index.html";
+$url = "http://finance.ynet.com/2023/03/27/3603807t632.html";
 $data = website::httpRequest($url);
-var_dump($data);
-$data = requests::get($url);
-log::add($data);
-var_dump($data);
-$data = selector::select($data, "//p[@class='bjd-column-source']");
+// var_dump($data);
+//$data = requests::get($url);
+//log::add($data);
+// var_dump($data);
+$data = selector::select($data, "//div[@id='articleAll']");
 var_dump($data);
 // $filterstr = "&gt;`,`1";
 // $separ = explode('`,`', $filterstr);
@@ -271,8 +271,8 @@ function create_guid($url)
 
 // b();
 
-// $config = website::getWebsiteConfig('subaonetcom', 0);
-// var_dump($config);
+$config = website::getWebsiteConfig('subaonetcom', 1);
+var_dump($config);
 
 // $data = '2023-01-13 07:21';
 // if(date('Y-m-d H:i',strtotime($data))==$data){

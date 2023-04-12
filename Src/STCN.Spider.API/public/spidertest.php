@@ -63,7 +63,9 @@ function runSpider()
     
     do {
         try {
-            $configs = website::getWebsiteConfig('ynet', 1);
+            $configs = website::getWebsiteConfig('bbtnews', 1);
+            $configstr = var_export($configs, true);
+            log::add("config：{$configstr}\r\n", 'spidertest');
             if (!empty($configs) && $configs['code'] == 'success') {
                 $configs = $configs['result'];
                 foreach ($configs as $config) {

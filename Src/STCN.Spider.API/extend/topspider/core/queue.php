@@ -32,7 +32,7 @@ class queue
     /**
      * 60X60X24X5 5天过期，-1则永不过期
      */
-    private static $expire = 432000;
+    private static $expire = 259200; // 3 day
 
     public static function init()
     {
