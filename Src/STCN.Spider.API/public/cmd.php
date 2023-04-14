@@ -35,6 +35,11 @@ extension=/www/server/php/81/lib/php/extensions/no-debug-non-zts-20210902/pcntl.
 6 安装结束
 7 项目需要配置的文件有（若配置文件有变则需要重新运行）：.env .env.develop config下的app.php、database.php、spider.php、queue.php 需要配置的内容有：数据库、redis、api url
 
+8 redis得设置密码及把bind ip改为0.0.0.0才能允许远程访问
+9 打开对应的端口
+开端口：firewall-cmd --zone=public --add-port=3306/tcp --permanent
+关端口：firewall-cmd --zone=public --remove-port=8080/tcp --permanent
+
 运行php文件 /www/server/php/81/bin/php /www/wwwroot/spider/public/spider.php
 在后台运行 nohup /www/server/php/81/bin/php /www/wwwroot/spider/public/spider.php &
 /www/server/php/81/bin/php /www/wwwroot/spider/public/spidertest.php
@@ -50,8 +55,7 @@ ps aux | grep /www/wwwroot/spider/public/spidertest.php | grep -v grep | awk '{p
 ctrl + z：将正在前台执行的命令放到后台，且让命令处于暂停状态。
 jobs：查看当前有多少在后台运行的命令，-l选项可显示所有任务的PID。
 
-开端口：firewall-cmd --zone=public --add-port=3306/tcp --permanent
-关端口：firewall-cmd --zone=public --remove-port=8080/tcp --permanent
-
 mysql -h10.254.15.33 -uroot -p123456
+
+宝塔命令：https://www.bt.cn/btcode.html
  */

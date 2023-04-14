@@ -422,8 +422,12 @@ class topspider
         // 产生时钟云，解决php7下面ctrl+c无法停止bug
         declare(ticks=1);
 
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = $configs['name'];
 
         // 先打开以显示验证报错内容
@@ -508,8 +512,12 @@ class topspider
 
     public function add_scan_url($url, $options = array(), $allowed_repeat = true)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         // 投递状态
@@ -563,8 +571,12 @@ class topspider
      */
     public function add_url($url, $options = array(), $depth = 0)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         // 投递状态
@@ -768,8 +780,12 @@ class topspider
      */
     public function signal_handler($signal)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         switch ($signal) {
@@ -848,8 +864,12 @@ class topspider
             return false;
         }
 
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         // 删除当前任务状态
@@ -1118,8 +1138,12 @@ class topspider
 
     public function do_collect_page()
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         while ($queue_lsize = $this->queue_lsize()) {
@@ -1186,8 +1210,12 @@ class topspider
      */
     public function collect_page()
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         //减少非必要 queue_lsize 查询
@@ -1396,8 +1424,12 @@ class topspider
      */
     public function request_url($url, $link = array())
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
         $time_start = microtime(true);
 
@@ -1514,8 +1546,12 @@ class topspider
      */
     public function get_urls($html, $collect_url, $depth = 0)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         //--------------------------------------------------------------------------------
@@ -1813,8 +1849,12 @@ class topspider
      */
     public function get_html_fields($html, $url, $page)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         $fields = $this->get_fields(self::$configs['fields'], $html, $url, $page);
@@ -1983,6 +2023,8 @@ class topspider
                         util::put_file(self::$export_file, $sql . ";\n", FILE_APPEND);
                     } elseif (self::$export_type == 'db' && !empty(self::$db_config)) {
                         db::insert(self::$export_table, $fields);
+                    } elseif (self::$export_type == 'api' && !empty(self::$db_config)) {
+                        website::articleCreate($fields);
                     }
                 }
 
@@ -2006,8 +2048,12 @@ class topspider
      */
     public function get_fields($confs, $html, $url, $page)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         $fields = array();
@@ -2272,8 +2318,12 @@ class topspider
     {
         // 如果设置了导出选项
         if (!empty(self::$configs['export'])) {
-            $cpid = posix_getpid();
-            $ppid = posix_getppid();
+            $cpid = 0;
+            $ppid = 0;
+            if (function_exists('posix_getpid')) {
+                $cpid = posix_getpid();
+                $ppid = posix_getppid();
+            }
             $mediaId = self::$configs['name'];
 
             if (self::$export_type == 'csv') {
@@ -2323,8 +2373,12 @@ class topspider
         // TODO
         return;
 
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         if (!self::$use_redis || self::$save_running_state) {
@@ -2912,8 +2966,12 @@ class topspider
      */
     public function get_fields_xpath($html, $selector, $fieldname)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         $result = selector::select($html, $selector);
@@ -2932,8 +2990,12 @@ class topspider
      */
     public function get_fields_regex($html, $selector, $fieldname)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         $result = selector::select($html, $selector, 'regex');
@@ -2953,8 +3015,12 @@ class topspider
      */
     public function get_fields_css($html, $selector, $fieldname)
     {
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
         $mediaId = self::$configs['name'];
 
         $result = selector::select($html, $selector, 'css');

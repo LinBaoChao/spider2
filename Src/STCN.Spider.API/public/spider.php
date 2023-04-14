@@ -50,8 +50,13 @@ function main()
     log::$log_show = isset($spiderConfig['log_show']) ? $spiderConfig['log_show'] : false;
     log::$log_type = isset($spiderConfig['log_type']) ? $spiderConfig['log_type'] : false;
 
-    $cpid = getmypid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
+
     log::add("当前进程[PID:{$cpid} PPID:{$ppid}]\r\n", 'runspider');
     log::add("===========开始启动多任务爬取===========\r\n", 'runspider');
 
@@ -139,8 +144,12 @@ function main()
                         }
 
                         $count++;
-                        $cpid = posix_getpid();
-                        $ppid = posix_getppid();
+                        $cpid = 0;
+                        $ppid = 0;
+                        if (function_exists('posix_getpid')) {
+                            $cpid = posix_getpid();
+                            $ppid = posix_getppid();
+                        }
                         log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 创建 [{$name} {$pid}] 任务{$count}成功 \r\n", 'runspider');
                         $websitestr = var_export($websites, true);
                         log::add("{$pName} [PID:{$cpid} PPID:{$ppid}] 已抓取网站2：{$websitestr}\r\n", 'runspider');
@@ -182,8 +191,12 @@ function runSpider($mediaId, $spiderConfig)
     log::$log_type = isset($spiderConfig['log_type']) ? $spiderConfig['log_type'] : false;
 
     $pName = '子进程';
-    $cpid = posix_getpid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     $isRunSpider = true;
     $runtimes = 0;
@@ -356,8 +369,12 @@ function on_finish($mediaId)
 {
     try {
         //ob_end_clean();
-        $cpid = posix_getpid();
-        $ppid = posix_getppid();
+        $cpid = 0;
+        $ppid = 0;
+        if (function_exists('posix_getpid')) {
+            $cpid = posix_getpid();
+            $ppid = posix_getppid();
+        }
 
         log::add("子进程 [{$mediaId} PID:{$cpid} PPID:{$ppid}] 停用，杀死进程\r\n", 'runspider');
         posix_kill($cpid, SIGKILL);
@@ -373,8 +390,12 @@ function on_finish($mediaId)
  */
 function on_task_finished($msg)
 {
-    $cpid = posix_getpid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     //log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
 
@@ -384,8 +405,12 @@ function on_task_finished($msg)
 
 function connectRedis($config)
 {
-    $cpid = posix_getpid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     try {
         if (isset($config['prefix'])) {
@@ -504,8 +529,12 @@ function on_extract_field($fieldname, $data, $page)
 
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs){
-    $cpid = getmypid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     if (!empty($data)) {
         $data = trim(strip_tags($data)); // 去tag
@@ -581,8 +610,12 @@ function on_extract_page_extend($page, $fields, $url, $configs)
 
 function on_before_insert_db($page, $fields, $url, $configs)
 {
-    $cpid = getmypid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     // 日期不符合则丢弃
     if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {

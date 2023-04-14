@@ -10,7 +10,7 @@ return [
 
     // logo
     'log_show' => false, // 是否开启
-    'log_type' => 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest', // 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest,fields' 默认空为所有
+    'log_type' => 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest,api', // 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest,fields,api' 默认空为所有
     'log_file' => '', // '/../data/log/topspider.log', // 存放文件路径
 
     // 频率相关
@@ -48,7 +48,7 @@ return [
 
     // db
     'export' => array(
-        'type' => 'db', // csv、sql、db、clickhouse
+        'type' => 'api', // csv、sql、db、clickhouse、api
         'table' => 'article_spider',
         'file' => 'export_file',
     ),

@@ -29,16 +29,16 @@ function runSpider()
 
     // db
     $export = array(
-        'type' => 'db', // csv、sql、db、clickhouse
+        'type' => 'api', // csv、sql、db、clickhouse、api
         'table' => 'article_spider',
         'file' => 'export_file',
     );
     $db_config = array(
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'user' => 'root',
-        'pass' => '123456',
-        'name' => 'stcn_spider',
+        'host'  => '10.254.15.33',
+        'port'  => 3306,
+        'user'  => 'root',
+        'pass'  => '123456',
+        'name'  => 'stcn_spider',
     );
 
     // test db
@@ -52,7 +52,7 @@ function runSpider()
     );
 
     $queueconfig = array(
-        'host' => '127.0.0.1',
+        'host' => '10.254.15.33',
         'port' => 6379,
         'pass' => 'stcn168',
         'db' => 0,
@@ -63,7 +63,7 @@ function runSpider()
     
     do {
         try {
-            $configs = website::getWebsiteConfig('bbtnews', 1);
+            $configs = website::getWebsiteConfig('subaonetcom', 1);
             $configstr = var_export($configs, true);
             log::add("config：{$configstr}\r\n", 'spidertest');
             if (!empty($configs) && $configs['code'] == 'success') {
@@ -73,7 +73,7 @@ function runSpider()
                         // test 只写mysql库
                         $config['click_house'] = null; // $clickhouse;
                         $config['export'] = $export;
-                        // $config['db_config'] = $db_config; // 直接用配置文件中的配置
+                        $config['db_config'] = $db_config;
                         $config['queue_config'] = $queueconfig;
 
                         $spider = new topspider($config);
@@ -185,8 +185,12 @@ function runSpider()
  */
 function on_task_finished($msg)
 {
-    $cpid = posix_getpid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     //log::add("子进程 [PID:{$cpid} PPID:{$ppid}] 正常结束退出 {$msg}\r\n", 'task');
 
@@ -268,8 +272,12 @@ function on_extract_field($fieldname, $data, $page)
 //----统一回调扩展 begin----//
 function on_extract_field_extend($fieldname, $data, $page, $url, $configs)
 {
-    $cpid = getmypid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     if (!empty($data)) {
         $data = trim(strip_tags($data)); // 去tag
@@ -345,8 +353,12 @@ function on_extract_page_extend($page, $fields, $url, $configs)
 
 function on_before_insert_db($page, $fields, $url, $configs)
 {
-    $cpid = getmypid();
-    $ppid = posix_getppid();
+    $cpid = 0;
+    $ppid = 0;
+    if (function_exists('posix_getpid')) {
+        $cpid = posix_getpid();
+        $ppid = posix_getppid();
+    }
 
     // 日期不符合则丢弃
     if (isset($fields['source_pub_time']) && !empty($fields['source_pub_time'])) {

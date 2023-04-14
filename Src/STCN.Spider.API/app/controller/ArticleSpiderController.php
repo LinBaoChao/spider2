@@ -59,6 +59,38 @@ class ArticleSpiderController extends BaseController
     }
 
     /**
+     * @OA\Post(path="/articleSpider/create",
+     *   tags={"资源采集"},
+     *   summary="创建采集资源",
+     *   @OA\Parameter(name="token", in="header", description="token", required=true, @OA\Schema(type="string")),
+     *   @OA\Parameter(name="params", in="query", description="json对象", required=true, @OA\Schema(type="object")),
+     *   @OA\Response(response="200", description="true")
+     * )
+     */
+    public function create($params)
+    {
+        // $logstr = var_export($params, true);
+        // Log::debug("create data:{$logstr}\r\nParams：" . json_encode($this->request->param()));
+        // Log::debug("create data2:{$params}\r\nParams：" . json_encode($params));
+
+        $retval = new Result();
+        $retval->code = ResultCode::SUCCESS;
+        $retval->message = '创建成功';
+
+        try {
+            $o = ArticleSpider::create($params);
+
+            $retval->result = $o;
+            return json($retval);
+        } catch (\Exception $ex) {
+            $retval->code = ResultCode::ERROR;
+            $retval->message = "创建失败：{$ex->getMessage()}";
+            Log::error("{$retval->message}\r\nHead：" . json_encode($this->request->header()) . "\r\nParam：" . json_encode($this->request->param()));
+            return json($retval);
+        }
+    }
+
+    /**
      * @OA\Delete(path="/articleSpider/delete",
      *   tags={"资源采集"},
      *   summary="删除",

@@ -4,6 +4,7 @@
 namespace topspider\core;
 
 use topspider\core\util;
+use topspider\core\log;
 
 class website
 {
@@ -26,22 +27,55 @@ class website
             'result' => null
         ];
 
-        $params = ['mediaId'=> $mediaId,'status'=> $status];
+        $data = ['mediaId' => $mediaId, 'status' => $status];
         // if(!empty($mediaId)){
-        //     $params[] = ['mediaId' => $mediaId];
+        //     $data[] = ['mediaId' => $mediaId];
         // }
         // if ($status != null) {
-        //     $params[] = ['status' => $status];
+        //     $data[] = ['status' => $status];
         // }
-        
+
         $url = $urlconfig . "website/getWebsiteConfig";
 
         try {
-            $retval = json_decode(self::httpRequest($url, 'post', $params), true);
+            $retval = json_decode(self::httpRequest($url, 'post', $data), true);
             return $retval;
         } catch (\Exception $ex) {
             $retval['code'] = 'error';
             $retval['message'] = "获取数据失败：{$ex->getMessage()}";
+            return $retval;
+        }
+    }
+
+    /**
+     * 创建采集资源
+     * @param mixed $data
+     * @return mixed
+     */
+    public static function articleCreate($data)
+    {
+        // $logstr = var_export($data, true);
+        // log::add("create data:{$logstr}", 'api');
+
+        $spiderConfig = util::get_spider_config();
+        $urlconfig = isset($spiderConfig['api_url']) ? $spiderConfig['api_url'] : self::URL;
+        $url = $urlconfig . "articleSpider/create";
+
+        $retval = [
+            'code' => 'success',
+            'message' => '获取数据成功',
+            'result' => null
+        ];
+
+        $data = array('params' => $data);
+
+        try {
+            $retval = json_decode(self::httpRequest($url, 'post', $data), true);
+            return $retval;
+        } catch (\Exception $ex) {
+            $retval['code'] = 'error';
+            $retval['message'] = "创建采集资源失败：{$ex->getMessage()}";
+            log::add($retval['message'], 'api');
             return $retval;
         }
     }
@@ -54,7 +88,7 @@ class website
      * @param string $method 请求方法 post / get
      * @return array|string
      */
-    public static function httpRequest($url, $method = 'get', $params = null, $timeout = 5)
+    public static function httpRequest($url, $method = 'get', $data = null, $timeout = 5, $header = null, $json = false)
     {
         $retval = [
             'code' => 'success',
@@ -70,14 +104,45 @@ class website
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在
         }
 
-        // POST方式发送请求
-        if ('post' == strtolower($method)) {
-            curl_setopt($curl, CURLOPT_POST, 1); //post提交方式
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $params); //设置传送的参数
+        // 设置header
+        if (!empty($header)) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        } else {
+            curl_setopt($curl, CURLOPT_HEADER, false);
+        }
+
+        if (!empty($data)) {
+            // 是否json传输
+            if ($json) {
+                if(is_array($data)){
+                    $data = json_encode($data);
+                }
+                $len = strlen($data);
+
+                curl_setopt($curl, CURLOPT_HEADER, false);
+                curl_setopt(
+                    $curl,
+                    CURLOPT_HTTPHEADER,
+                    array(
+                        'Content-Type: application/json; charset=utf-8',
+                        'Content-Length:' . $len
+                    )
+                );
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data); //设置传送的参数
+            }else{
+                $data = http_build_query($data);
+
+                // POST方式发送请求
+                if ('post' == strtolower($method)) {
+                    curl_setopt($curl, CURLOPT_POST, 1); //post提交方式
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data); //设置传送的参数
+                } else {
+                    $url = $url . '?' . $data;
+                }
+            }
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HEADER, false); //设置header
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); //要求结果为字符串且输出到屏幕上
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout); //设置等待时间
 
@@ -99,6 +164,7 @@ class website
         // $data = json_decode($data, true);
         // $data = urldecode($data);
 
+        // log::add("return data:{$data}", 'api');
         return $data;
     }
 }
