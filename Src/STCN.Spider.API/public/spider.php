@@ -248,8 +248,8 @@ function runSpider($mediaId, $spiderConfig)
                 foreach ($configs as $config) {
                     try {
                         // 生产时不需要写mysql
-                        $config['export'] = null;
-                        $config['db_config'] = null;
+                        // $config['export'] = null;
+                        // $config['db_config'] = null;
 
                         $spider = new topspider($config);
                         $spider->on_task_finished = 'on_task_finished'; // 子子进程结束回调

@@ -30,7 +30,7 @@ return [
             // 数据库类型
             'type'            => env('database.type', 'mysql'),
             // 服务器地址
-            'hostname'        => env('database.hostname', '10.254.15.33'),
+            'hostname'        => env('database.hostname', '10.200.201.5'),
             // 数据库名
             'database'        => env('database.database', 'stcn_spider'),
             // 用户名

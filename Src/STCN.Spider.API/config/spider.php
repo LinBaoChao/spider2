@@ -35,9 +35,9 @@ return [
     //     'timeout'   => 30,
     //     // 'queue_order' => 'rand', 此项先不配，默认为列表采集
     // ),
-    // redis oa
+    // redis test
     'queue_config' => array(
-        'host'      => '10.200.255.33',
+        'host'      => '10.200.201.5',
         'port'      => 6379,
         'pass'      => 'stcn168',
         'db'        => 1,
@@ -52,8 +52,9 @@ return [
         'table' => 'article_spider',
         'file' => 'export_file',
     ),
+    // 以上type用api的话此配置无效，因为通过api写
     'db_config' => array(
-        'host'  => '10.254.15.33',
+        'host'  => '10.200.201.5',
         'port'  => 3306,
         'user'  => 'root',
         'pass'  => '123456',
@@ -70,12 +71,12 @@ return [
     // ),
     // test
     'click_house' => array(
-        'host' => '10.254.15.57',
-        'port' => '8123',
-        'username' => 'linbaocao',
-        'password' => '345556',
-        'dbname' => 'sentiment_db',
-        'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
+        // 'host' => '10.254.15.57',
+        // 'port' => '8123',
+        // 'username' => 'linbaocao',
+        // 'password' => '345556',
+        // 'dbname' => 'sentiment_db',
+        // 'table' => 'sentiment_new_distributed', // 'sentiment_tmp sentiment_t sentiment_t_distributed sentiment_new_distributed',
     ),
 
     // 反爬

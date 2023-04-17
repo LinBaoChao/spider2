@@ -33,8 +33,9 @@ function runSpider()
         'table' => 'article_spider',
         'file' => 'export_file',
     );
+    // 以上type用api的话此配置无效，因为通过api写
     $db_config = array(
-        'host'  => '10.254.15.33',
+        'host'  => '10.200.201.5',
         'port'  => 3306,
         'user'  => 'root',
         'pass'  => '123456',
@@ -52,7 +53,7 @@ function runSpider()
     );
 
     $queueconfig = array(
-        'host' => '10.254.15.33',
+        'host' => '10.200.201.5',
         'port' => 6379,
         'pass' => 'stcn168',
         'db' => 0,
