@@ -15,7 +15,7 @@ SELECT * FROM website WHERE `interval`>0  NAME = 'youthcn'
 
  -- truncate article_spider
  
- SELECT COUNT(*) FROM website_field article_spider
+ SELECT COUNT(*) FROM  article_spider
 
 SELECT * FROM `article_spider` WHERE id!=1 ORDER BY publish_time DESC LIMIT 60,20
 

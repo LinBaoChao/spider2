@@ -5,6 +5,9 @@ use topspider\core\queue;
 use think\helper\Str;
 //var_dump(__DIR__);
 require_once __DIR__ . '/../vendor/autoload.php';
+if(is_file(__DIR__ . '/../vendor/autoload.php')){
+    var_dump(filesize(__DIR__ . '/../vendor/autoload.php'));
+}
 //include_once __DIR__ . '/../include.php';
 
 //$config = include_once __DIR__ . '/00_config_connect.php';
@@ -164,6 +167,15 @@ if (@preg_match_all("/更新时间：(.*)来源/", $data, $out) === false) {
     var_dump(false);
 }
 var_dump($out);
+
+$pid = pcntl_fork();
+if ($pid === -1) { // 创建错误，返回-1
+    var_dump('err');
+} else if ($pid) { // 父进程
+    var_dump('父进程');
+} else if ($pid === 0) { // 子进程
+    var_dump('子进程');
+}
 
 // $spiderConfig = include_once(__DIR__ . '/../config/spider.php');
 // $qe = queue::set_connect('default', $spiderConfig['queue_config']);
@@ -478,8 +490,6 @@ error_reporting(E_ALL);
 // //         // 字符串转小写
 // //         print(Str::lower("EEFDSAEWQAdeq4342e#T"));
 
-// // phpinfo();
-
 // $array1 = [
 //     'c2' => 'ccc',
 //     'a1' => 'aaa',
@@ -757,3 +767,6 @@ STR;
 // $regex= "https://www.bjnews.com.cn/guoji/\d+.html";
 // $url = "https://www.bjnews.com.cn/guoji/4324324321.html";
 // var_dump(preg_match("#{$regex}#i", $url));
+
+
+phpinfo();

@@ -22,7 +22,7 @@ http://www.findme.wang/blog/detail/id/300.html
 进入要存放下载文件的目录如 cd /tools
 下载对应的php版本源码 wget -c http://cn.php.net/distributions/php-8.2.4.tar.gz
 解压 tar -xzvf php-8.2.4.tar.gz
-进入目录 cd /tools/php-8.2.4/ext/pcntl
+进入目录 cd /www/tools/php-8.2.4/ext/pcntl
 编译：
 1 /www/server/php/82/bin/phpize
 2 ./configure --prefix=/www/server/php/81/bin/php --with-php-config=/www/server/php/82/bin/php-config
@@ -30,6 +30,7 @@ http://www.findme.wang/blog/detail/id/300.html
 4 编辑php配置文件打开扩展，增加行如，如果出现重复加载的提示则不需要加以下
 [pcntl]
 extension=/www/server/php/82/lib/php/extensions/no-debug-non-zts-20220829/pcntl.so
+在php配置文件中把disable_functions或相关函数注掉就是不要禁用，及关掉安全模式safe_mode = off；
 
 5 检查是否安装成功 php --ri pcntl
 6 安装结束
@@ -40,9 +41,9 @@ extension=/www/server/php/82/lib/php/extensions/no-debug-non-zts-20220829/pcntl.
 开端口：firewall-cmd --zone=public --add-port=3306/tcp --permanent
 关端口：firewall-cmd --zone=public --remove-port=8080/tcp --permanent
 
-10 新建网站和api 运行目录为public 伪静态为thiinkphp
+10 新建网站和api 运行目录为public 伪静态为thinkphp
 11 新建前端网站纯静态 node安装
-11 打开目录权限
+11 打开目录权限,如果没有权限程序执行不了，有些机器或用户不同老是出现没有权限问题
 chmod -R 777 /www/wwwroot
 
 运行php文件 /www/server/php/82/bin/php /www/wwwroot/spider/public/spider.php

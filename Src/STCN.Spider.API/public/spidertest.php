@@ -77,6 +77,8 @@ function runSpider()
                         $config['db_config'] = $db_config;
                         $config['queue_config'] = $queueconfig;
 
+                        log::$log_type = 'error,Error,debug,Debug,warn,Warning,task,runspider,joinfields,channel,pubtime,required,spidertest,api,test';
+
                         $spider = new topspider($config);
                         $spider->on_task_finished = 'on_task_finished'; // 子子进程结束回调
                         // 统一处理，如果设置了个性处理，下面会替换成设置的

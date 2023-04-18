@@ -111,7 +111,14 @@ class log
 
         $path = self::$file_path . date('Ymd') . '/';
         util::path_exists($path);
-        file_put_contents($path . $log_type . ".log", $msg, FILE_APPEND | LOCK_EX);
+
+        $name = $path . $log_type . ".log";
+        // if(is_file($name)){ // 如果文件存在
+        //     if (filesize($name) > 10 * 1024 * 1024) { // 大于10m则新建
+                
+        //     }
+        // }        
+        file_put_contents($name, $msg, FILE_APPEND | LOCK_EX);
     }
 
 }
